@@ -1,0 +1,39 @@
+# ── Données brutes (ne jamais commiter) ───────────────────────────────────────
+*.csv
+processed/
+data/
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# ── Environnements virtuels ────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+.env
+
+# ── Éditeurs / IDE ────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+
+# ── Jupyter ────────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb
+
+# ── Système ────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Fichiers temporaires ────────────────────────────────────────────────────────
+*.tmp
+*.log
