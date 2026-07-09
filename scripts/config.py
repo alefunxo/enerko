@@ -13,6 +13,11 @@ AGG_DIR       = PROCESSED_DIR / "aggregates"      # Agrégats (jamais commités)
 IMAGES_DIR    = ROOT_DIR / "docs" / "assets" / "images"
 DOCS_DIR      = ROOT_DIR / "docs"
 
+# Cache PVGIS (irradiance Genève) — jamais commité (*.csv), généré via
+# scripts/irradiance_compare.py. Absent = le panneau irradiance de la vue
+# d'ensemble annuelle (03_charts.py) est simplement omis.
+PVGIS_CACHE   = ROOT_DIR / "pvgis_geneva_2018_2023.csv"
+
 # ── Définition des sites ───────────────────────────────────────────────────────
 # Clé : identifiant stable (ne pas modifier)
 # 'name'         : nom affiché — remplacer "Site X" par le vrai nom quand disponible

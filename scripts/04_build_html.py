@@ -17,6 +17,22 @@ if hasattr(sys.stdout, "reconfigure"):
 sys.path.insert(0, str(Path(__file__).parent))
 from config import SITES, SITE_ORDER, PV_SITE_ORDER, TYPES, TYPE_LABELS, DOCS_DIR
 
+COMPLETENESS_PATH = DOCS_DIR / "assets" / "data" / "completeness.json"
+
+
+def _completeness_json() -> str:
+    """
+    Contenu de completeness.json, embarqué tel quel dans la page.
+
+    Chargé via fetch() auparavant, mais fetch() d'un fichier local est bloqué
+    par le navigateur en file:// (CORS) — la page ouverte en double-clic
+    affichait alors "n/d" partout. L'embarquer directement dans le HTML
+    fonctionne aussi bien en file:// qu'en http(s)://.
+    """
+    if not COMPLETENESS_PATH.exists():
+        return "{}"
+    return COMPLETENESS_PATH.read_text(encoding="utf-8")
+
 
 def _sites_by_type_json() -> str:
     """
@@ -44,6 +60,7 @@ def _sites_by_type_json() -> str:
 def build_html() -> str:
     today          = date.today().strftime("%d/%m/%Y")
     sites_by_type  = _sites_by_type_json()
+    completeness   = _completeness_json()
     first_site     = next(
         sid for sid in SITE_ORDER if SITES[sid]["files"].get("consommation") is not None
     )
@@ -85,7 +102,7 @@ def build_html() -> str:
   <section id="sec-annual">
     <h2>Vue d'ensemble annuelle</h2>
     <p class="section-intro">
-      Totaux annuels par installation, en MWh. Utilisez les boutons pour
+      Totaux annuels par site, en MWh. Utilisez les boutons pour
       basculer entre consommation et production.
     </p>
     <div class="toggle-group" id="annual-toggle" role="group" aria-label="Type de données">
@@ -102,12 +119,14 @@ def build_html() -> str:
     </div>
   </section>
 
-  <!-- ── Section 3 : Explorateur par installation ──────────────────────────── -->
+  <!-- ── Section 3 : Explorateur par site ──────────────────────────────────── -->
   <section id="sec-sites">
-    <h2>Explorer par installation</h2>
+    <h2>Explorer par site</h2>
     <p class="section-intro">
-      Choisissez d'abord le type de données, puis l'installation — seules
-      celles disposant de ce type de mesure sont proposées.
+      Choisissez d'abord le type de données, puis le site — seuls ceux
+      disposant de ce type de mesure sont proposés. Un site de consommation
+      est un bâtiment raccordé au réseau ; un site de production est une
+      installation photovoltaïque.
     </p>
 
     <div class="controls">
@@ -119,8 +138,8 @@ def build_html() -> str:
         </div>
       </div>
       <div class="control-group">
-        <label for="site-select">Installation</label>
-        <select id="site-select" aria-label="Sélection de l'installation"></select>
+        <label for="site-select">Site</label>
+        <select id="site-select" aria-label="Sélection du site"></select>
       </div>
 
       <div class="control-group">
@@ -198,7 +217,7 @@ def build_html() -> str:
 
   var currentType = "consommation";
   var currentSite = "{first_site}";
-  var completenessData = null;
+  var completenessData = {completeness};
 
   function populateSiteSelect() {{
     var options = SITES_BY_TYPE[currentType] || [];
@@ -249,11 +268,6 @@ def build_html() -> str:
     }}
   }}
 
-  fetch("assets/data/completeness.json")
-    .then(function (r) {{ return r.json(); }})
-    .then(function (data) {{ completenessData = data; refreshCompleteness(); }})
-    .catch(function () {{ /* pas de données de complétude disponibles */ }});
-
   // Sélecteur de site
   siteSel.addEventListener("change", function () {{
     currentSite = this.value;
@@ -276,6 +290,7 @@ def build_html() -> str:
 
   populateSiteSelect();
   refreshSiteCharts();
+  refreshCompleteness();
 
   // Toggle type (section annuelle — indépendant)
   document.querySelectorAll("#annual-toggle .toggle-btn").forEach(function (btn) {{

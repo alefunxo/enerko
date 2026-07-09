@@ -37,6 +37,14 @@ def _load_completeness() -> dict:
     return {}
 
 
+def _load_pvgis_annual():
+    """Irradiance annuelle (kWh/m²), ou None si le cache PVGIS n'a pas été généré."""
+    f = AGG_DIR / "annual_irradiance_pvgis.parquet"
+    if not f.exists():
+        return None
+    return pd.read_parquet(f)["irradiance_kwh_m2"]
+
+
 def _gap_years(comp) -> set:
     """Années civiles chevauchant un trou de données significatif (≥ 2 jours)."""
     if not comp:
@@ -53,6 +61,11 @@ YELLOW = "#E8720C"   # orange Enerko (accents)   — anciennement jaune
 BG     = "#FFFFFF"
 GRID   = "#E8E8E8"
 TEXT   = "#2C3E50"
+
+# Irradiance PVGIS — slot 8 (orange) de la palette catégorielle dataviz, seul
+# slot non utilisé par un site (SITES en occupe 1-7) : identité propre, jamais
+# recyclée, distincte du YELLOW de marque ci-dessus.
+IRRADIANCE_COLOR = "#eb6834"
 
 plt.rcParams.update({
     "figure.facecolor":   BG,
@@ -142,7 +155,9 @@ def chart_timeline() -> None:
 
 # ── 2. Vue d'ensemble annuelle ─────────────────────────────────────────────────
 def chart_annual_overview(type_key: str) -> None:
-    completeness = _load_completeness()
+    completeness  = _load_completeness()
+    current_year  = pd.Timestamp.today().year
+    today_str     = pd.Timestamp.today().strftime("%d/%m/%Y")
 
     # Collecter les données annuelles de tous les sites
     all_years = set()
@@ -168,9 +183,25 @@ def chart_annual_overview(type_key: str) -> None:
 
     years = sorted(all_years)
     x     = np.arange(len(years))
-    fig, ax = plt.subplots(figsize=(12, 6))
+
+    # Irradiance PVGIS : panneau séparé sous la production (jamais un second axe Y
+    # sur le même graphique — deux échelles superposées suggèrent une corrélation
+    # que le graphique n'a pas les moyens d'affirmer). Non pertinent pour la
+    # consommation, qui ne dépend pas de l'ensoleillement.
+    irr_annual = _load_pvgis_annual() if type_key == "production" else None
+    show_irr = irr_annual is not None and any(y in irr_annual.index for y in years)
+
+    if show_irr:
+        fig, (ax, ax_irr) = plt.subplots(
+            2, 1, figsize=(12, 7.4), sharex=True,
+            gridspec_kw={"height_ratios": [3, 1], "hspace": 0.12},
+        )
+    else:
+        fig, ax = plt.subplots(figsize=(12, 6))
+
     bottom = np.zeros(len(years))
     any_gap_year = False
+    label_word = "installation" if type_key == "production" else "site"
 
     for site_id in SITE_ORDER:
         if site_id not in site_data:
@@ -187,6 +218,10 @@ def chart_annual_overview(type_key: str) -> None:
                 bars[xi].set_edgecolor("white")
                 bars[xi].set_linewidth(0.6)
                 any_gap_year = True
+            if yr == current_year and vals[xi] > 0:
+                # Année en cours : barre atténuée pour ne pas donner l'impression
+                # d'une chute par rapport aux années complètes précédentes.
+                bars[xi].set_alpha(0.55)
 
         bottom += vals
 
@@ -195,24 +230,67 @@ def chart_annual_overview(type_key: str) -> None:
     label_offset = top * 0.012
     for xi, tot in enumerate(bottom):
         if tot > 0:
-            ax.text(xi, tot + label_offset, f"{tot:.0f}", ha="center", va="bottom",
+            suffix = " *" if years[xi] == current_year else ""
+            ax.text(xi, tot + label_offset, f"{tot:.0f}{suffix}", ha="center", va="bottom",
                     fontsize=8, color=TEXT)
 
-    ax.set_xticks(x)
-    ax.set_xticklabels([str(y) for y in years])
     ax.set_ylabel("MWh", color=TEXT)
-    ax.set_title(f"{TYPE_LABELS[type_key]} annuelle totale par installation (MWh)")
+    ax.set_title(f"{TYPE_LABELS[type_key]} annuelle totale par {label_word} (MWh)")
     # Légende hors zone de tracé pour ne jamais chevaucher les barres/étiquettes
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.18),
               ncol=min(len(site_data), 3), frameon=False, fontsize=9)
     ax.set_ylim(0, top * 1.15)
 
+    if show_irr:
+        irr_vals = np.array([irr_annual.get(y, np.nan) for y in years], dtype=float)
+        ax_irr.bar(x, irr_vals, color=IRRADIANCE_COLOR, width=0.65, zorder=3)
+
+        finite = irr_vals[~np.isnan(irr_vals)]
+        irr_top = finite.max() if finite.size and finite.max() > 0 else 1.0
+        irr_offset = irr_top * 0.03
+        for xi, v in enumerate(irr_vals):
+            if np.isnan(v):
+                # Pas (encore) de donnée PVGIS pour cette année (ex. année en cours) :
+                # étiquette explicite plutôt qu'un espace vide qui ressemble à un bug.
+                ax_irr.text(xi, irr_offset, "n/d", ha="center", va="bottom",
+                            fontsize=7.5, color="#AAAAAA", style="italic")
+            else:
+                ax_irr.text(xi, v + irr_offset, f"{v:.0f}", ha="center", va="bottom",
+                            fontsize=7.5, color=TEXT)
+
+        ax_irr.set_ylabel("Irradiance\n(kWh/m²)", color=TEXT, fontsize=9)
+        ax_irr.set_title("Irradiance globale annuelle — PVGIS, Genève (référence, échelle indépendante)",
+                          fontsize=9.5, color=TEXT, pad=8)
+        ax_irr.set_ylim(0, irr_top * 1.2)
+        ax_irr.set_xticks(x)
+        ax_irr.set_xticklabels([str(y) for y in years])
+        ax.tick_params(axis="x", labelbottom=False)
+        note_ax, note_y = ax_irr, -0.34
+    else:
+        ax.set_xticks(x)
+        ax.set_xticklabels([str(y) for y in years])
+        note_ax, note_y = ax, -0.18
+
+    # Notes explicatives (empilées, en langage courant pour un public non technique)
+    notes = []
+    if current_year in years:
+        notes.append(
+            f"*  Année en cours : total partiel (au {today_str}), pas comparable à une année complète"
+        )
     if any_gap_year:
-        ax.text(0.0, -0.13, "///  Année avec trou de données significatif (voir badge de complétude)",
-                transform=ax.transAxes, fontsize=7.5, color=TEXT, ha="left")
+        notes.append("///  Année avec trou de données significatif (voir badge de complétude)")
+    if show_irr:
+        notes.append(
+            "Irradiance : plus la barre est haute, plus il y a eu de soleil cette année-là — "
+            "une production plus faible peut donc venir de la météo, pas seulement de l'installation."
+        )
+
+    if notes:
+        note_ax.text(0.0, note_y, "\n".join(notes),
+                      transform=note_ax.transAxes, fontsize=7.5, color=TEXT, ha="left", va="top")
 
     _save(fig, IMAGES_DIR / f"annual_overview_{type_key}.png")
-    print(f"  ✓  annual_overview_{type_key}.png")
+    print(f"  ✓  annual_overview_{type_key}.png" + ("  (+ irradiance PVGIS)" if show_irr else ""))
 
 
 # ── 3. Évolution mensuelle par site ───────────────────────────────────────────
@@ -311,14 +389,17 @@ def chart_heatmap(site_id: str, type_key: str) -> None:
     except Exception:
         month_starts = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
 
-    cmap = "YlOrRd" if type_key == "consommation" else "YlGn"
+    cmap_name = "YlOrRd" if type_key == "consommation" else "YlGn"
+    cmap = plt.cm.get_cmap(cmap_name).copy()
+    cmap.set_bad(color="#D0D0D0")  # gris : aucune donnée — distinct des valeurs basses/nulles
 
     fig, ax = plt.subplots(figsize=(16, 5))
     data = heatmap.values
+    masked = np.ma.masked_invalid(data)
     vmax = np.nanpercentile(data[data > 0], 98) if np.any(data > 0) else 1.0
 
     im = ax.imshow(
-        data,
+        masked,
         aspect="auto",
         origin="lower",
         cmap=cmap,
@@ -340,6 +421,10 @@ def chart_heatmap(site_id: str, type_key: str) -> None:
         f"{site['name']} — Carte thermique {TYPE_LABELS[type_key]} {year} (kWh / 15 min)"
     )
     plt.colorbar(im, ax=ax, fraction=0.018, pad=0.02, label="kWh")
+
+    if np.isnan(data).any():
+        ax.text(0.0, -0.22, "■ gris = aucune donnée disponible pour cette période (pas une valeur nulle)",
+                transform=ax.transAxes, fontsize=8, color=TEXT, ha="left")
 
     _save(fig, out)
     print(f"  ✓  {out.name}")

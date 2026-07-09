@@ -35,7 +35,7 @@
   <section id="sec-annual">
     <h2>Vue d'ensemble annuelle</h2>
     <p class="section-intro">
-      Totaux annuels par installation, en MWh. Utilisez les boutons pour
+      Totaux annuels par site, en MWh. Utilisez les boutons pour
       basculer entre consommation et production.
     </p>
     <div class="toggle-group" id="annual-toggle" role="group" aria-label="Type de données">
@@ -52,12 +52,14 @@
     </div>
   </section>
 
-  <!-- ── Section 3 : Explorateur par installation ──────────────────────────── -->
+  <!-- ── Section 3 : Explorateur par site ──────────────────────────────────── -->
   <section id="sec-sites">
-    <h2>Explorer par installation</h2>
+    <h2>Explorer par site</h2>
     <p class="section-intro">
-      Choisissez d'abord le type de données, puis l'installation — seules
-      celles disposant de ce type de mesure sont proposées.
+      Choisissez d'abord le type de données, puis le site — seuls ceux
+      disposant de ce type de mesure sont proposés. Un site de consommation
+      est un bâtiment raccordé au réseau ; un site de production est une
+      installation photovoltaïque.
     </p>
 
     <div class="controls">
@@ -69,8 +71,8 @@
         </div>
       </div>
       <div class="control-group">
-        <label for="site-select">Installation</label>
-        <select id="site-select" aria-label="Sélection de l'installation"></select>
+        <label for="site-select">Site</label>
+        <select id="site-select" aria-label="Sélection du site"></select>
       </div>
 
       <div class="control-group">
@@ -148,7 +150,102 @@
 
   var currentType = "consommation";
   var currentSite = "site_a";
-  var completenessData = null;
+  var completenessData = {
+  "site_a_consommation": {
+    "start": "2017-06-24",
+    "end": "2026-06-23",
+    "expected": 315552,
+    "present": 315516,
+    "missing": 36,
+    "pct_missing": 0.01,
+    "gaps": []
+  },
+  "site_b_consommation": {
+    "start": "2017-11-29",
+    "end": "2026-06-23",
+    "expected": 300384,
+    "present": 300348,
+    "missing": 36,
+    "pct_missing": 0.01,
+    "gaps": []
+  },
+  "site_c_consommation": {
+    "start": "2018-01-11",
+    "end": "2026-06-23",
+    "expected": 296256,
+    "present": 296220,
+    "missing": 36,
+    "pct_missing": 0.01,
+    "gaps": []
+  },
+  "site_c_production": {
+    "start": "2018-02-05",
+    "end": "2026-06-23",
+    "expected": 293856,
+    "present": 264448,
+    "missing": 29408,
+    "pct_missing": 10.01,
+    "gaps": [
+      {
+        "start": "2019-08-01",
+        "end": "2020-03-31",
+        "days": 244.0
+      },
+      {
+        "start": "2020-07-01",
+        "end": "2020-08-31",
+        "days": 62.0
+      }
+    ]
+  },
+  "site_d_production": {
+    "start": "2018-01-31",
+    "end": "2026-06-23",
+    "expected": 294336,
+    "present": 264928,
+    "missing": 29408,
+    "pct_missing": 9.99,
+    "gaps": [
+      {
+        "start": "2019-08-01",
+        "end": "2020-03-31",
+        "days": 244.0
+      },
+      {
+        "start": "2020-07-01",
+        "end": "2020-08-31",
+        "days": 62.0
+      }
+    ]
+  },
+  "site_e_consommation": {
+    "start": "2018-01-11",
+    "end": "2026-06-23",
+    "expected": 296256,
+    "present": 296220,
+    "missing": 36,
+    "pct_missing": 0.01,
+    "gaps": []
+  },
+  "site_f_production": {
+    "start": "2022-06-24",
+    "end": "2026-06-23",
+    "expected": 140256,
+    "present": 140240,
+    "missing": 16,
+    "pct_missing": 0.01,
+    "gaps": []
+  },
+  "site_g_consommation": {
+    "start": "2022-06-24",
+    "end": "2026-06-23",
+    "expected": 140256,
+    "present": 140240,
+    "missing": 16,
+    "pct_missing": 0.01,
+    "gaps": []
+  }
+};
 
   function populateSiteSelect() {
     var options = SITES_BY_TYPE[currentType] || [];
@@ -199,11 +296,6 @@
     }
   }
 
-  fetch("assets/data/completeness.json")
-    .then(function (r) { return r.json(); })
-    .then(function (data) { completenessData = data; refreshCompleteness(); })
-    .catch(function () { /* pas de données de complétude disponibles */ });
-
   // Sélecteur de site
   siteSel.addEventListener("change", function () {
     currentSite = this.value;
@@ -226,6 +318,7 @@
 
   populateSiteSelect();
   refreshSiteCharts();
+  refreshCompleteness();
 
   // Toggle type (section annuelle — indépendant)
   document.querySelectorAll("#annual-toggle .toggle-btn").forEach(function (btn) {

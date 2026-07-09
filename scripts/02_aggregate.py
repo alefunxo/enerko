@@ -9,7 +9,9 @@ Produit, pour chaque (site, type) :
 Usage : python scripts/02_aggregate.py
 """
 
+import io
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -20,7 +22,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent))
-from config import SITES, SITE_ORDER, TYPES, SAISONS, PROCESSED_DIR, AGG_DIR, DOCS_DIR
+from config import SITES, SITE_ORDER, TYPES, SAISONS, PROCESSED_DIR, AGG_DIR, DOCS_DIR, PVGIS_CACHE
 
 
 def compute_monthly(df: pd.DataFrame) -> pd.DataFrame:
@@ -139,6 +141,44 @@ def compute_completeness(df: pd.DataFrame) -> dict:
     }
 
 
+def compute_annual_irradiance():
+    """
+    Somme annuelle d'irradiance globale horizontale (kWh/m²/an), à partir du
+    cache PVGIS local (cf. scripts/irradiance_compare.py pour le régénérer).
+    Retourne None si le cache est absent — 03_charts.py omet alors simplement
+    le panneau irradiance de la vue d'ensemble annuelle.
+    """
+    if not PVGIS_CACHE.exists():
+        return None
+
+    lines = PVGIS_CACHE.read_text(encoding="utf-8").splitlines()
+    header_idx = next(
+        (i for i, ln in enumerate(lines) if ln.strip().startswith("time,")), None
+    )
+    if header_idx is None:
+        return None
+
+    data_pat = re.compile(r"^\d{8}:\d{4},")
+    data_lines = [lines[header_idx]]
+    data_lines += [ln.strip() for ln in lines[header_idx + 1:] if data_pat.match(ln.strip())]
+
+    df = pd.read_csv(io.StringIO("\n".join(data_lines)))
+    df["timestamp"] = pd.to_datetime(df["time"].str.strip(), format="%Y%m%d:%H%M")
+    df = df.set_index("timestamp").sort_index()
+
+    irr_col = next((c for c in df.columns if c.strip().startswith("G(")), None)
+    if irr_col is None:
+        return None
+
+    # W/m² horaire → kWh/m² par heure, puis somme annuelle
+    irr = pd.to_numeric(df[irr_col], errors="coerce").clip(lower=0) / 1000.0
+    annual = irr.resample("YS").sum()
+    annual.index = annual.index.year
+    annual.index.name = "annee"
+    annual.name = "irradiance_kwh_m2"
+    return annual
+
+
 def process_all() -> None:
     AGG_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -194,6 +234,16 @@ def process_all() -> None:
         json.dumps(completeness, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     print(f"✓  completeness.json ({len(completeness)} entrées)")
+
+    irr_annual = compute_annual_irradiance()
+    if irr_annual is not None:
+        irr_annual.to_frame().to_parquet(AGG_DIR / "annual_irradiance_pvgis.parquet")
+        print(f"✓  annual_irradiance_pvgis.parquet ({len(irr_annual)} années, {PVGIS_CACHE.name})")
+    else:
+        print(
+            f"  ⚠ Cache PVGIS introuvable ({PVGIS_CACHE.name}) — panneau irradiance omis "
+            f"de la vue d'ensemble annuelle. Lancez scripts/irradiance_compare.py pour le générer."
+        )
 
     print(f"\nAgrégats enregistrés dans : {AGG_DIR}")
 
