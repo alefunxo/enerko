@@ -9,6 +9,7 @@ Produit, pour chaque (site, type) :
 Usage : python scripts/02_aggregate.py
 """
 
+import json
 import sys
 from pathlib import Path
 
@@ -19,7 +20,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent))
-from config import SITES, SITE_ORDER, TYPES, SAISONS, PROCESSED_DIR, AGG_DIR
+from config import SITES, SITE_ORDER, TYPES, SAISONS, PROCESSED_DIR, AGG_DIR, DOCS_DIR
 
 
 def compute_monthly(df: pd.DataFrame) -> pd.DataFrame:
@@ -63,16 +64,25 @@ def compute_typical_day(df: pd.DataFrame) -> pd.DataFrame:
 
 def compute_heatmap(df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
     """
-    Carte thermique heure × jour de l'année pour l'année la plus récente avec données.
+    Carte thermique heure × jour de l'année pour l'année la plus récente COMPLÈTE
+    (l'année en cours est toujours partielle, donc exclue si une année antérieure
+    avec données existe).
     Index = heure (0-23), colonnes = jour de l'année (1-366).
     Valeurs en kWh/15min (moyenne sur les intervalles de l'heure).
     """
     df = df.copy()
 
-    # Trouver l'année la plus récente ayant des données non nulles
+    current_year = pd.Timestamp.today().year
     by_year = df.groupby(df.index.year)["valeur_kwh"].sum()
-    years_with_data = by_year[by_year > 0].index.tolist()
-    year = int(years_with_data[-1]) if years_with_data else int(df.index.year[-1])
+    years_with_data = sorted(by_year[by_year > 0].index.tolist())
+    complete_years = [y for y in years_with_data if y < current_year]
+
+    if complete_years:
+        year = int(complete_years[-1])
+    elif years_with_data:
+        year = int(years_with_data[-1])
+    else:
+        year = int(df.index.year[-1])
 
     year_df = df[df.index.year == year].copy()
     year_df["heure"]      = year_df.index.hour
@@ -90,8 +100,49 @@ def compute_heatmap(df: pd.DataFrame) -> tuple[pd.DataFrame, int]:
     return heatmap, year
 
 
+def compute_completeness(df: pd.DataFrame) -> dict:
+    """
+    Taux de complétude des données à intervalle de 15 min.
+    Les trous < 2 jours (ex. passage heure d'été/hiver) sont ignorés dans
+    la liste des trous, mais comptent dans le pourcentage manquant.
+    """
+    full_range = pd.date_range(df.index.min(), df.index.max(), freq="15min")
+    missing_idx = full_range.difference(df.index)
+
+    expected = len(full_range)
+    present  = len(df)
+    missing  = expected - present
+    pct_missing = round(100 * missing / expected, 2) if expected else 0.0
+
+    gaps = []
+    if len(missing_idx):
+        s = missing_idx.to_series()
+        block_id = (s.diff() != pd.Timedelta("15min")).cumsum()
+        for _, block in s.groupby(block_id):
+            if len(block) < 96 * 2:  # < 2 jours : ignoré (probable DST)
+                continue
+            gaps.append({
+                "start": block.iloc[0].strftime("%Y-%m-%d"),
+                "end":   block.iloc[-1].strftime("%Y-%m-%d"),
+                "days":  round(len(block) / 96, 1),
+            })
+        gaps.sort(key=lambda g: g["days"], reverse=True)
+
+    return {
+        "start":       df.index.min().strftime("%Y-%m-%d"),
+        "end":         df.index.max().strftime("%Y-%m-%d"),
+        "expected":    expected,
+        "present":     present,
+        "missing":     missing,
+        "pct_missing": pct_missing,
+        "gaps":        gaps,
+    }
+
+
 def process_all() -> None:
     AGG_DIR.mkdir(parents=True, exist_ok=True)
+
+    completeness: dict[str, dict] = {}
 
     for site_id in SITE_ORDER:
         site = SITES[site_id]
@@ -125,9 +176,24 @@ def process_all() -> None:
                 AGG_DIR / f"heatmap_year_{site_id}_{type_key}.json"
             )
 
+            # Complétude
+            comp = compute_completeness(df)
+            completeness[f"{site_id}_{type_key}"] = comp
+
             n_mois = len(monthly)
             total_mwh = annual["valeur_mwh"].sum()
-            print(f"✓  {n_mois} mois  ·  {total_mwh:.1f} MWh total  ·  heatmap {year}")
+            gap_note = f"  ⚠ {len(comp['gaps'])} trou(s)" if comp["gaps"] else ""
+            print(
+                f"✓  {n_mois} mois  ·  {total_mwh:.1f} MWh total  ·  heatmap {year}"
+                f"  ·  {100 - comp['pct_missing']:.1f}% complet{gap_note}"
+            )
+
+    data_dir = DOCS_DIR / "assets" / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    (data_dir / "completeness.json").write_text(
+        json.dumps(completeness, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    print(f"✓  completeness.json ({len(completeness)} entrées)")
 
     print(f"\nAgrégats enregistrés dans : {AGG_DIR}")
 

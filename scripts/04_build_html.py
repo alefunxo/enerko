@@ -15,23 +15,38 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
 sys.path.insert(0, str(Path(__file__).parent))
-from config import SITES, SITE_ORDER, TYPES, TYPE_LABELS, DOCS_DIR
+from config import SITES, SITE_ORDER, PV_SITE_ORDER, TYPES, TYPE_LABELS, DOCS_DIR
 
 
-def _site_options() -> str:
-    parts = []
-    for sid in SITE_ORDER:
-        s = SITES[sid]
-        parts.append(
-            f'            <option value="{sid}">{s["name"]} (depuis {s["online_since"]})</option>'
-        )
-    return "\n".join(parts)
+def _sites_by_type_json() -> str:
+    """
+    {"consommation": [{"id": "site_a", "label": "..."}, ...], "production": [...]}
+    Sert à ne proposer, pour un type de données donné, que les installations
+    qui possèdent effectivement ce type.
+    """
+    import json as _json
+
+    by_type = {}
+    for type_key in TYPES:
+        entries = []
+        for sid in SITE_ORDER:
+            s = SITES[sid]
+            if s["files"].get(type_key) is None:
+                continue
+            entries.append({
+                "id": sid,
+                "label": f'{s["name"]} (depuis {s["online_since"]})',
+            })
+        by_type[type_key] = entries
+    return _json.dumps(by_type, ensure_ascii=False)
 
 
 def build_html() -> str:
-    today    = date.today().strftime("%d/%m/%Y")
-    site_opts = _site_options()
-    first_site = SITE_ORDER[0]
+    today          = date.today().strftime("%d/%m/%Y")
+    sites_by_type  = _sites_by_type_json()
+    first_site     = next(
+        sid for sid in SITE_ORDER if SITES[sid]["files"].get("consommation") is not None
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="fr">
@@ -56,8 +71,8 @@ def build_html() -> str:
   <section id="sec-timeline">
     <h2>Évolution des installations</h2>
     <p class="section-intro">
-      {len(SITE_ORDER)} installations actives, de juin&nbsp;2017 à aujourd'hui.
-      Chaque barre représente la période de mesure disponible pour un site.
+      {len(PV_SITE_ORDER)} installations photovoltaïques actives, de juin&nbsp;2017 à aujourd'hui.
+      Chaque barre représente la période de mesure disponible pour une installation.
     </p>
     <div class="chart-wrap">
       <img src="assets/images/timeline.png"
@@ -91,17 +106,11 @@ def build_html() -> str:
   <section id="sec-sites">
     <h2>Explorer par installation</h2>
     <p class="section-intro">
-      Sélectionnez un site et un type de données pour afficher les trois
-      analyses détaillées.
+      Choisissez d'abord le type de données, puis l'installation — seules
+      celles disposant de ce type de mesure sont proposées.
     </p>
 
     <div class="controls">
-      <div class="control-group">
-        <label for="site-select">Installation</label>
-        <select id="site-select" aria-label="Sélection de l'installation">
-{site_opts}
-        </select>
-      </div>
       <div class="control-group">
         <label>Type de données</label>
         <div class="toggle-group" id="site-type-toggle" role="group" aria-label="Type de données">
@@ -109,7 +118,20 @@ def build_html() -> str:
           <button class="toggle-btn"        data-type="production">Production</button>
         </div>
       </div>
+      <div class="control-group">
+        <label for="site-select">Installation</label>
+        <select id="site-select" aria-label="Sélection de l'installation"></select>
+      </div>
+
+      <div class="control-group">
+        <label>Complétude des données</label>
+        <div class="completeness-badge" id="completeness-badge">
+          <span id="completeness-pct">–</span>
+        </div>
+      </div>
     </div>
+
+    <p class="completeness-detail" id="completeness-detail"></p>
 
     <!-- Ligne 1 : mensuel + profil journalier -->
     <div class="charts-row two-col">
@@ -168,11 +190,34 @@ def build_html() -> str:
   var imgMonth  = document.getElementById("chart-monthly");
   var imgTyp    = document.getElementById("chart-typical");
   var imgHeat   = document.getElementById("chart-heatmap");
+  var compBadge  = document.getElementById("completeness-badge");
+  var compPct    = document.getElementById("completeness-pct");
+  var compDetail = document.getElementById("completeness-detail");
 
-  var currentSite = siteSel.value;
+  var SITES_BY_TYPE = {sites_by_type};
+
   var currentType = "consommation";
+  var currentSite = "{first_site}";
+  var completenessData = null;
+
+  function populateSiteSelect() {{
+    var options = SITES_BY_TYPE[currentType] || [];
+    var keepSite = options.some(function (o) {{ return o.id === currentSite; }});
+    if (!keepSite) {{
+      currentSite = options.length ? options[0].id : null;
+    }}
+    siteSel.innerHTML = "";
+    options.forEach(function (o) {{
+      var opt = document.createElement("option");
+      opt.value = o.id;
+      opt.textContent = o.label;
+      if (o.id === currentSite) opt.selected = true;
+      siteSel.appendChild(opt);
+    }});
+  }}
 
   function refreshSiteCharts() {{
+    if (!currentSite) return;
     var base   = "assets/images/" + currentSite;
     var suffix = "_" + currentType + ".png";
     imgMonth.src = base + "_monthly"     + suffix;
@@ -180,22 +225,57 @@ def build_html() -> str:
     imgHeat.src  = base + "_heatmap"     + suffix;
   }}
 
+  function refreshCompleteness() {{
+    var c = (completenessData && currentSite)
+      ? completenessData[currentSite + "_" + currentType] : null;
+    compBadge.classList.remove("good", "warn", "bad");
+
+    if (!c) {{
+      compPct.textContent = "n/d";
+      compDetail.textContent = "";
+      return;
+    }}
+
+    var pctPresent = (100 - c.pct_missing).toFixed(1);
+    compPct.textContent = pctPresent + "% complet (" + c.start + " → " + c.end + ")";
+    compBadge.classList.add(c.pct_missing < 2 ? "good" : c.pct_missing < 15 ? "warn" : "bad");
+
+    if (c.gaps.length) {{
+      compDetail.textContent = "Trous : " + c.gaps.map(function (g) {{
+        return g.start + " → " + g.end + " (" + g.days + " j)";
+      }}).join("  ·  ");
+    }} else {{
+      compDetail.textContent = "Aucun trou significatif détecté.";
+    }}
+  }}
+
+  fetch("assets/data/completeness.json")
+    .then(function (r) {{ return r.json(); }})
+    .then(function (data) {{ completenessData = data; refreshCompleteness(); }})
+    .catch(function () {{ /* pas de données de complétude disponibles */ }});
+
   // Sélecteur de site
   siteSel.addEventListener("change", function () {{
     currentSite = this.value;
     refreshSiteCharts();
+    refreshCompleteness();
   }});
 
-  // Toggle type (section sites)
+  // Toggle type (section sites) : refiltre la liste des installations
   document.querySelectorAll("#site-type-toggle .toggle-btn").forEach(function (btn) {{
     btn.addEventListener("click", function () {{
       document.querySelectorAll("#site-type-toggle .toggle-btn")
               .forEach(function (b) {{ b.classList.remove("active"); }});
       this.classList.add("active");
       currentType = this.dataset.type;
+      populateSiteSelect();
       refreshSiteCharts();
+      refreshCompleteness();
     }});
   }});
+
+  populateSiteSelect();
+  refreshSiteCharts();
 
   // Toggle type (section annuelle — indépendant)
   document.querySelectorAll("#annual-toggle .toggle-btn").forEach(function (btn) {{

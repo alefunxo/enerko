@@ -1,7 +1,8 @@
 /* ── Variables ────────────────────────────────────────────────────────────── */
+/* Couleurs institutionnelles Enerko : noir/anthracite + orange (cf. logo). */
 :root {
-  --navy:    #1B3A5C;
-  --yellow:  #F5A623;
+  --navy:    #181614;   /* noir Enerko — anciennement bleu marine */
+  --yellow:  #E8720C;   /* orange Enerko — anciennement jaune */
   --bg:      #F0F2F5;
   --white:   #FFFFFF;
   --text:    #2C3E50;
@@ -9,6 +10,10 @@
   --border:  #DEE2E6;
   --shadow:  0 2px 12px rgba(0, 0, 0, 0.07);
   --radius:  10px;
+  /* Palette de statut fixe (jamais réutilisée pour une série de données) */
+  --good:    #0CA30C;
+  --warn:    #C97A05;
+  --bad:     #D03B3B;
 }
 
 /* ── Reset & base ─────────────────────────────────────────────────────────── */
@@ -166,6 +171,29 @@ select {
 select:focus {
   outline: none;
   border-color: var(--navy);
+}
+
+/* ── Badge de complétude des données ──────────────────────────────────────── */
+.completeness-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  background: var(--border);
+  color: var(--text);
+}
+
+.completeness-badge.good { background: var(--good); color: var(--white); }
+.completeness-badge.warn { background: var(--warn); color: var(--white); }
+.completeness-badge.bad  { background: var(--bad);  color: var(--white); }
+
+.completeness-detail {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: -0.75rem;
+  margin-bottom: 1.25rem;
 }
 
 /* ── Grille deux colonnes ─────────────────────────────────────────────────── */

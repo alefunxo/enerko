@@ -21,8 +21,8 @@
   <section id="sec-timeline">
     <h2>Évolution des installations</h2>
     <p class="section-intro">
-      7 installations actives, de juin&nbsp;2017 à aujourd'hui.
-      Chaque barre représente la période de mesure disponible pour un site.
+      3 installations photovoltaïques actives, de juin&nbsp;2017 à aujourd'hui.
+      Chaque barre représente la période de mesure disponible pour une installation.
     </p>
     <div class="chart-wrap">
       <img src="assets/images/timeline.png"
@@ -56,23 +56,11 @@
   <section id="sec-sites">
     <h2>Explorer par installation</h2>
     <p class="section-intro">
-      Sélectionnez un site et un type de données pour afficher les trois
-      analyses détaillées.
+      Choisissez d'abord le type de données, puis l'installation — seules
+      celles disposant de ce type de mesure sont proposées.
     </p>
 
     <div class="controls">
-      <div class="control-group">
-        <label for="site-select">Installation</label>
-        <select id="site-select" aria-label="Sélection de l'installation">
-            <option value="site_a">Site A (depuis 2017-06)</option>
-            <option value="site_b">Site B (depuis 2017-11)</option>
-            <option value="site_c">Site C (depuis 2018-01)</option>
-            <option value="site_d">Site D (depuis 2018-01)</option>
-            <option value="site_e">Site E (depuis 2018-02)</option>
-            <option value="site_f">Site F (depuis 2022-06)</option>
-            <option value="site_g">Site G (depuis 2022-06)</option>
-        </select>
-      </div>
       <div class="control-group">
         <label>Type de données</label>
         <div class="toggle-group" id="site-type-toggle" role="group" aria-label="Type de données">
@@ -80,7 +68,20 @@
           <button class="toggle-btn"        data-type="production">Production</button>
         </div>
       </div>
+      <div class="control-group">
+        <label for="site-select">Installation</label>
+        <select id="site-select" aria-label="Sélection de l'installation"></select>
+      </div>
+
+      <div class="control-group">
+        <label>Complétude des données</label>
+        <div class="completeness-badge" id="completeness-badge">
+          <span id="completeness-pct">–</span>
+        </div>
+      </div>
     </div>
+
+    <p class="completeness-detail" id="completeness-detail"></p>
 
     <!-- Ligne 1 : mensuel + profil journalier -->
     <div class="charts-row two-col">
@@ -128,7 +129,7 @@
 <footer>
   <p>Données&nbsp;: SIG (Services Industriels de Genève) &mdash;
      Enerko Coopérative Solaire &mdash;
-     Visualisation générée le 24/06/2026</p>
+     Visualisation générée le 09/07/2026</p>
 </footer>
 
 <script>
@@ -139,11 +140,34 @@
   var imgMonth  = document.getElementById("chart-monthly");
   var imgTyp    = document.getElementById("chart-typical");
   var imgHeat   = document.getElementById("chart-heatmap");
+  var compBadge  = document.getElementById("completeness-badge");
+  var compPct    = document.getElementById("completeness-pct");
+  var compDetail = document.getElementById("completeness-detail");
 
-  var currentSite = siteSel.value;
+  var SITES_BY_TYPE = {"consommation": [{"id": "site_a", "label": "GENEVE, Rue Soubeyran 7 (depuis 2017-06)"}, {"id": "site_b", "label": "MEYRIN, Espl. des Récréations 24 (depuis 2017-11)"}, {"id": "site_c", "label": "MEYRIN, Espl. des Récréations 26 (depuis 2018-01)"}, {"id": "site_e", "label": "Site E (depuis 2018-02)"}, {"id": "site_g", "label": "PLAN-LES-OUATES, Ch. de Vers 8 (depuis 2022-06)"}], "production": [{"id": "site_c", "label": "MEYRIN, Espl. des Récréations 26 (depuis 2018-01)"}, {"id": "site_d", "label": "MEYRIN, Espl. des Récréations 24 (depuis 2018-01)"}, {"id": "site_f", "label": "PLAN-LES-OUATES, Ch. de Vers 8 (depuis 2022-06)"}]};
+
   var currentType = "consommation";
+  var currentSite = "site_a";
+  var completenessData = null;
+
+  function populateSiteSelect() {
+    var options = SITES_BY_TYPE[currentType] || [];
+    var keepSite = options.some(function (o) { return o.id === currentSite; });
+    if (!keepSite) {
+      currentSite = options.length ? options[0].id : null;
+    }
+    siteSel.innerHTML = "";
+    options.forEach(function (o) {
+      var opt = document.createElement("option");
+      opt.value = o.id;
+      opt.textContent = o.label;
+      if (o.id === currentSite) opt.selected = true;
+      siteSel.appendChild(opt);
+    });
+  }
 
   function refreshSiteCharts() {
+    if (!currentSite) return;
     var base   = "assets/images/" + currentSite;
     var suffix = "_" + currentType + ".png";
     imgMonth.src = base + "_monthly"     + suffix;
@@ -151,22 +175,57 @@
     imgHeat.src  = base + "_heatmap"     + suffix;
   }
 
+  function refreshCompleteness() {
+    var c = (completenessData && currentSite)
+      ? completenessData[currentSite + "_" + currentType] : null;
+    compBadge.classList.remove("good", "warn", "bad");
+
+    if (!c) {
+      compPct.textContent = "n/d";
+      compDetail.textContent = "";
+      return;
+    }
+
+    var pctPresent = (100 - c.pct_missing).toFixed(1);
+    compPct.textContent = pctPresent + "% complet (" + c.start + " → " + c.end + ")";
+    compBadge.classList.add(c.pct_missing < 2 ? "good" : c.pct_missing < 15 ? "warn" : "bad");
+
+    if (c.gaps.length) {
+      compDetail.textContent = "Trous : " + c.gaps.map(function (g) {
+        return g.start + " → " + g.end + " (" + g.days + " j)";
+      }).join("  ·  ");
+    } else {
+      compDetail.textContent = "Aucun trou significatif détecté.";
+    }
+  }
+
+  fetch("assets/data/completeness.json")
+    .then(function (r) { return r.json(); })
+    .then(function (data) { completenessData = data; refreshCompleteness(); })
+    .catch(function () { /* pas de données de complétude disponibles */ });
+
   // Sélecteur de site
   siteSel.addEventListener("change", function () {
     currentSite = this.value;
     refreshSiteCharts();
+    refreshCompleteness();
   });
 
-  // Toggle type (section sites)
+  // Toggle type (section sites) : refiltre la liste des installations
   document.querySelectorAll("#site-type-toggle .toggle-btn").forEach(function (btn) {
     btn.addEventListener("click", function () {
       document.querySelectorAll("#site-type-toggle .toggle-btn")
               .forEach(function (b) { b.classList.remove("active"); });
       this.classList.add("active");
       currentType = this.dataset.type;
+      populateSiteSelect();
       refreshSiteCharts();
+      refreshCompleteness();
     });
   });
+
+  populateSiteSelect();
+  refreshSiteCharts();
 
   // Toggle type (section annuelle — indépendant)
   document.querySelectorAll("#annual-toggle .toggle-btn").forEach(function (btn) {

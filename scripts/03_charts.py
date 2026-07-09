@@ -24,14 +24,32 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent))
 from config import (
-    SITES, SITE_ORDER, TYPES, TYPE_LABELS,
+    SITES, SITE_ORDER, PV_SITE_ORDER, TYPES, TYPE_LABELS,
     SAISONS, SAISON_COLORS, MOIS,
-    AGG_DIR, IMAGES_DIR,
+    AGG_DIR, IMAGES_DIR, DOCS_DIR,
 )
 
-# ── Style global ───────────────────────────────────────────────────────────────
-NAVY   = "#1B3A5C"
-YELLOW = "#F5A623"
+
+def _load_completeness() -> dict:
+    f = DOCS_DIR / "assets" / "data" / "completeness.json"
+    if f.exists():
+        return json.loads(f.read_text(encoding="utf-8"))
+    return {}
+
+
+def _gap_years(comp) -> set:
+    """Années civiles chevauchant un trou de données significatif (≥ 2 jours)."""
+    if not comp:
+        return set()
+    years = set()
+    for g in comp.get("gaps", []):
+        start, end = pd.Timestamp(g["start"]), pd.Timestamp(g["end"])
+        years.update(range(start.year, end.year + 1))
+    return years
+
+# ── Style global — couleurs institutionnelles Enerko (noir + orange) ────────────
+NAVY   = "#181614"   # noir Enerko (titres, axes) — anciennement bleu marine
+YELLOW = "#E8720C"   # orange Enerko (accents)   — anciennement jaune
 BG     = "#FFFFFF"
 GRID   = "#E8E8E8"
 TEXT   = "#2C3E50"
@@ -87,8 +105,10 @@ def make_placeholder(output_path: Path, site_name: str, type_label: str) -> None
 
 # ── 1. Chronologie ─────────────────────────────────────────────────────────────
 def chart_timeline() -> None:
+    """Uniquement les installations PV — les points de consommation associés
+    à un même bâtiment ne sont pas des installations."""
     today = pd.Timestamp.today().normalize()
-    sites = [SITES[sid] for sid in reversed(SITE_ORDER)]  # du bas vers le haut
+    sites = [SITES[sid] for sid in reversed(PV_SITE_ORDER)]  # du bas vers le haut
 
     fig, ax = plt.subplots(figsize=(14, 5))
     ax.set_facecolor(BG)
@@ -122,6 +142,8 @@ def chart_timeline() -> None:
 
 # ── 2. Vue d'ensemble annuelle ─────────────────────────────────────────────────
 def chart_annual_overview(type_key: str) -> None:
+    completeness = _load_completeness()
+
     # Collecter les données annuelles de tous les sites
     all_years = set()
     site_data: dict[str, pd.Series] = {}
@@ -148,28 +170,46 @@ def chart_annual_overview(type_key: str) -> None:
     x     = np.arange(len(years))
     fig, ax = plt.subplots(figsize=(12, 6))
     bottom = np.zeros(len(years))
+    any_gap_year = False
 
     for site_id in SITE_ORDER:
         if site_id not in site_data:
             continue
         site = SITES[site_id]
         vals = np.array([site_data[site_id].get(y, 0.0) for y in years])
-        ax.bar(x, vals, bottom=bottom, label=site["name"],
-               color=site["color"], width=0.65, zorder=3)
+        bars = ax.bar(x, vals, bottom=bottom, label=site["name"],
+                       color=site["color"], width=0.65, zorder=3)
+
+        gap_years = _gap_years(completeness.get(f"{site_id}_{type_key}"))
+        for xi, yr in enumerate(years):
+            if yr in gap_years and vals[xi] > 0:
+                bars[xi].set_hatch("///")
+                bars[xi].set_edgecolor("white")
+                bars[xi].set_linewidth(0.6)
+                any_gap_year = True
+
         bottom += vals
 
-    # Total au-dessus de chaque barre
+    # Total au-dessus de chaque barre, avec marge proportionnelle au maximum
+    top = bottom.max() if bottom.max() > 0 else 1.0
+    label_offset = top * 0.012
     for xi, tot in enumerate(bottom):
         if tot > 0:
-            ax.text(xi, tot + 0.5, f"{tot:.0f}", ha="center", va="bottom",
+            ax.text(xi, tot + label_offset, f"{tot:.0f}", ha="center", va="bottom",
                     fontsize=8, color=TEXT)
 
     ax.set_xticks(x)
     ax.set_xticklabels([str(y) for y in years])
     ax.set_ylabel("MWh", color=TEXT)
     ax.set_title(f"{TYPE_LABELS[type_key]} annuelle totale par installation (MWh)")
-    ax.legend(loc="upper left", ncol=2)
-    ax.set_ylim(bottom=0)
+    # Légende hors zone de tracé pour ne jamais chevaucher les barres/étiquettes
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, 1.18),
+              ncol=min(len(site_data), 3), frameon=False, fontsize=9)
+    ax.set_ylim(0, top * 1.15)
+
+    if any_gap_year:
+        ax.text(0.0, -0.13, "///  Année avec trou de données significatif (voir badge de complétude)",
+                transform=ax.transAxes, fontsize=7.5, color=TEXT, ha="left")
 
     _save(fig, IMAGES_DIR / f"annual_overview_{type_key}.png")
     print(f"  ✓  annual_overview_{type_key}.png")
