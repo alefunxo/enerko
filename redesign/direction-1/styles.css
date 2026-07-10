@@ -218,6 +218,12 @@ a { color: inherit; }
 .hero__content { position: relative; width: 100%; padding-block: clamp(3rem, 7vw, 5.5rem); }
 .hero__lede { max-width: 34rem; font-size: 1.1875rem; margin: 1.25rem 0 0; }
 
+/* Photo d'installation (fiches installation-*) — hauteur fixe, capée et
+   IDENTIQUE sur les 3 fiches, indépendante de la hauteur du viewport.
+   Les photos ont des ratios différents mais sont recadrées en object-fit
+   cover, donc le bloc photo est rigoureusement de même taille partout. */
+.hero--install { min-height: min(48vh, 32rem); }
+
 /* ---------- Tuiles de chiffres ---------- */
 .stat-row {
   list-style: none; margin: 0; padding: 0;
@@ -562,16 +568,38 @@ a { color: inherit; }
 .band--dark .fact-callout__text { color: var(--gris-chaud); }
 
 /* ---------- Fiche technique (détail d'installation) ---------- */
+/* tech-panel (specs) et prose-card (communauté) sont posées côte à côte via
+   .grid-2 — même largeur de colonne que l'intro juste au-dessus, donc même
+   mesure de lecture, sans le grand vide qu'un plafond fixe (48rem) laissait
+   dans une bande large de ~76rem. fact-callout reste une bannière pleine
+   largeur en dessous — c'est un chiffre-clé, pas une carte de contenu, et
+   l'empiler dans une des deux colonnes créait des colonnes de hauteurs
+   inégales (« zoomé » / trop de vide sous la carte la plus courte). */
 .tech-panel {
-  max-width: 48rem;
-  margin: 0 0 2rem;
-  padding: 1.75rem 2rem;
+  margin: 0;
+  padding: 1.5rem 1.75rem;
   background: var(--blanc);
   border: 1px solid var(--trait-clair);
   border-top: 3px solid var(--orange-encre);
 }
-.tech-panel .spec { margin-bottom: 1.25rem; }
+.tech-panel .spec { margin: 0 0 1.25rem; }
+.tech-panel .spec dd {
+  font-family: var(--f-body); font-weight: 600;
+  font-size: 1rem; font-variant-numeric: normal;
+  line-height: 1.35;
+}
 .tech-panel .prose p:last-child { margin-bottom: 0; }
+
+/* carte texte (communauté d'autoconsommateurs) — même habillage que .tech-panel,
+   pour que les 2 cartes lisent comme un seul jeu de même largeur */
+.prose-card {
+  padding: 1.5rem 1.75rem;
+  background: var(--blanc);
+  border: 1px solid var(--trait-clair);
+  border-top: 3px solid var(--orange-encre);
+}
+.prose-card .panel-title { margin-bottom: .75rem; }
+.prose-card .prose p:last-child { margin-bottom: 0; }
 
 /* ---------- Héros scindé (Contact, Devenir membre) ---------- */
 .split-hero {
@@ -599,24 +627,51 @@ a { color: inherit; }
   text-transform: uppercase; line-height: 1.15;
   margin: 0;
 }
-.step .prose p { max-width: 46rem; }
+/* Page Investir — chaque étape occupe TOUTE la largeur de contenu (.wrap),
+   comme le bloc du haut (héros + chiffres) et le bloc du bas (CTA). Tous les
+   enfants (prose, encart chiffré, cartes charges/revenus, listes) remplissent
+   cette même largeur pleine : les trois blocs (01 Sécurité, 02 Rendement,
+   03 Récupération) ont donc rigoureusement les mêmes largeurs et s'alignent
+   avec le reste de la page. */
+.step .prose p,
+.step .fact-callout,
+.step .info-card-grid,
+.step .plain-list,
+.step .plain-list li { max-width: none; }
 
-.two-col-list {
+/* cartes charges/revenus (page Investir) — même habillage que .tech-panel,
+   largeur de colonne égale (le texte remplissait mal les 24rem précédentes) */
+.info-card-grid {
+  max-width: 46rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  gap: clamp(1.25rem, 3vw, 1.75rem);
   margin: 1.75rem 0;
+  align-items: stretch;
 }
-.two-col-list h4 {
+.info-card {
+  background: var(--blanc);
+  border: 1px solid var(--trait-clair);
+  border-top: 3px solid var(--orange-encre);
+  padding: 1.5rem 1.75rem;
+}
+.info-card__title {
   font-family: var(--f-mono); font-size: .8125rem;
   letter-spacing: .08em; text-transform: uppercase;
   color: var(--gris-encre); margin: 0 0 .875rem;
 }
-.two-col-list ul { margin: 0; padding-left: 1.1rem; }
-.two-col-list li { margin-bottom: .5rem; max-width: 24rem; }
+.info-card ul { margin: 0; padding-left: 1.1rem; }
+.info-card li { margin-bottom: .5rem; }
+.info-card li:last-child { margin-bottom: 0; }
 
 .plain-list { padding-left: 1.1rem; margin: 1rem 0; }
-.plain-list li { margin-bottom: .4rem; max-width: 40rem; }
+.plain-list li { margin-bottom: .4rem; }
+
+/* Encart chiffré sur bande pierre (étape 02) : son fond par défaut est
+   var(--pierre) = la couleur de la bande, donc la carte disparaît. On la
+   repasse en blanc pour qu'elle lise comme une carte, exactement comme sur
+   les bandes claires. */
+.band--stone .fact-callout { background: var(--blanc); }
 
 /* ---------- Formulaire (page Devenir membre) ---------- */
 .form {
@@ -710,7 +765,7 @@ a { color: inherit; }
   .figure-bleed img { aspect-ratio: 16 / 9; }
   .team-grid { grid-template-columns: 1fr 1fr; }
   .install-card-grid { grid-template-columns: 1fr; }
-  .two-col-list { grid-template-columns: 1fr; gap: 1.25rem; }
+  .info-card-grid { grid-template-columns: 1fr; gap: 1.25rem; max-width: none; }
   .partner-grid { grid-template-columns: 1fr 1fr; }
   .contact-block { gap: 2.5rem; }
   .explorer__controls { align-items: flex-start; }
