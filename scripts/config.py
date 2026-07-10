@@ -352,6 +352,231 @@ INSTALLATION_ORDER = [
     "install_plan_les_ouates_vers_8",
 ]
 
+# ── Pages éditoriales (contenu institutionnel, repris du site vitrine enerko.ch) ─
+# Ce contenu est indépendant des données mesurées (SITES/INSTALLATIONS ci-dessus) :
+# c'est le texte institutionnel de la coopérative — statuts, mode de financement,
+# adhésion. Certaines sections du site vitrine d'origine (Gouvernance/Implication
+# sous Investir, page Actus/Médias, carte Google sous Contact) sont volontairement
+# omises ici : le texte réel n'a pas été fourni, mieux vaut ne pas publier de page
+# incomplète que d'improviser du contenu.
+
+ABOUT = {
+    "tagline_prefix": "coopér",
+    "tagline_accent1": "Action",
+    "tagline_mid": " énerg",
+    "tagline_accent2": "Ethique",
+    "text": (
+        "Enerko est une société coopérative fondée en 2016 à Genève. Elle a "
+        "pour but de favoriser et développer des projets de production "
+        "d'énergies renouvelables et d'économie d'énergie. Elle a également "
+        "pour but de contribuer à l'émergence et l'expérimentation de "
+        "nouveaux modèles de mise en œuvre de ces projets — notamment le "
+        "financement d'installations photovoltaïques en autoconsommation "
+        "collective."
+    ),
+}
+
+AUTOCONSOMMER = {
+    "intro": (
+        "L'autoconsommation collective est le fait de se regrouper au sein "
+        "d'un bâtiment pour autoconsommer un maximum d'électricité "
+        "photovoltaïque."
+    ),
+    "paragraphs": [
+        (
+            "Dans un contexte actuel où l'électricité photovoltaïque est "
+            "rachetée à bas prix par les gestionnaires de réseaux électriques "
+            "suisses, il est cohérent d'essayer d'en autoconsommer "
+            "instantanément un maximum. Pour ce faire, une communauté "
+            "d'autoconsommateurs ou un regroupement pour consommation propre "
+            "est mis en œuvre."
+        ),
+        (
+            "La coopérative Enerko vend aux membres des communautés/"
+            "regroupements d'autoconsommation d'une part l'énergie "
+            "photovoltaïque instantanément consommée, mais également "
+            "l'électricité soutirée du réseau électrique de SIG, au prix de "
+            "la gamme vitale bleu heures pleines/creuses."
+        ),
+        (
+            "L'autoconsommateur consomme ainsi un mix électrique comportant "
+            "un quart d'électricité solaire et trois quarts d'électricité "
+            "hydraulique suisse. Il s'agit d'une électricité de meilleure "
+            "qualité que la gamme vitale vert de SIG, ceci au prix du vitale "
+            "bleu."
+        ),
+        (
+            "L'électricité photovoltaïque non autoconsommée instantanément "
+            "est refoulée sur le réseau électrique et achetée par SIG à un "
+            "tarif révisé chaque année."
+        ),
+    ],
+    "diagram": {
+        "caption": "Autoconsommation collective",
+        "buy_label": "électricité achetée à SIG",
+        "buy_price": "24 cts/kWh",
+        "sell_label": "vendue à SIG",
+        "sell_price": "12 cts/kWh",
+        "self_label": "électricité solaire autoconsommée",
+    },
+    "cta_text": (
+        "Vous habitez ou gérez déjà un bâtiment équipé par Enerko et "
+        "souhaitez rejoindre une communauté d'autoconsommateurs, ou vous "
+        "souhaitez devenir membre de la coopérative ?"
+    ),
+}
+
+INVESTIR = {
+    "summary": (
+        "En résumé : vos parts sociales financent des installations "
+        "photovoltaïques sur des toits genevois. Enerko vise un intérêt de "
+        "1 à 2% par an sur ce capital, versé si les comptes de la "
+        "coopérative le permettent, et vous pouvez demander à le récupérer "
+        "moyennant un préavis de 6 mois. Le détail — sécurité, rendement, "
+        "récupération du capital — est développé ci-dessous."
+    ),
+    "sections": [
+        {
+            "anchor": "securite",
+            "nav_label": "Sécurité",
+            "title": "Sécurité financière — Comment fonctionne Enerko ?",
+            "paragraphs": [
+                (
+                    "Enerko finance des installations photovoltaïques en "
+                    "autoconsommation collective grâce aux parts sociales "
+                    "souscrites par ses membres."
+                ),
+                (
+                    "L'administration d'Enerko gère autant les questions "
+                    "stratégiques qu'opérationnelles. Nous étudions "
+                    "actuellement la possibilité/faisabilité de déléguer une "
+                    "partie des tâches opérationnelles à un bureau interne."
+                ),
+            ],
+            "charges_title": "Financièrement, nos charges sont :",
+            "charges": [
+                "les intérêts sur les parts sociales",
+                "les frais de gestion des communautés d'autoconsommateurs",
+                "les frais d'entretien/assurances des installations PV",
+                "divers frais de fonctionnement (communication, défraiement "
+                "administratif, etc.)",
+            ],
+            "revenus_title": "Parallèlement, nos revenus proviennent de :",
+            "revenus": [
+                "la vente du courant autoconsommé aux membres des "
+                "communautés d'autoconsommateurs",
+                "la vente du courant excédentaire, injecté dans le réseau "
+                "électrique, à SIG",
+                "une prime de gestion/mise en place de projet pour chaque "
+                "nouvelle installation photovoltaïque",
+            ],
+            "closing": (
+                "L'électricité autoconsommée est vendue aux membres de nos "
+                "communautés au tarif SIG vitale bleu (100% hydraulique "
+                "suisse). L'électricité refoulée dans le réseau est vendue au "
+                "distributeur d'énergie. Le taux d'autoconsommation moyen de "
+                "nos installations photovoltaïques se monte à 50%, nous "
+                "valorisons donc la moitié de l'électricité solaire produite "
+                "via les membres de nos communautés et l'autre moitié via SIG "
+                "qui a l'obligation de nous acheter l'excédent de production "
+                "photovoltaïque."
+            ),
+        },
+        {
+            "anchor": "rendement",
+            "nav_label": "Rendement",
+            "title": "Rendement financier — Quel est le taux d'intérêt sur les parts sociales ?",
+            "paragraphs": [
+                (
+                    "Nous visons un taux d'intérêt sur les parts sociales de "
+                    "1 à 2%. Cet intérêt est :"
+                ),
+            ],
+            "bullets": [
+                "conditionnel, c'est-à-dire si les comptes de la coopérative "
+                "le permettent",
+                "optionnel, donc chaque membre est libre de renoncer à cet "
+                "intérêt",
+            ],
+            "paragraphs_after": [
+                (
+                    "La volonté d'Enerko est de rémunérer le capital "
+                    "mobilisé sous forme de parts sociales. L'assemblée "
+                    "générale statue chaque année, non pas sur le fait qu'il "
+                    "y ait ou n'y ait pas d'intérêt, mais sur le taux "
+                    "d'intérêt que le fonctionnement d'Enerko permet de "
+                    "proposer aux membres de notre coopérative."
+                ),
+                (
+                    "À titre d'information : le taux 2017 a été de 1% et "
+                    "depuis 2018 jusqu'à aujourd'hui le taux est de 2%."
+                ),
+            ],
+        },
+        {
+            "anchor": "recuperation",
+            "nav_label": "Récupération de capital",
+            "title": (
+                "Récupération du capital — Quand et sous quelles conditions "
+                "puis-je récupérer le capital immobilisé en parts sociales ?"
+            ),
+            "paragraphs": [
+                (
+                    "Les parts sociales peuvent être revendues, moyennant un "
+                    "délai de 6 mois après demande par courrier, pour autant "
+                    "que cela ne mette pas en danger la pérennité financière "
+                    "d'Enerko. Dans le cas extrême d'une mise en péril de la "
+                    "coopérative, le code des obligations permet un délai de "
+                    "remboursement pouvant aller jusqu'à 3 ans."
+                ),
+                (
+                    "Dans les faits, si le nombre de parts sociales non "
+                    "engagé dans des projets est suffisant, un remboursement "
+                    "urgent peut être envisagé au cas par cas, s'il est "
+                    "justifié."
+                ),
+            ],
+        },
+    ],
+}
+
+DEVENIR_MEMBRE = {
+    "text": (
+        "Pour devenir membre ou pour toute autre information, écrivez-nous "
+        "à"
+    ),
+    "email": "info@enerko.ch",
+}
+
+CONTACT = {
+    "address_lines": ["4, ch. des Terres-Noires", "1252 Meinier", "Suisse"],
+    "email": "info@enerko.ch",
+}
+
+# Pas d'URL externe : non fournie/confirmée par l'utilisateur, on n'en devine pas.
+LIENS = [
+    {
+        "name": "Equilibre",
+        "desc": "Coopérative d'habitation partenaire de plusieurs installations Enerko.",
+    },
+    {
+        "name": "Swissgrid",
+        "desc": "Gestionnaire du réseau de transport d'électricité suisse.",
+    },
+    {
+        "name": "SIG",
+        "desc": "Services Industriels de Genève — distributeur d'électricité local.",
+    },
+    {
+        "name": "Swissolar",
+        "desc": "Association professionnelle suisse de l'énergie solaire.",
+    },
+    {
+        "name": "VESE",
+        "desc": "Association des producteurs d'énergie indépendants.",
+    },
+]
+
 # ── Saisons ────────────────────────────────────────────────────────────────────
 SAISONS = {
     "Hiver":     [12, 1, 2],

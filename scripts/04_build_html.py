@@ -21,6 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from config import (
     SITES, SITE_ORDER, PV_SITE_ORDER, TYPES, TYPE_LABELS,
     INSTALLATIONS, INSTALLATION_ORDER, DOCS_DIR,
+    ABOUT, AUTOCONSOMMER, INVESTIR, DEVENIR_MEMBRE, CONTACT, LIENS,
 )
 
 COMPLETENESS_PATH = DOCS_DIR / "assets" / "data" / "completeness.json"
@@ -79,14 +80,23 @@ def _fmt_kwc(v) -> str:
     return f"{v:g}"
 
 
-# ── Composants HTML réutilisés (accueil + fiches installations) ─────────────
+# ── Composants HTML réutilisés (toutes les pages) ────────────────────────────
+# Nav unifiée : tableau de bord (Accueil, Installations → fiches mesurées) et
+# pages institutionnelles (Enerko?, Autoconsommer, Investir, Devenir membre,
+# Contact, Liens). Les fiches individuelles ne sont plus listées directement
+# dans la nav (ça ferait 3+ entrées de plus) — on y accède depuis "Installations".
 def _nav_links(depth: int):
     prefix = "../" if depth else ""
-    links = [("accueil", "Accueil", f"{prefix}index.html")]
-    for iid in INSTALLATION_ORDER:
-        inst = INSTALLATIONS[iid]
-        links.append((inst["slug"], inst["name"], f"{prefix}installations/{inst['slug']}.html"))
-    return links
+    return [
+        ("accueil", "Accueil", f"{prefix}index.html"),
+        ("enerko", "Enerko ?", f"{prefix}enerko.html"),
+        ("installations", "Installations", f"{prefix}installations/index.html"),
+        ("autoconsommer", "Autoconsommer", f"{prefix}autoconsommer.html"),
+        ("investir", "Investir", f"{prefix}investir.html"),
+        ("devenir-membre", "Devenir membre", f"{prefix}devenir-membre.html"),
+        ("contact", "Contact", f"{prefix}contact.html"),
+        ("liens", "Liens", f"{prefix}liens.html"),
+    ]
 
 
 def _nav_html(active: str, depth: int) -> str:
@@ -120,7 +130,10 @@ def _brief_list_html(brief: dict) -> str:
     return f'<ul class="brief-list">{items}</ul>'
 
 
-def _install_cards_html() -> str:
+def _install_cards_html(depth: int) -> str:
+    """depth 0 (accueil) → liens vers installations/<slug>.html ;
+    depth 1 (installations/index.html) → liens vers <slug>.html directement."""
+    link_prefix = "" if depth else "installations/"
     cards = []
     for iid in INSTALLATION_ORDER:
         inst = INSTALLATIONS[iid]
@@ -129,7 +142,7 @@ def _install_cards_html() -> str:
         <h3>{inst["name"]}</h3>
         <p class="install-address">{inst["address"]}</p>
         {_brief_list_html(inst["brief"])}
-        <a class="install-card-link" href="installations/{inst["slug"]}.html">Voir la fiche complète →</a>
+        <a class="install-card-link" href="{link_prefix}{inst["slug"]}.html">Voir la fiche complète →</a>
       </div>""")
     return "".join(cards)
 
@@ -148,6 +161,59 @@ def _data_note_html(note) -> str:
     if not note:
         return ""
     return f'<div class="data-note"><strong>À noter sur les données ci-dessous</strong><br>{note}</div>'
+
+
+def _stat_tiles_html() -> str:
+    """Chiffres d'impact agrégés à partir des fiches INSTALLATIONS (brief) —
+    aucune donnée nouvelle, simple somme des chiffres déjà publiés par fiche."""
+    total_kwc = sum(INSTALLATIONS[iid]["brief"]["puissance_kwc"] for iid in INSTALLATION_ORDER)
+    total_m2  = sum(INSTALLATIONS[iid]["brief"]["surface_m2"] for iid in INSTALLATION_ORDER)
+    total_kwh = sum(INSTALLATIONS[iid]["brief"]["production_kwh_an"] for iid in INSTALLATION_ORDER)
+    total_chf = sum(INSTALLATIONS[iid]["brief"]["cout_chf"] for iid in INSTALLATION_ORDER)
+    tiles = [
+        (str(len(INSTALLATION_ORDER)),               "Installations photovoltaïques"),
+        (f"{_fmt_kwc(total_kwc)} kWc",                "Puissance installée totale"),
+        (f"{_fmt_thousands(total_m2)} m²",            "Surface de toiture équipée"),
+        (f"{_fmt_thousands(total_kwh)} kWh/an",       "Production solaire annuelle"),
+        (f"{_fmt_thousands(total_chf)} CHF",          "Capital investi dans ces installations"),
+    ]
+    items = "".join(
+        f'<div class="stat-tile"><span class="stat-value">{v}</span>'
+        f'<span class="stat-label">{l}</span></div>'
+        for v, l in tiles
+    )
+    return f'<div class="stats-strip">{items}</div>'
+
+
+def _cta_band_html(heading: str, text: str, buttons, depth: int = 0) -> str:
+    """buttons : liste de (label, href, css_class) — css_class = 'btn-primary'|'btn-secondary'."""
+    prefix = "../" if depth else ""
+    btns = "".join(
+        f'<a class="btn {cls}" href="{prefix}{href}">{label}</a>'
+        for label, href, cls in buttons
+    )
+    return f"""
+    <div class="cta-band">
+      <h3>{heading}</h3>
+      <p>{text}</p>
+      <div class="cta-buttons">{btns}</div>
+    </div>"""
+
+
+def _hero_html() -> str:
+    return f"""
+  <section id="sec-hero" class="hero-band">
+    <p class="hero-tagline">
+      {ABOUT["tagline_prefix"]}<span class="accent">{ABOUT["tagline_accent1"]}</span
+      >{ABOUT["tagline_mid"]}<span class="accent">{ABOUT["tagline_accent2"]}</span>
+    </p>
+    <p class="hero-text">{ABOUT["text"]}</p>
+    <div class="cta-buttons">
+      <a class="btn btn-primary" href="devenir-membre.html">Devenir membre</a>
+      <a class="btn btn-secondary" href="investir.html">Investir</a>
+      <a class="btn btn-secondary" href="enerko.html">En savoir plus sur Enerko</a>
+    </div>
+  </section>"""
 
 
 def _photo_gallery_html(photos, depth: int) -> str:
@@ -211,50 +277,18 @@ def _measured_type_block_html(site_id: str, type_key: str, depth: int, completen
 """
 
 
-# ── Page d'accueil ───────────────────────────────────────────────────────────
-def build_index_html() -> str:
-    today          = date.today().strftime("%d/%m/%Y")
-    sites_by_type  = _sites_by_type_json()
-    completeness   = _completeness_json()
-    first_site     = next(
-        sid for sid in SITE_ORDER if SITES[sid]["files"].get("consommation") is not None
-    )
+# ── Explorateur de données (chronologie, vue annuelle, par site) ────────────
+# Vit sur installations/index.html, sous les fiches "en bref" — pas sur la
+# page d'accueil, qui reste une page d'atterrissage (mission + CTA + cartes).
+def _dashboard_sections_html(depth: int) -> str:
+    prefix = "../" if depth else ""
     conso_label = TYPE_LABELS["consommation"]
     prod_label  = TYPE_LABELS["production"]
-
-    return f"""<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enerko — Courbes de charge</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-
-<header>
-  <div class="header-inner">
-    <h1>Enerko</h1>
-    <p class="subtitle">Coopérative Solaire — Courbes de charge des installations photovoltaïques</p>
-  </div>
-</header>
-
-{_nav_html("accueil", 0)}
-
-<main>
-
-  <!-- ── Section 0 : Installations en bref ────────────────────────────────── -->
-  <section id="sec-installations-brief">
-    <h2>Les installations en un coup d'œil</h2>
-    <p class="section-intro">
-      Surface, puissance, autoconsommation et financement de chaque installation
-      photovoltaïque Enerko. Cliquez sur une fiche pour le détail complet.
-    </p>
-    <div class="install-cards">{_install_cards_html()}
-    </div>
-  </section>
-
-  <!-- ── Section 1 : Chronologie ─────────────────────────────────────────── -->
+    first_site  = next(
+        sid for sid in SITE_ORDER if SITES[sid]["files"].get("consommation") is not None
+    )
+    return f"""
+  <!-- ── Chronologie ─────────────────────────────────────────────────────── -->
   <section id="sec-timeline">
     <h2>Évolution des installations</h2>
     <p class="section-intro">
@@ -262,13 +296,13 @@ def build_index_html() -> str:
       Chaque barre représente la période de mesure disponible pour une installation.
     </p>
     <div class="chart-wrap">
-      <img src="assets/images/timeline.png"
+      <img src="{prefix}assets/images/timeline.png"
            alt="Chronologie des installations Enerko"
            class="chart-img">
     </div>
   </section>
 
-  <!-- ── Section 2 : Vue d'ensemble annuelle ──────────────────────────────── -->
+  <!-- ── Vue d'ensemble annuelle ─────────────────────────────────────────── -->
   <section id="sec-annual">
     <h2>Vue d'ensemble annuelle</h2>
     <p class="section-intro">
@@ -280,16 +314,16 @@ def build_index_html() -> str:
       <button class="toggle-btn"        data-type="production">{prod_label}</button>
     </div>
     <div class="chart-wrap">
-      <img src="assets/images/annual_overview_consommation.png"
+      <img src="{prefix}assets/images/annual_overview_consommation.png"
            alt="{conso_label} annuelle par site"
            class="annual-img chart-img" data-type="consommation">
-      <img src="assets/images/annual_overview_production.png"
+      <img src="{prefix}assets/images/annual_overview_production.png"
            alt="Production annuelle par site"
            class="annual-img chart-img" data-type="production" style="display:none">
     </div>
   </section>
 
-  <!-- ── Section 3 : Explorateur par site ──────────────────────────────────── -->
+  <!-- ── Explorateur par site ────────────────────────────────────────────── -->
   <section id="sec-sites">
     <h2>Explorer par site</h2>
     <p class="section-intro">
@@ -330,7 +364,7 @@ def build_index_html() -> str:
         <p class="panel-desc">Totaux mensuels en MWh — une courbe par année.</p>
         <div class="chart-wrap">
           <img id="chart-monthly"
-               src="assets/images/{first_site}_monthly_consommation.png"
+               src="{prefix}assets/images/{first_site}_monthly_consommation.png"
                alt="Évolution mensuelle"
                class="chart-img">
         </div>
@@ -341,7 +375,7 @@ def build_index_html() -> str:
         <p class="panel-desc">Puissance moyenne sur 15 min, par saison (kW).</p>
         <div class="chart-wrap">
           <img id="chart-typical"
-               src="assets/images/{first_site}_typical_day_consommation.png"
+               src="{prefix}assets/images/{first_site}_typical_day_consommation.png"
                alt="Profil journalier typique"
                class="chart-img">
         </div>
@@ -355,23 +389,23 @@ def build_index_html() -> str:
       <p class="panel-desc">Intensité heure par heure sur l'année la plus récente disponible.</p>
       <div class="chart-wrap">
         <img id="chart-heatmap"
-             src="assets/images/{first_site}_heatmap_consommation.png"
+             src="{prefix}assets/images/{first_site}_heatmap_consommation.png"
              alt="Carte thermique"
              class="chart-img">
       </div>
     </div>
 
-  </section>
+  </section>"""
 
-</main>
 
-<footer>
-  <p>Données&nbsp;: SIG (Services Industriels de Genève) &mdash;
-     Enerko Coopérative Solaire &mdash;
-     Visualisation générée le {today}</p>
-</footer>
-
-<script>
+def _dashboard_script_html(depth: int) -> str:
+    prefix        = "../" if depth else ""
+    sites_by_type = _sites_by_type_json()
+    completeness  = _completeness_json()
+    first_site    = next(
+        sid for sid in SITE_ORDER if SITES[sid]["files"].get("consommation") is not None
+    )
+    return f"""<script>
 (function () {{
   "use strict";
 
@@ -407,7 +441,7 @@ def build_index_html() -> str:
 
   function refreshSiteCharts() {{
     if (!currentSite) return;
-    var base   = "assets/images/" + currentSite;
+    var base   = "{prefix}assets/images/" + currentSite;
     var suffix = "_" + currentType + ".png";
     imgMonth.src = base + "_monthly"     + suffix;
     imgTyp.src   = base + "_typical_day" + suffix;
@@ -476,7 +510,55 @@ def build_index_html() -> str:
   }});
 
 }})();
-</script>
+</script>"""
+
+
+# ── Page d'accueil ───────────────────────────────────────────────────────────
+# Page d'atterrissage uniquement : mission + CTA + cartes "en bref". Le
+# tableau de bord (chronologie, vue annuelle, explorateur par site) vit sur
+# installations/index.html, pas ici — cf. _dashboard_sections_html().
+def build_index_html() -> str:
+    today   = date.today().strftime("%d/%m/%Y")
+    address = ", ".join(CONTACT["address_lines"])
+
+    return f"""<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enerko — Coopérative Solaire</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1>Enerko</h1>
+    <p class="subtitle">Coopérative Solaire — Courbes de charge des installations photovoltaïques</p>
+  </div>
+</header>
+
+{_nav_html("accueil", 0)}
+
+<main>
+{_hero_html()}
+
+  <section id="sec-installations-brief">
+    <h2>Les installations en un coup d'œil</h2>
+    <p class="section-intro">
+      Surface, puissance, autoconsommation et financement de chaque installation
+      photovoltaïque Enerko. Cliquez sur une fiche pour le détail complet.
+    </p>
+    <div class="install-cards">{_install_cards_html(0)}
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Enerko Coopérative Solaire &mdash; {address} &mdash;
+     <a href="mailto:{CONTACT["email"]}">{CONTACT["email"]}</a></p>
+</footer>
 
 </body>
 </html>
@@ -514,7 +596,7 @@ def build_installation_html(iid: str, completeness: dict, today: str) -> str:
   </div>
 </header>
 
-{_nav_html(inst["slug"], depth)}
+{_nav_html("installations", depth)}
 
 <main>
 
@@ -573,6 +655,264 @@ def build_installation_html(iid: str, completeness: dict, today: str) -> str:
 """
 
 
+# ── Pages institutionnelles (contenu éditorial, cf. config.py) ──────────────
+def _page_shell(
+    title: str, active: str, depth: int, body: str, today: str,
+    data_footer: bool = False, extra_html: str = "",
+) -> str:
+    """Squelette commun (header/nav/main/footer) pour les pages de contenu
+    éditorial — évite de répéter le header/footer 6 fois.
+
+    data_footer=False (défaut) : footer "coordonnées de contact" — pour les
+    pages qui n'affichent aucune visualisation générée.
+    data_footer=True : footer "Visualisation générée le [date]" — réservé aux
+    pages qui affichent effectivement des graphiques générés par le pipeline
+    (ex. installations/index.html, qui héberge l'explorateur de données).
+
+    extra_html : contenu additionnel injecté après le footer, avant
+    </body> — utilisé pour le <script> de l'explorateur de données.
+    """
+    prefix = "../" if depth else ""
+    if data_footer:
+        footer_html = f"""<footer>
+  <p>Données&nbsp;: SIG (Services Industriels de Genève) &mdash;
+     Enerko Coopérative Solaire &mdash;
+     Visualisation générée le {today}</p>
+</footer>"""
+    else:
+        address = ", ".join(CONTACT["address_lines"])
+        footer_html = f"""<footer>
+  <p>Enerko Coopérative Solaire &mdash; {address} &mdash;
+     <a href="mailto:{CONTACT["email"]}">{CONTACT["email"]}</a></p>
+</footer>"""
+    return f"""<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title} — Enerko</title>
+  <link rel="stylesheet" href="{prefix}assets/css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <h1>Enerko</h1>
+    <p class="subtitle">Coopérative Solaire — Courbes de charge des installations photovoltaïques</p>
+  </div>
+</header>
+
+{_nav_html(active, depth)}
+
+<main>
+{body}
+</main>
+
+{footer_html}
+
+{extra_html}
+</body>
+</html>
+"""
+
+
+def build_installations_index_html(today: str) -> str:
+    depth = 1
+    body = f"""
+  <section id="sec-installations">
+    <a class="back-link" href="../index.html">← Retour à l'accueil</a>
+    <h2>Nos installations photovoltaïques</h2>
+    <p class="section-intro">
+      Enerko finance et exploite des installations photovoltaïques en
+      autoconsommation collective à Genève. Cliquez sur une fiche pour le
+      détail complet — description technique, financement, communauté
+      d'autoconsommateurs et données mesurées.
+    </p>
+    <div class="install-cards">{_install_cards_html(depth)}
+    </div>
+  </section>
+{_dashboard_sections_html(depth)}"""
+    return _page_shell(
+        "Installations", "installations", depth, body, today,
+        data_footer=True, extra_html=_dashboard_script_html(depth),
+    )
+
+
+def build_enerko_html(today: str) -> str:
+    depth = 0
+    body = f"""
+  <section id="sec-about">
+    <h2>Enerko ?</h2>
+    <div class="about-layout">
+      <div class="about-tagline">
+        <p class="brand-tagline">
+          {ABOUT["tagline_prefix"]}<span class="accent">{ABOUT["tagline_accent1"]}</span
+          >{ABOUT["tagline_mid"]}<span class="accent">{ABOUT["tagline_accent2"]}</span>
+        </p>
+      </div>
+      <div class="about-text">
+        <p>{ABOUT["text"]}</p>
+      </div>
+    </div>
+    {_stat_tiles_html()}
+    {_cta_band_html(
+        "Envie de rejoindre l'aventure ?",
+        "Devenez sociétaire d'Enerko pour financer de futures installations "
+        "photovoltaïques, ou consultez le détail de nos conditions d'investissement.",
+        [
+            ("Devenir membre", "devenir-membre.html", "btn-primary"),
+            ("Investir",        "investir.html",        "btn-secondary"),
+        ],
+        depth,
+    )}
+  </section>"""
+    return _page_shell("Enerko ?", "enerko", depth, body, today)
+
+
+def _autoconsommer_diagram_html() -> str:
+    d = AUTOCONSOMMER["diagram"]
+    return f"""
+    <div class="flow-diagram">
+      <div class="flow-node flow-node-grid">Réseau SIG</div>
+      <div class="flow-arrows">
+        <div class="flow-arrow flow-arrow-buy">
+          <span class="flow-arrow-icon">→</span>
+          <span class="flow-arrow-text">{d["buy_label"]} <strong>{d["buy_price"]}</strong></span>
+        </div>
+        <div class="flow-arrow flow-arrow-sell">
+          <span class="flow-arrow-icon">←</span>
+          <span class="flow-arrow-text">{d["sell_label"]} <strong>{d["sell_price"]}</strong></span>
+        </div>
+      </div>
+      <div class="flow-node flow-node-building">
+        <span class="flow-node-roof">Installation photovoltaïque</span>
+        <span class="flow-node-self">☀ {d["self_label"]}</span>
+      </div>
+    </div>
+    <p class="flow-caption">{d["caption"]}</p>"""
+
+
+def build_autoconsommer_html(today: str) -> str:
+    depth = 0
+    paragraphs = "".join(f"<p>{p}</p>" for p in AUTOCONSOMMER["paragraphs"])
+    body = f"""
+  <section id="sec-autoconsommer">
+    <h2>Autoconsommer</h2>
+    <p class="section-intro">{AUTOCONSOMMER["intro"]}</p>
+    {paragraphs}
+    {_autoconsommer_diagram_html()}
+    {_cta_band_html(
+        "Déjà locataire d'un bâtiment équipé ?",
+        AUTOCONSOMMER["cta_text"],
+        [
+            ("Devenir membre", "devenir-membre.html", "btn-primary"),
+            ("Nous contacter",  "contact.html",          "btn-secondary"),
+        ],
+        depth,
+    )}
+  </section>"""
+    return _page_shell("Autoconsommer", "autoconsommer", depth, body, today)
+
+
+def _investir_subnav_html() -> str:
+    items = "".join(
+        f'<a href="#{s["anchor"]}">{s["nav_label"].upper()}</a>'
+        for s in INVESTIR["sections"]
+    )
+    return f'<nav class="subnav" aria-label="Sections Investir">{items}</nav>'
+
+
+def _investir_section_html(s: dict) -> str:
+    paragraphs = "".join(f"<p>{p}</p>" for p in s.get("paragraphs", []))
+    charges_revenus = ""
+    if "charges" in s:
+        charges_items = "".join(f"<li>{c}</li>" for c in s["charges"])
+        revenus_items = "".join(f"<li>{r}</li>" for r in s["revenus"])
+        charges_revenus = f"""
+    <div class="charges-revenus-grid">
+      <div class="charges-box">
+        <h4>{s["charges_title"]}</h4>
+        <ul>{charges_items}</ul>
+      </div>
+      <div class="revenus-box">
+        <h4>{s["revenus_title"]}</h4>
+        <ul>{revenus_items}</ul>
+      </div>
+    </div>"""
+    bullets = ""
+    if "bullets" in s:
+        bullet_items = "".join(f"<li>{b}</li>" for b in s["bullets"])
+        bullets = f'<ul class="plain-bullets">{bullet_items}</ul>'
+    paragraphs_after = "".join(f"<p>{p}</p>" for p in s.get("paragraphs_after", []))
+    closing = f'<p>{s["closing"]}</p>' if "closing" in s else ""
+
+    return f"""
+    <div id="{s["anchor"]}" class="investir-section">
+      <h3>{s["title"]}</h3>
+      {paragraphs}
+      {charges_revenus}
+      {closing}
+      {bullets}
+      {paragraphs_after}
+    </div>"""
+
+
+def build_investir_html(today: str) -> str:
+    depth = 0
+    sections_html = "".join(_investir_section_html(s) for s in INVESTIR["sections"])
+    body = f"""
+  <section id="sec-investir">
+    <h2>Investir</h2>
+    <p class="section-intro">{INVESTIR["summary"]}</p>
+    {_investir_subnav_html()}
+    {sections_html}
+  </section>"""
+    return _page_shell("Investir", "investir", depth, body, today)
+
+
+def build_devenir_membre_html(today: str) -> str:
+    depth = 0
+    body = f"""
+  <section id="sec-devenir-membre">
+    <h2>Devenir membre</h2>
+    <p>{DEVENIR_MEMBRE["text"]}
+       <a href="mailto:{DEVENIR_MEMBRE["email"]}">{DEVENIR_MEMBRE["email"]}</a></p>
+  </section>"""
+    return _page_shell("Devenir membre", "devenir-membre", depth, body, today)
+
+
+def build_contact_html(today: str) -> str:
+    depth = 0
+    address = "<br>".join(CONTACT["address_lines"])
+    body = f"""
+  <section id="sec-contact">
+    <h2>Contact</h2>
+    <div class="contact-block">
+      <p>{address}</p>
+      <p><a href="mailto:{CONTACT["email"]}">{CONTACT["email"]}</a></p>
+    </div>
+  </section>"""
+    return _page_shell("Contact", "contact", depth, body, today)
+
+
+def build_liens_html(today: str) -> str:
+    depth = 0
+    cards = "".join(
+        f"""
+      <div class="lien-card">
+        <h3>{l["name"]}</h3>
+        <p>{l["desc"]}</p>
+      </div>""" for l in LIENS
+    )
+    body = f"""
+  <section id="sec-liens">
+    <h2>Liens utiles</h2>
+    <div class="liens-grid">{cards}
+    </div>
+  </section>"""
+    return _page_shell("Liens utiles", "liens", depth, body, today)
+
+
 def main() -> None:
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
     INSTALL_DIR.mkdir(parents=True, exist_ok=True)
@@ -588,6 +928,19 @@ def main() -> None:
         inst = INSTALLATIONS[iid]
         html = build_installation_html(iid, completeness, today)
         out  = INSTALL_DIR / f"{inst['slug']}.html"
+        out.write_text(html, encoding="utf-8")
+        print(f"✓  {out} généré ({len(html):,} caractères)")
+
+    pages = [
+        (build_installations_index_html(today), INSTALL_DIR / "index.html"),
+        (build_enerko_html(today),               DOCS_DIR / "enerko.html"),
+        (build_autoconsommer_html(today),         DOCS_DIR / "autoconsommer.html"),
+        (build_investir_html(today),              DOCS_DIR / "investir.html"),
+        (build_devenir_membre_html(today),        DOCS_DIR / "devenir-membre.html"),
+        (build_contact_html(today),               DOCS_DIR / "contact.html"),
+        (build_liens_html(today),                 DOCS_DIR / "liens.html"),
+    ]
+    for html, out in pages:
         out.write_text(html, encoding="utf-8")
         print(f"✓  {out} généré ({len(html):,} caractères)")
 

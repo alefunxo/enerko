@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enerko — Courbes de charge</title>
+  <title>Enerko — Coopérative Solaire</title>
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -15,11 +15,23 @@
   </div>
 </header>
 
-<nav class="top-nav"><div class="top-nav-inner"><a href="index.html" class="active">Accueil</a><a href="installations/soubeyran-7.html">GENÈVE, Rue Soubeyran 7</a><a href="installations/meyrin-recreations-24.html">MEYRIN, Espl. des Récréations 24</a><a href="installations/plan-les-ouates-vers-8.html">PLAN-LES-OUATES, Ch. de Vers 8</a></div></nav>
+<nav class="top-nav"><div class="top-nav-inner"><a href="index.html" class="active">Accueil</a><a href="enerko.html">Enerko ?</a><a href="installations/index.html">Installations</a><a href="autoconsommer.html">Autoconsommer</a><a href="investir.html">Investir</a><a href="devenir-membre.html">Devenir membre</a><a href="contact.html">Contact</a><a href="liens.html">Liens</a></div></nav>
 
 <main>
 
-  <!-- ── Section 0 : Installations en bref ────────────────────────────────── -->
+  <section id="sec-hero" class="hero-band">
+    <p class="hero-tagline">
+      coopér<span class="accent">Action</span
+      > énerg<span class="accent">Ethique</span>
+    </p>
+    <p class="hero-text">Enerko est une société coopérative fondée en 2016 à Genève. Elle a pour but de favoriser et développer des projets de production d'énergies renouvelables et d'économie d'énergie. Elle a également pour but de contribuer à l'émergence et l'expérimentation de nouveaux modèles de mise en œuvre de ces projets — notamment le financement d'installations photovoltaïques en autoconsommation collective.</p>
+    <div class="cta-buttons">
+      <a class="btn btn-primary" href="devenir-membre.html">Devenir membre</a>
+      <a class="btn btn-secondary" href="investir.html">Investir</a>
+      <a class="btn btn-secondary" href="enerko.html">En savoir plus sur Enerko</a>
+    </div>
+  </section>
+
   <section id="sec-installations-brief">
     <h2>Les installations en un coup d'œil</h2>
     <p class="section-intro">
@@ -48,324 +60,12 @@
     </div>
   </section>
 
-  <!-- ── Section 1 : Chronologie ─────────────────────────────────────────── -->
-  <section id="sec-timeline">
-    <h2>Évolution des installations</h2>
-    <p class="section-intro">
-      3 installations photovoltaïques actives, de juin&nbsp;2017 à aujourd'hui.
-      Chaque barre représente la période de mesure disponible pour une installation.
-    </p>
-    <div class="chart-wrap">
-      <img src="assets/images/timeline.png"
-           alt="Chronologie des installations Enerko"
-           class="chart-img">
-    </div>
-  </section>
-
-  <!-- ── Section 2 : Vue d'ensemble annuelle ──────────────────────────────── -->
-  <section id="sec-annual">
-    <h2>Vue d'ensemble annuelle</h2>
-    <p class="section-intro">
-      Totaux annuels par site, en MWh. Utilisez les boutons pour
-      basculer entre autoconsommation et production.
-    </p>
-    <div class="toggle-group" id="annual-toggle" role="group" aria-label="Type de données">
-      <button class="toggle-btn active" data-type="consommation">Autoconsommation</button>
-      <button class="toggle-btn"        data-type="production">Production</button>
-    </div>
-    <div class="chart-wrap">
-      <img src="assets/images/annual_overview_consommation.png"
-           alt="Autoconsommation annuelle par site"
-           class="annual-img chart-img" data-type="consommation">
-      <img src="assets/images/annual_overview_production.png"
-           alt="Production annuelle par site"
-           class="annual-img chart-img" data-type="production" style="display:none">
-    </div>
-  </section>
-
-  <!-- ── Section 3 : Explorateur par site ──────────────────────────────────── -->
-  <section id="sec-sites">
-    <h2>Explorer par site</h2>
-    <p class="section-intro">
-      Choisissez d'abord le type de données, puis le site — seuls ceux
-      disposant de ce type de mesure sont proposés. Un site d'autoconsommation
-      est un bâtiment raccordé au réseau ; un site de production est une
-      installation photovoltaïque.
-    </p>
-
-    <div class="controls">
-      <div class="control-group">
-        <label>Type de données</label>
-        <div class="toggle-group" id="site-type-toggle" role="group" aria-label="Type de données">
-          <button class="toggle-btn active" data-type="consommation">Autoconsommation</button>
-          <button class="toggle-btn"        data-type="production">Production</button>
-        </div>
-      </div>
-      <div class="control-group">
-        <label for="site-select">Site</label>
-        <select id="site-select" aria-label="Sélection du site"></select>
-      </div>
-
-      <div class="control-group">
-        <label>Complétude des données</label>
-        <div class="completeness-badge" id="completeness-badge">
-          <span id="completeness-pct">–</span>
-        </div>
-      </div>
-    </div>
-
-    <p class="completeness-detail" id="completeness-detail"></p>
-
-    <!-- Ligne 1 : mensuel + profil journalier -->
-    <div class="charts-row two-col">
-
-      <div class="chart-panel">
-        <h3 class="panel-title">Évolution mensuelle</h3>
-        <p class="panel-desc">Totaux mensuels en MWh — une courbe par année.</p>
-        <div class="chart-wrap">
-          <img id="chart-monthly"
-               src="assets/images/site_a_monthly_consommation.png"
-               alt="Évolution mensuelle"
-               class="chart-img">
-        </div>
-      </div>
-
-      <div class="chart-panel">
-        <h3 class="panel-title">Profil journalier typique</h3>
-        <p class="panel-desc">Puissance moyenne sur 15 min, par saison (kW).</p>
-        <div class="chart-wrap">
-          <img id="chart-typical"
-               src="assets/images/site_a_typical_day_consommation.png"
-               alt="Profil journalier typique"
-               class="chart-img">
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Ligne 2 : heatmap pleine largeur -->
-    <div class="chart-panel">
-      <h3 class="panel-title">Carte thermique</h3>
-      <p class="panel-desc">Intensité heure par heure sur l'année la plus récente disponible.</p>
-      <div class="chart-wrap">
-        <img id="chart-heatmap"
-             src="assets/images/site_a_heatmap_consommation.png"
-             alt="Carte thermique"
-             class="chart-img">
-      </div>
-    </div>
-
-  </section>
-
 </main>
 
 <footer>
-  <p>Données&nbsp;: SIG (Services Industriels de Genève) &mdash;
-     Enerko Coopérative Solaire &mdash;
-     Visualisation générée le 10/07/2026</p>
+  <p>Enerko Coopérative Solaire &mdash; 4, ch. des Terres-Noires, 1252 Meinier, Suisse &mdash;
+     <a href="mailto:info@enerko.ch">info@enerko.ch</a></p>
 </footer>
-
-<script>
-(function () {
-  "use strict";
-
-  var siteSel   = document.getElementById("site-select");
-  var imgMonth  = document.getElementById("chart-monthly");
-  var imgTyp    = document.getElementById("chart-typical");
-  var imgHeat   = document.getElementById("chart-heatmap");
-  var compBadge  = document.getElementById("completeness-badge");
-  var compPct    = document.getElementById("completeness-pct");
-  var compDetail = document.getElementById("completeness-detail");
-
-  var SITES_BY_TYPE = {"consommation": [{"id": "site_a", "label": "GENEVE, Rue Soubeyran 7 (depuis 2017-06)"}, {"id": "site_b", "label": "MEYRIN, Espl. des Récréations 24 (depuis 2017-11)"}, {"id": "site_c", "label": "MEYRIN, Espl. des Récréations 26 (depuis 2018-01)"}, {"id": "site_e", "label": "Site E (depuis 2018-02)"}, {"id": "site_g", "label": "PLAN-LES-OUATES, Ch. de Vers 8 (depuis 2022-06)"}], "production": [{"id": "site_c", "label": "MEYRIN, Espl. des Récréations 26 (depuis 2018-01)"}, {"id": "site_d", "label": "MEYRIN, Espl. des Récréations 24 (depuis 2018-01)"}, {"id": "site_f", "label": "PLAN-LES-OUATES, Ch. de Vers 8 (depuis 2022-06)"}]};
-
-  var currentType = "consommation";
-  var currentSite = "site_a";
-  var completenessData = {
-  "site_a_consommation": {
-    "start": "2017-06-24",
-    "end": "2026-06-23",
-    "expected": 315552,
-    "present": 315516,
-    "missing": 36,
-    "pct_missing": 0.01,
-    "gaps": []
-  },
-  "site_b_consommation": {
-    "start": "2017-11-29",
-    "end": "2026-06-23",
-    "expected": 300384,
-    "present": 300348,
-    "missing": 36,
-    "pct_missing": 0.01,
-    "gaps": []
-  },
-  "site_c_consommation": {
-    "start": "2018-01-11",
-    "end": "2026-06-23",
-    "expected": 296256,
-    "present": 296220,
-    "missing": 36,
-    "pct_missing": 0.01,
-    "gaps": []
-  },
-  "site_c_production": {
-    "start": "2018-02-05",
-    "end": "2026-06-23",
-    "expected": 293856,
-    "present": 264448,
-    "missing": 29408,
-    "pct_missing": 10.01,
-    "gaps": [
-      {
-        "start": "2019-08-01",
-        "end": "2020-03-31",
-        "days": 244.0
-      },
-      {
-        "start": "2020-07-01",
-        "end": "2020-08-31",
-        "days": 62.0
-      }
-    ]
-  },
-  "site_d_production": {
-    "start": "2018-01-31",
-    "end": "2026-06-23",
-    "expected": 294336,
-    "present": 264928,
-    "missing": 29408,
-    "pct_missing": 9.99,
-    "gaps": [
-      {
-        "start": "2019-08-01",
-        "end": "2020-03-31",
-        "days": 244.0
-      },
-      {
-        "start": "2020-07-01",
-        "end": "2020-08-31",
-        "days": 62.0
-      }
-    ]
-  },
-  "site_e_consommation": {
-    "start": "2018-01-11",
-    "end": "2026-06-23",
-    "expected": 296256,
-    "present": 296220,
-    "missing": 36,
-    "pct_missing": 0.01,
-    "gaps": []
-  },
-  "site_f_production": {
-    "start": "2022-06-24",
-    "end": "2026-06-23",
-    "expected": 140256,
-    "present": 140240,
-    "missing": 16,
-    "pct_missing": 0.01,
-    "gaps": []
-  },
-  "site_g_consommation": {
-    "start": "2022-06-24",
-    "end": "2026-06-23",
-    "expected": 140256,
-    "present": 140240,
-    "missing": 16,
-    "pct_missing": 0.01,
-    "gaps": []
-  }
-};
-
-  function populateSiteSelect() {
-    var options = SITES_BY_TYPE[currentType] || [];
-    var keepSite = options.some(function (o) { return o.id === currentSite; });
-    if (!keepSite) {
-      currentSite = options.length ? options[0].id : null;
-    }
-    siteSel.innerHTML = "";
-    options.forEach(function (o) {
-      var opt = document.createElement("option");
-      opt.value = o.id;
-      opt.textContent = o.label;
-      if (o.id === currentSite) opt.selected = true;
-      siteSel.appendChild(opt);
-    });
-  }
-
-  function refreshSiteCharts() {
-    if (!currentSite) return;
-    var base   = "assets/images/" + currentSite;
-    var suffix = "_" + currentType + ".png";
-    imgMonth.src = base + "_monthly"     + suffix;
-    imgTyp.src   = base + "_typical_day" + suffix;
-    imgHeat.src  = base + "_heatmap"     + suffix;
-  }
-
-  function refreshCompleteness() {
-    var c = (completenessData && currentSite)
-      ? completenessData[currentSite + "_" + currentType] : null;
-    compBadge.classList.remove("good", "warn", "bad");
-
-    if (!c) {
-      compPct.textContent = "n/d";
-      compDetail.textContent = "";
-      return;
-    }
-
-    var pctPresent = (100 - c.pct_missing).toFixed(1);
-    compPct.textContent = pctPresent + "% complet (" + c.start + " → " + c.end + ")";
-    compBadge.classList.add(c.pct_missing < 2 ? "good" : c.pct_missing < 15 ? "warn" : "bad");
-
-    if (c.gaps.length) {
-      compDetail.textContent = "Trous : " + c.gaps.map(function (g) {
-        return g.start + " → " + g.end + " (" + g.days + " j)";
-      }).join("  ·  ");
-    } else {
-      compDetail.textContent = "Aucun trou significatif détecté.";
-    }
-  }
-
-  // Sélecteur de site
-  siteSel.addEventListener("change", function () {
-    currentSite = this.value;
-    refreshSiteCharts();
-    refreshCompleteness();
-  });
-
-  // Toggle type (section sites) : refiltre la liste des installations
-  document.querySelectorAll("#site-type-toggle .toggle-btn").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      document.querySelectorAll("#site-type-toggle .toggle-btn")
-              .forEach(function (b) { b.classList.remove("active"); });
-      this.classList.add("active");
-      currentType = this.dataset.type;
-      populateSiteSelect();
-      refreshSiteCharts();
-      refreshCompleteness();
-    });
-  });
-
-  populateSiteSelect();
-  refreshSiteCharts();
-  refreshCompleteness();
-
-  // Toggle type (section annuelle — indépendant)
-  document.querySelectorAll("#annual-toggle .toggle-btn").forEach(function (btn) {
-    btn.addEventListener("click", function () {
-      document.querySelectorAll("#annual-toggle .toggle-btn")
-              .forEach(function (b) { b.classList.remove("active"); });
-      this.classList.add("active");
-      var t = this.dataset.type;
-      document.querySelectorAll(".annual-img").forEach(function (img) {
-        img.style.display = (img.dataset.type === t) ? "block" : "none";
-      });
-    });
-  });
-
-})();
-</script>
 
 </body>
 </html>
