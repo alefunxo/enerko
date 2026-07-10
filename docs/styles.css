@@ -10,15 +10,15 @@
    Archivo             : fonts.google.com/specimen/Archivo (OFL)
    IBM Plex Mono       : fonts.google.com/specimen/IBM+Plex+Mono (OFL)    */
 
-@font-face { font-family: "Bricolage Grotesque"; src: url("../assets/fonts/bricolage-grotesque/bricolage-grotesque-v9-latin-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
-@font-face { font-family: "Bricolage Grotesque"; src: url("../assets/fonts/bricolage-grotesque/bricolage-grotesque-v9-latin-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
-@font-face { font-family: "Bricolage Grotesque"; src: url("../assets/fonts/bricolage-grotesque/bricolage-grotesque-v9-latin-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
-@font-face { font-family: "Bricolage Grotesque"; src: url("../assets/fonts/bricolage-grotesque/bricolage-grotesque-v9-latin-800.woff2") format("woff2"); font-weight: 800; font-display: swap; }
-@font-face { font-family: "Archivo"; src: url("../assets/fonts/archivo/archivo-v25-latin-regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "Archivo"; src: url("../assets/fonts/archivo/archivo-v25-latin-500.woff2") format("woff2");     font-weight: 500; font-display: swap; }
-@font-face { font-family: "Archivo"; src: url("../assets/fonts/archivo/archivo-v25-latin-600.woff2") format("woff2");     font-weight: 600; font-display: swap; }
-@font-face { font-family: "IBM Plex Mono"; src: url("../assets/fonts/ibm-plex-mono/ibm-plex-mono-v20-latin-regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
-@font-face { font-family: "IBM Plex Mono"; src: url("../assets/fonts/ibm-plex-mono/ibm-plex-mono-v20-latin-500.woff2") format("woff2");     font-weight: 500; font-display: swap; }
+@font-face { font-family: "Bricolage Grotesque"; src: url("assets/fonts/bricolage-grotesque/bricolage-grotesque-v9-latin-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Bricolage Grotesque"; src: url("assets/fonts/bricolage-grotesque/bricolage-grotesque-v9-latin-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Bricolage Grotesque"; src: url("assets/fonts/bricolage-grotesque/bricolage-grotesque-v9-latin-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Bricolage Grotesque"; src: url("assets/fonts/bricolage-grotesque/bricolage-grotesque-v9-latin-800.woff2") format("woff2"); font-weight: 800; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("assets/fonts/archivo/archivo-v25-latin-regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("assets/fonts/archivo/archivo-v25-latin-500.woff2") format("woff2");     font-weight: 500; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("assets/fonts/archivo/archivo-v25-latin-600.woff2") format("woff2");     font-weight: 600; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/ibm-plex-mono/ibm-plex-mono-v20-latin-regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("assets/fonts/ibm-plex-mono/ibm-plex-mono-v20-latin-500.woff2") format("woff2");     font-weight: 500; font-display: swap; }
 
 /* ---------- Jetons (contrastes vérifiés WCAG AA pour leur usage) ----------
    #F7931E sur #1E1A16 : 7.5:1  — texte et marques sur sombre : OK

@@ -1,6 +1,6 @@
 """
 03_charts.py — Génération des graphiques PNG
-Produit tous les graphiques dans docs/assets/images/.
+Produit tous les graphiques dans docs/assets/charts/ (référencés par les pages statiques).
 Si les agrégats sont absents, génère un PNG "données non disponibles".
 
 Usage : python scripts/03_charts.py

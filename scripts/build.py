@@ -1,14 +1,16 @@
 """
-build.py — Pipeline complet Enerko
-Exécute les quatre étapes dans l'ordre :
+build.py — Pipeline de données Enerko (CSV → graphiques)
+Exécute les trois étapes dans l'ordre :
   01_parse       → Parquets par (site, type)
-  02_aggregate   → Agrégats mensuels/annuels/profils/heatmaps
-  03_charts      → PNGs dans docs/assets/images/
-  04_build_html  → docs/index.html
+  02_aggregate   → Agrégats mensuels/annuels/profils/heatmaps + completeness.json
+  03_charts      → PNGs dans docs/assets/charts/
+
+Le HTML du site est désormais STATIQUE (pages hand-maintained sous docs/) — il
+n'est plus généré. Le pipeline ne produit que les données et les graphiques ;
+les pages HTML les référencent directement.
 
 Usage :
-  python scripts/build.py           # pipeline complet
-  python scripts/build.py --html    # régénère uniquement le HTML (noms de sites)
+  python scripts/build.py           # pipeline complet (parse → agrégats → charts)
   python scripts/build.py --charts  # régénère uniquement les graphiques
 """
 
@@ -44,7 +46,6 @@ def run_full() -> None:
         ("01 — Lecture des CSV",           "01_parse",      "process_all"),
         ("02 — Calcul des agrégats",       "02_aggregate",  "process_all"),
         ("03 — Génération des graphiques", "03_charts",     "main"),
-        ("04 — Génération du HTML",        "04_build_html", "main"),
     ]
 
     success = 0
@@ -65,12 +66,6 @@ def run_full() -> None:
     print(f"{'='*60}\n")
 
 
-def run_html_only() -> None:
-    import importlib
-    mod = importlib.import_module("04_build_html")
-    _run("04 — Génération du HTML", mod.main)
-
-
 def run_charts_only() -> None:
     import importlib
     for name, fn_name in [("02_aggregate", "process_all"), ("03_charts", "main")]:
@@ -80,9 +75,7 @@ def run_charts_only() -> None:
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    if "--html" in args:
-        run_html_only()
-    elif "--charts" in args:
+    if "--charts" in args:
         run_charts_only()
     else:
         run_full()

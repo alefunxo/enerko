@@ -13,7 +13,7 @@
 
 <header class="site-head">
   <a class="brand" href="index.html">
-    <img src="../assets/logos/logo-enerko-mark.png" alt="Enerko — coopérAction énergEthique" width="800" height="166">
+    <img src="assets/logos/logo-enerko-mark.png" alt="Enerko — coopérAction énergEthique" width="800" height="166">
   </a>
   <nav class="site-nav" aria-label="Navigation principale">
     <a href="index.html">Accueil</a>
@@ -115,10 +115,10 @@
       </div>
 
       <figure class="chart-figure" style="margin-top:1.5rem">
-        <img class="annual-img" src="../assets/charts/annual_overview_consommation.png"
+        <img class="annual-img" src="assets/charts/annual_overview_consommation.png"
              alt="Surplus injecté dans le réseau annuel par site" data-type="consommation"
              width="1600" height="900" loading="lazy">
-        <img class="annual-img" src="../assets/charts/annual_overview_production.png"
+        <img class="annual-img" src="assets/charts/annual_overview_production.png"
              alt="Production annuelle par site" data-type="production"
              width="1600" height="900" style="display:none" loading="lazy">
       </figure>
@@ -158,16 +158,16 @@
 
       <div class="chart-grid" style="margin-top:2rem">
         <figure class="chart-figure">
-          <img id="chart-monthly" src="../assets/charts/site_a_monthly_consommation.png" alt="Évolution mensuelle" loading="lazy">
+          <img id="chart-monthly" src="assets/charts/site_a_monthly_consommation.png" alt="Évolution mensuelle" loading="lazy">
           <figcaption class="panel-title">Évolution mensuelle</figcaption>
         </figure>
         <figure class="chart-figure">
-          <img id="chart-typical" src="../assets/charts/site_a_typical_day_consommation.png" alt="Profil journalier typique" loading="lazy">
+          <img id="chart-typical" src="assets/charts/site_a_typical_day_consommation.png" alt="Profil journalier typique" loading="lazy">
           <figcaption class="panel-title">Profil journalier typique</figcaption>
         </figure>
       </div>
       <figure class="chart-figure" style="margin-top:1.5rem">
-        <img id="chart-heatmap" src="../assets/charts/site_a_heatmap_consommation.png" alt="Carte thermique" loading="lazy">
+        <img id="chart-heatmap" src="assets/charts/site_a_heatmap_consommation.png" alt="Carte thermique" loading="lazy">
         <figcaption class="panel-title">Carte thermique — heure par heure sur l'année</figcaption>
       </figure>
     </div>
@@ -179,7 +179,7 @@
   <div class="wrap site-foot__grid">
     <div>
       <a class="brand brand--foot" href="index.html">
-        <img src="../assets/logos/logo-enerko-mark.png" alt="Enerko — coopérAction énergEthique" width="800" height="166">
+        <img src="assets/logos/logo-enerko-mark.png" alt="Enerko — coopérAction énergEthique" width="800" height="166">
       </a>
     </div>
     <address>
@@ -259,7 +259,7 @@
 
   function refreshSiteCharts() {
     if (!currentSite) return;
-    var base = "../assets/charts/" + currentSite;
+    var base = "assets/charts/" + currentSite;
     var suffix = "_" + currentType + ".png";
     imgMonth.src = base + "_monthly" + suffix;
     imgTyp.src   = base + "_typical_day" + suffix;

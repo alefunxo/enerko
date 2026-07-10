@@ -1,12 +1,16 @@
 # Enerko — Courbes de charge
 
-Page statique GitHub Pages pour visualiser les courbes de charge (consommation et production)
-des installations photovoltaïques de la coopérative solaire Enerko.
+Site statique GitHub Pages de la coopérative solaire Enerko : présentation de la coopérative
+et visualisation des courbes de charge (injection réseau et production) de ses installations
+photovoltaïques.
 
 ## Principe
 
 Les données brutes (CSV SIG) restent **strictement locales** et ne sont jamais publiées.
-Seuls les graphiques (PNG) et la page HTML générés sont commités dans `docs/`.
+Seuls les graphiques (PNG) générés et les pages HTML sont commités dans `docs/`.
+
+Le site (`docs/*.html`) est **statique et édité à la main** — ce n'est plus généré. Le
+pipeline Python ne produit que les **données et les graphiques** que les pages référencent :
 
 ```
 CSV bruts (local)
@@ -15,31 +19,37 @@ CSV bruts (local)
 Parquets (local, ignorés par git)
     │
     ▼ 02_aggregate.py
-Agrégats mensuels / annuels / profils (local)
+Agrégats mensuels / annuels / profils + completeness.json (local)
     │
     ▼ 03_charts.py
-PNG dans docs/assets/images/  ──┐
-    │                            ├── commités → GitHub Pages
-    ▼ 04_build_html.py           │
-docs/index.html ────────────────┘
+PNG dans docs/assets/charts/  ── commités → référencés par les pages statiques → GitHub Pages
 ```
+
+> Le pipeline s'arrête aux graphiques. Une ancienne étape `04_build_html.py` générait les
+> pages depuis `config.py` ; elle a été retirée quand la refonte « Signal » est devenue le
+> site officiel, statique.
 
 ## Structure
 
 ```
 Enerko/
 ├── scripts/
-│   ├── config.py          ← seul fichier à modifier pour les noms de sites
+│   ├── config.py          ← source de vérité des DONNÉES (quel CSV → quel site/type, couleurs)
 │   ├── 01_parse.py        ← lecture des CSV → Parquets
-│   ├── 02_aggregate.py    ← calcul des agrégats
-│   ├── 03_charts.py       ← génération des PNG
-│   ├── 04_build_html.py   ← génération de docs/index.html
-│   └── build.py           ← pipeline complet
+│   ├── 02_aggregate.py    ← calcul des agrégats + completeness.json
+│   ├── 03_charts.py       ← génération des PNG → docs/assets/charts/
+│   └── build.py           ← pipeline complet (données → graphiques)
 ├── docs/                  ← racine GitHub Pages (commité)
-│   ├── index.html
+│   ├── index.html         ← accueil
+│   ├── enerko.html · equipe.html · installations.html
+│   ├── installation-soubeyran.html · installation-meyrin.html · installation-plan-les-ouates.html
+│   ├── autoconsommer.html · investir.html · devenir-membre.html · contact.html · liens.html
+│   ├── styles.css
 │   └── assets/
-│       ├── css/style.css
-│       └── images/        ← PNG générés
+│       ├── charts/        ← PNG générés par le pipeline (+ charts/partners/, logos partenaires)
+│       ├── fonts/         ← polices auto-hébergées
+│       ├── logos/ · photos/
+│       └── data/completeness.json  ← généré, non consommé au runtime (badges codés en dur)
 ├── .gitignore
 ├── requirements.txt
 └── README.md
@@ -63,19 +73,10 @@ python scripts/build.py
 
 Étapes exécutées :
 1. Lecture de tous les CSV → `processed/*.parquet`
-2. Calcul des agrégats → `processed/aggregates/*.parquet`
-3. Génération des graphiques → `docs/assets/images/*.png`
-4. Génération de la page → `docs/index.html`
+2. Calcul des agrégats → `processed/aggregates/*.parquet` + `docs/assets/data/completeness.json`
+3. Génération des graphiques → `docs/assets/charts/*.png`
 
-Durée indicative : 5–15 minutes selon la machine (260 Mo de CSV).
-
-### Mettre à jour uniquement les noms de sites
-
-1. Modifier `scripts/config.py` — champ `"name"` de chaque site
-2. Exécuter :
-   ```bash
-   python scripts/build.py --html
-   ```
+Durée indicative : quelques secondes à quelques minutes selon la machine.
 
 ### Régénérer uniquement les graphiques (sans relire les CSV)
 
@@ -83,52 +84,38 @@ Durée indicative : 5–15 minutes selon la machine (260 Mo de CSV).
 python scripts/build.py --charts
 ```
 
+### Modifier le contenu du site
+
+Les pages sont statiques : éditer directement les fichiers `docs/*.html` (et `docs/styles.css`
+pour la mise en forme). Il n'y a pas d'étape de génération HTML à relancer.
+
+> Sur cette machine, utiliser le venv du projet : `.venv\Scripts\python.exe scripts\build.py`
+> (le `python` système est Miniconda, sans `pyarrow` → échec sur les Parquets).
+
 ## Déploiement GitHub Pages
 
-1. Créer un dépôt GitHub (ex. `enerko-dashboard`)
-2. Aller dans *Settings → Pages → Source* : `main` / `docs`
-3. Commiter `docs/` après chaque génération :
+1. *Settings → Pages → Source* : `main` / `docs`
+2. Commiter `docs/` après chaque changement (graphiques régénérés ou pages éditées) :
    ```bash
    git add docs/
-   git commit -m "Mise à jour des graphiques"
+   git commit -m "Mise à jour du site"
    git push
    ```
-4. La page est accessible à `https://<utilisateur>.github.io/enerko-dashboard/`
+3. La page est accessible à `https://<utilisateur>.github.io/<dépôt>/`
 
-## Mettre à jour les noms de sites
+## Données des sites (`config.py`)
 
-Ouvrir `scripts/config.py` et modifier la clé `"name"` de chaque entrée :
+`scripts/config.py` reste la source de vérité pour les **données** : quel fichier CSV
+correspond à quel site et quel type (`consommation` = injection réseau / `production`),
+les couleurs des séries, les saisons. Modifier ce fichier puis relancer le pipeline régénère
+les graphiques en conséquence. La **copie éditoriale des pages** (noms affichés, chiffres,
+textes) vit désormais dans `docs/*.html` et se met à jour à la main.
 
-```python
-"site_a": {
-    "name": "Toiture Carouge",   # ← remplacer "Site A"
-    ...
-}
-```
+### Confirmer consommation vs production (sites C et D)
 
-Puis régénérer le HTML :
-
-```bash
-python scripts/build.py --html
-git add docs/index.html && git commit -m "Noms de sites mis à jour" && git push
-```
-
-## Confirmer consommation vs production (sites C et D)
-
-Les sites C et D disposent chacun de deux fichiers CSV.
-L'assignation actuelle dans `config.py` est une hypothèse à confirmer.
-Pour inverser :
-
-```python
-"site_c": {
-    "files": {
-        "consommation": "81dac57f-...",   # ← échanger les deux UUID
-        "production":   "3cddead9-...",
-    }
-}
-```
-
-Puis relancer le pipeline complet.
+Les sites C et D disposent chacun de deux fichiers CSV ; l'assignation actuelle dans
+`config.py` est une hypothèse à confirmer. Pour inverser, échanger les deux UUID dans
+`files`, puis relancer le pipeline complet.
 
 ## Graphiques produits
 
@@ -140,4 +127,4 @@ Puis relancer le pipeline complet.
 | `{site}_typical_day_{type}.png` | Profil 15 min moyen par saison (kW) |
 | `{site}_heatmap_{type}.png` | Carte thermique heure × jour de l'année |
 
-`{type}` vaut `consommation` ou `production`.
+`{type}` vaut `consommation` ou `production`. Tous les PNG sont écrits dans `docs/assets/charts/`.

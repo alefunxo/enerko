@@ -1,50 +1,205 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enerko — Enerko</title>
-  <link rel="stylesheet" href="assets/css/style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enerko — Enerko</title>
+<meta name="description" content="Enerko, société coopérative fondée en 2016 à Genève : mission, chiffres clés et modèle de financement des installations photovoltaïques en autoconsommation collective.">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <a href="index.html" class="brand-logo">
-      <img src="assets/images/logo-enerko.png" alt="Enerko — coopérAction énergEthique">
-    </a>
-  </div>
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+
+<header class="site-head">
+  <a class="brand" href="index.html">
+    <img src="assets/logos/logo-enerko-mark.png" alt="Enerko — coopérAction énergEthique" width="800" height="166">
+  </a>
+  <nav class="site-nav" aria-label="Navigation principale">
+    <a href="index.html">Accueil</a>
+    <a href="enerko.html" aria-current="page">Enerko</a>
+    <a href="equipe.html">Équipe</a>
+    <a href="installations.html">Installations</a>
+    <a href="autoconsommer.html">Autoconsommer</a>
+    <a href="investir.html">Investir</a>
+    <a href="contact.html">Contact</a>
+    <a class="site-nav__cta" href="devenir-membre.html">Devenir membre</a>
+  </nav>
 </header>
 
-<nav class="top-nav"><div class="top-nav-inner"><input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox"><label for="nav-toggle" class="nav-toggle-label" aria-label="Ouvrir le menu"></label><div class="top-nav-links"><a href="index.html">Accueil</a><a href="enerko.html" class="active">Enerko</a><a href="equipe.html">Équipe</a><a href="installations/index.html">Installations</a><a href="autoconsommer.html">Autoconsommer</a><a href="investir.html">Investir</a><a href="devenir-membre.html">Devenir membre</a><a href="contact.html">Contact</a><a href="liens.html">Liens</a></div></div></nav>
+<main id="contenu">
 
-<main>
-
-  <section id="sec-about">
-    <h2>Enerko</h2>
-    <div class="about-layout">
-      <div class="about-tagline">
-        <img class="about-logo" src="assets/images/logo-enerko.png" alt="Enerko — coopérAction énergEthique">
-      </div>
-      <div class="about-text">
-        <p>Enerko est une société coopérative fondée en 2016 à Genève. Elle a pour but de favoriser et développer des projets de production d'énergies renouvelables et d'économie d'énergie. Elle a également pour but de contribuer à l'émergence et l'expérimentation de nouveaux modèles de mise en œuvre de ces projets — notamment le financement d'installations photovoltaïques en autoconsommation collective.</p>
-      </div>
-    </div>
-    <div class="stats-strip"><div class="stat-tile"><span class="stat-value">X</span><span class="stat-label">Membres de la coopérative</span></div><div class="stat-tile"><span class="stat-value">3</span><span class="stat-label">Installations photovoltaïques</span></div><div class="stat-tile"><span class="stat-value">248.4 kWc</span><span class="stat-label">Puissance installée totale</span></div><div class="stat-tile"><span class="stat-value">1'403 m²</span><span class="stat-label">Surface de toiture équipée</span></div><div class="stat-tile"><span class="stat-value">260'000 kWh/an</span><span class="stat-label">Production solaire annuelle</span></div><div class="stat-tile"><span class="stat-value">440'000 CHF</span><span class="stat-label">Capital investi dans ces installations</span></div></div>
-    
-    <div class="cta-band">
-      <h3>Envie de rejoindre l'aventure ?</h3>
-      <p>Devenez sociétaire d'Enerko pour financer de futures installations photovoltaïques, ou consultez le détail de nos conditions d'investissement.</p>
-      <div class="cta-buttons"><a class="btn btn-primary" href="devenir-membre.html">Devenir membre</a><a class="btn btn-secondary" href="investir.html">Investir</a></div>
+  <section class="band band--dark page-hero" aria-labelledby="page-titre">
+    <div class="wrap">
+      <p class="kicker kicker--orange">La coopérative</p>
+      <h1 id="page-titre" class="display-lg">Enerko.</h1>
+      <p class="page-lede">Enerko est une société coopérative fondée en 2016 à Genève.
+      Elle a pour but de favoriser et développer des projets de production d'énergies
+      renouvelables et d'économie d'énergie. Elle a également pour but de contribuer
+      à l'émergence et l'expérimentation de nouveaux modèles de mise en œuvre de ces
+      projets&nbsp;— notamment le financement d'installations photovoltaïques en
+      autoconsommation collective.</p>
     </div>
   </section>
+  
+  <!-- ============ CHIFFRES — bande claire ============ -->
+  <section class="band band--light" aria-label="Enerko en chiffres">
+    <div class="wrap">
+      <p class="kicker">Enerko en chiffres</p>
+      <ul class="stat-row stat-row--6">
+        <li class="stat stat--light">
+          <span class="stat__value">≈ 100</span>
+          <span class="stat__label">membres de la coopérative</span>
+        </li>
+        <li class="stat stat--light">
+          <span class="stat__value">3</span>
+          <span class="stat__label">installations photovoltaïques</span>
+        </li>
+        <li class="stat stat--light">
+          <span class="stat__value">248,4<span class="stat__unit">kWc</span></span>
+          <span class="stat__label">puissance installée totale</span>
+        </li>
+        <li class="stat stat--light">
+          <span class="stat__value">1&nbsp;403<span class="stat__unit">m²</span></span>
+          <span class="stat__label">surface de toiture équipée</span>
+        </li>
+        <li class="stat stat--light">
+          <span class="stat__value">260<span class="stat__unit">MWh/an</span></span>
+          <span class="stat__label">production solaire annuelle</span>
+        </li>
+        <li class="stat stat--light">
+          <span class="stat__value">440<span class="stat__unit">k CHF</span></span>
+          <span class="stat__label">capital investi dans ces installations</span>
+        </li>
+      </ul>
+    </div>
+  </section>
+  <!-- ============ MISSION — bande pierre (rythme) ============ -->
+  <section class="band band--stone" aria-labelledby="mission-titre">
+    <div class="wrap">
+      <p class="kicker">Notre mission</p>
+      <h2 id="mission-titre" class="display-md">Une réappropriation<br>citoyenne de l'énergie.</h2>
+      <p class="page-lede">Les principes directeurs qui guident l'action de la coopérative sont les suivants&nbsp;:</p>
+      <ul class="principes principes--wide">
+        <li>
+          <h3>Agir localement</h3>
+          <p>Accélérer la transition énergétique en agissant au niveau local.</p>
+        </li>
+        <li>
+          <h3>Expérimenter de nouveaux modèles</h3>
+          <p>Développer et expérimenter de nouveaux modèles techniques mais aussi socio-économiques, permettant de faire de cette transition une opportunité pour chaque citoyen.</p>
+        </li>
+        <li>
+          <h3>Un lien direct producteur-consommateur</h3>
+          <p>Créer un lien direct entre l'énergie produite et les consommateurs de celle-ci — par exemple via les communautés d'autoconsommateurs — pour favoriser l'implication de chacun dans la transition énergétique.</p>
+        </li>
+        <li>
+          <h3>Relocaliser et décarboner l'épargne</h3>
+          <p>Permettre à chaque citoyen qui le souhaite de relocaliser et décarboner son épargne, en investissant dans des projets dont il peut suivre directement l'avancée.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+
+  <!-- ============ PRINCIPES — bande sombre ============ -->
+  <section class="band band--dark" aria-labelledby="principes-titre">
+    <div class="wrap">
+      <p class="kicker kicker--orange">Comment Enerko fonctionne</p>
+      <h2 id="principes-titre" class="display-md">Une gouvernance<br>coopérative.</h2>
+      <ul class="principes principes--wide">
+        <li>
+          <h3>Un membre, une voix</h3>
+          <p>La gouvernance est démocratique&nbsp;: chaque coopérateur pèse le même
+          poids en assemblée générale, quel que soit le nombre de parts sociales
+          détenues.</p>
+        </li>
+        <li>
+          <h3>Le capital finance des toits, pas des titres</h3>
+          <p>Chaque part sociale souscrite finance directement une installation
+          photovoltaïque genevoise&nbsp;— pas un produit financier abstrait.</p>
+        </li>
+        <li>
+          <h3>Une administration bénévole</h3>
+          <p>L'administration d'Enerko gère les questions stratégiques et
+          opérationnelles. Nous étudions la possibilité de déléguer une partie
+          des tâches opérationnelles à un bureau interne.</p>
+        </li>
+        <li>
+          <h3>Expérimenter de nouveaux modèles</h3>
+          <p>Enerko contribue à l'émergence de nouvelles façons de mettre en œuvre
+          des projets d'énergie renouvelable et d'économie d'énergie à Genève.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ ORGANISATION FORMELLE — bande claire ============ -->
+  <section class="band band--light" aria-labelledby="organisation-titre">
+    <div class="wrap">
+      <p class="kicker">Organisation formelle</p>
+      <h2 id="organisation-titre" class="display-md">Comme dans toute<br>coopérative.</h2>
+      <div class="prose">
+        <p>Enerko est structurée comme toute coopérative&nbsp;: une Assemblée
+        générale souveraine, qui élit l'Administration et les réviseurs aux
+        comptes. C'est elle qui décide&nbsp;:</p>
+      </div>
+      <ul class="plain-list">
+        <li>de la gestion des installations</li>
+        <li>du tarif de vente de l'énergie produite</li>
+        <li>de la rémunération des parts sociales, proposée par l'administration</li>
+        <li>des coûts des communautés d'autoconsommateurs</li>
+        <li>de l'entretien des installations</li>
+        <li>des provisions</li>
+        <li>de la comptabilité</li>
+        <li>de la gestion exercée par l'administration</li>
+      </ul>
+      <p><a class="link-arrow" href="https://enerko.ch/wp-content/uploads/2019/01/Statuts-Coope%CC%81rative-enerko-Finaux-20160621.pdf" target="_blank" rel="noopener">Consulter nos statuts</a></p>
+    </div>
+  </section>
+
+  <!-- ============ CTA — bande orange ============ -->
+  <section class="band band--orange" aria-labelledby="cta-titre">
+    <div class="wrap">
+      <h2 id="cta-titre" class="display-md">Envie de rejoindre l'aventure&nbsp;?</h2>
+      <p class="band--orange__lede">Devenez sociétaire d'Enerko pour financer de futures
+      installations photovoltaïques, ou consultez le détail de nos conditions
+      d'investissement.</p>
+      <div class="btn-row">
+        <a class="btn btn--dark" href="devenir-membre.html">Devenir membre</a>
+        <a class="btn btn--ghost-dark" href="investir.html">Investir</a>
+      </div>
+    </div>
+  </section>
+
 </main>
 
-<footer>
-  <p>Enerko Coopérative Solaire &mdash; 4, ch. des Terres-Noires, 1252 Meinier, Suisse &mdash;
-     <a href="mailto:info@enerko.ch">info@enerko.ch</a></p>
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <a class="brand brand--foot" href="index.html">
+        <img src="assets/logos/logo-enerko-mark.png" alt="Enerko — coopérAction énergEthique" width="800" height="166">
+      </a>
+    </div>
+    <address>
+      Enerko, société coopérative<br>
+      4, ch. des Terres-Noires<br>
+      1252 Meinier<br>
+      <a href="mailto:info@enerko.ch">info@enerko.ch</a>
+    </address>
+    <nav class="site-foot__nav" aria-label="Pied de page">
+      <a href="enerko.html">Enerko</a>
+      <a href="equipe.html">Équipe</a>
+      <a href="installations.html">Installations</a>
+      <a href="autoconsommer.html">Autoconsommer</a>
+      <a href="investir.html">Investir</a>
+      <a href="devenir-membre.html">Devenir membre</a>
+      <a href="contact.html">Contact</a>
+      <a href="liens.html">Liens</a>
+    </nav>
+  </div>
+  <div class="wrap site-foot__legal">© 2026 Enerko — société coopérative, Genève</div>
 </footer>
-
 
 </body>
 </html>

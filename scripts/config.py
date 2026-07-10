@@ -10,7 +10,11 @@ ROOT_DIR      = Path(__file__).parent.parent
 DATA_DIR      = ROOT_DIR                          # CSVs bruts (jamais commités)
 PROCESSED_DIR = ROOT_DIR / "processed"            # Parquets intermédiaires (jamais commités)
 AGG_DIR       = PROCESSED_DIR / "aggregates"      # Agrégats (jamais commités)
-IMAGES_DIR    = ROOT_DIR / "docs" / "assets" / "images"
+# Graphiques générés par le pipeline (03_charts.py). Le HTML est désormais
+# statique (redesign hand-maintained sous docs/), il référence ces PNG via
+# assets/charts/. Ne pas repointer vers assets/images/ : ce dossier est réservé
+# aux images éditoriales statiques du site.
+IMAGES_DIR    = ROOT_DIR / "docs" / "assets" / "charts"
 DOCS_DIR      = ROOT_DIR / "docs"
 
 # Cache PVGIS (irradiance Genève) — jamais commité (*.csv), généré via
