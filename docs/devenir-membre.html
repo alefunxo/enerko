@@ -22,8 +22,20 @@
 
   <section id="sec-devenir-membre">
     <h2>Devenir membre</h2>
-    <p>Pour devenir membre ou pour toute autre information, écrivez-nous à
+    <p>Laissez-nous votre nom et votre email ci-dessous : cela ouvrira un message pré-rempli dans votre messagerie, à nous envoyer directement. Vous pouvez aussi nous écrire à
        <a href="mailto:info@enerko.ch">info@enerko.ch</a></p>
+
+    <form id="membership-form" class="membership-form" novalidate>
+      <div class="form-field">
+        <label for="member-name">Nom</label>
+        <input type="text" id="member-name" name="name" autocomplete="name" required>
+      </div>
+      <div class="form-field">
+        <label for="member-email">Email</label>
+        <input type="email" id="member-email" name="email" autocomplete="email" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Envoyer ma demande</button>
+    </form>
   </section>
 </main>
 
@@ -32,6 +44,32 @@
      <a href="mailto:info@enerko.ch">info@enerko.ch</a></p>
 </footer>
 
+<script>
+(function () {
+  "use strict";
 
+  var form = document.getElementById("membership-form");
+  if (!form) return;
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+
+    var name  = document.getElementById("member-name").value.trim();
+    var email = document.getElementById("member-email").value.trim();
+
+    var subject = "Demande d'adhésion — Enerko";
+    var body =
+      "Nom : " + name + "\n" +
+      "Email : " + email + "\n\n" +
+      "Je souhaite devenir membre d'Enerko.";
+
+    window.location.href =
+      "mailto:info@enerko.ch" +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(body);
+  });
+})();
+</script>
 </body>
 </html>

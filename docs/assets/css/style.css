@@ -387,6 +387,47 @@ select:focus {
 
 .btn-secondary:hover { background: var(--yellow); color: var(--navy); border-color: var(--yellow); }
 
+.membership-form {
+  max-width: 28rem;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.membership-form .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.membership-form label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.membership-form input {
+  padding: 0.6rem 0.75rem;
+  border: 2px solid var(--bg);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--navy);
+  background: var(--white);
+}
+
+.membership-form input:focus {
+  outline: none;
+  border-color: var(--yellow);
+}
+
+.membership-form .btn {
+  align-self: flex-start;
+  border: none;
+  cursor: pointer;
+}
+
 .stats-strip {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));

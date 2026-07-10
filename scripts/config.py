@@ -557,8 +557,9 @@ INVESTIR = {
 
 DEVENIR_MEMBRE = {
     "text": (
-        "Pour devenir membre ou pour toute autre information, écrivez-nous "
-        "à"
+        "Laissez-nous votre nom et votre email ci-dessous : cela ouvrira un "
+        "message pré-rempli dans votre messagerie, à nous envoyer directement. "
+        "Vous pouvez aussi nous écrire à"
     ),
     "email": "info@enerko.ch",
 }

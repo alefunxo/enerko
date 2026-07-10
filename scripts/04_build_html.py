@@ -874,8 +874,48 @@ def build_investir_html(today: str) -> str:
     <h2>Investir</h2>
     <p class="section-intro">{INVESTIR["summary"]}</p>
     {sections_html}
+    {_cta_band_html(
+        "Prêt·e à investir ?",
+        "Souscrivez des parts sociales pour financer de futures installations "
+        "photovoltaïques, ou contactez-nous si vous avez des questions.",
+        [
+            ("Devenir membre", "devenir-membre.html", "btn-primary"),
+            ("Nous contacter",  "contact.html",          "btn-secondary"),
+        ],
+        depth,
+    )}
   </section>"""
     return _page_shell("Investir", "investir", depth, body, today)
+
+
+def _devenir_membre_script_html() -> str:
+    return f"""<script>
+(function () {{
+  "use strict";
+
+  var form = document.getElementById("membership-form");
+  if (!form) return;
+
+  form.addEventListener("submit", function (e) {{
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+
+    var name  = document.getElementById("member-name").value.trim();
+    var email = document.getElementById("member-email").value.trim();
+
+    var subject = "Demande d'adhésion — Enerko";
+    var body =
+      "Nom : " + name + "\\n" +
+      "Email : " + email + "\\n\\n" +
+      "Je souhaite devenir membre d'Enerko.";
+
+    window.location.href =
+      "mailto:{DEVENIR_MEMBRE["email"]}" +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(body);
+  }});
+}})();
+</script>"""
 
 
 def build_devenir_membre_html(today: str) -> str:
@@ -885,8 +925,23 @@ def build_devenir_membre_html(today: str) -> str:
     <h2>Devenir membre</h2>
     <p>{DEVENIR_MEMBRE["text"]}
        <a href="mailto:{DEVENIR_MEMBRE["email"]}">{DEVENIR_MEMBRE["email"]}</a></p>
+
+    <form id="membership-form" class="membership-form" novalidate>
+      <div class="form-field">
+        <label for="member-name">Nom</label>
+        <input type="text" id="member-name" name="name" autocomplete="name" required>
+      </div>
+      <div class="form-field">
+        <label for="member-email">Email</label>
+        <input type="email" id="member-email" name="email" autocomplete="email" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Envoyer ma demande</button>
+    </form>
   </section>"""
-    return _page_shell("Devenir membre", "devenir-membre", depth, body, today)
+    return _page_shell(
+        "Devenir membre", "devenir-membre", depth, body, today,
+        extra_html=_devenir_membre_script_html(),
+    )
 
 
 def build_contact_html(today: str) -> str:
