@@ -1,0 +1,369 @@
+/* ============================================================
+   ENERKO — Direction 2 « L'IMPRIMÉ »
+   Journal civique / rapport annuel élégant. Clair dominant.
+   Système de classes réutilisable (généré par script Python).
+   ============================================================ */
+
+/* ---------- Fontes auto-hébergées ----------
+   Fraunces        : fonts.google.com/specimen/Fraunces (OFL)
+   General Sans    : fontshare.com/fonts/general-sans (licence ITF gratuite)
+   Spline Sans Mono: fonts.google.com/specimen/Spline+Sans+Mono (OFL)     */
+
+@font-face { font-family: "Fraunces"; src: url("../assets/fonts/fraunces/fraunces-v38-latin-regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Fraunces"; src: url("../assets/fonts/fraunces/fraunces-v38-latin-italic.woff2") format("woff2");  font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "Fraunces"; src: url("../assets/fonts/fraunces/fraunces-v38-latin-600.woff2") format("woff2");     font-weight: 600; font-display: swap; }
+@font-face { font-family: "Fraunces"; src: url("../assets/fonts/fraunces/fraunces-v38-latin-700.woff2") format("woff2");     font-weight: 700; font-display: swap; }
+@font-face { font-family: "Fraunces"; src: url("../assets/fonts/fraunces/fraunces-v38-latin-900.woff2") format("woff2");     font-weight: 900; font-display: swap; }
+@font-face { font-family: "General Sans"; src: url("../assets/fonts/general-sans/GeneralSans-Regular.woff2") format("woff2");  font-weight: 400; font-display: swap; }
+@font-face { font-family: "General Sans"; src: url("../assets/fonts/general-sans/GeneralSans-Italic.woff2") format("woff2");   font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "General Sans"; src: url("../assets/fonts/general-sans/GeneralSans-Medium.woff2") format("woff2");   font-weight: 500; font-display: swap; }
+@font-face { font-family: "General Sans"; src: url("../assets/fonts/general-sans/GeneralSans-Semibold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Spline Sans Mono"; src: url("../assets/fonts/spline-sans-mono/spline-sans-mono-v13-latin-regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Spline Sans Mono"; src: url("../assets/fonts/spline-sans-mono/spline-sans-mono-v13-latin-500.woff2") format("woff2");     font-weight: 500; font-display: swap; }
+
+/* ---------- Jetons (tous vérifiés WCAG AA pour leur usage) ---------- */
+:root {
+  /* palette */
+  --papier:       #FBFAF7;  /* fond clair principal (blanc légèrement chaud, PAS crème) */
+  --pierre:       #F0EEE9;  /* fond clair alternatif (fiches) */
+  --encre:        #221E19;  /* texte + bandes sombres (gris-brun presque noir) */
+  --taupe:        #5D564D;  /* texte secondaire sur clair — 6.9:1 */
+  --craie:        #F6F2EC;  /* texte sur sombre — 14.9:1 */
+  --gris-chaud:   #B9AFA3;  /* texte secondaire sur sombre — 7.7:1 */
+  --orange:       #E8720C;  /* orange Enerko : titres, chiffres, marques sur sombre */
+  --orange-encre: #B4540A;  /* orange pour petit texte sur clair — 4.8:1 */
+  --filet:        rgba(34,30,25,.16);   /* filets typographiques sur clair */
+  --filet-sombre: rgba(246,242,236,.2);
+
+  /* typo */
+  --f-display: "Fraunces", Georgia, serif;
+  --f-body:    "General Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-mono:    "Spline Sans Mono", "Consolas", monospace;
+
+  /* rythme */
+  --wrap: 74rem;
+  --pad-x: clamp(1.25rem, 4vw, 3rem);
+  --band-y: clamp(4rem, 9vw, 7.5rem);
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+body {
+  margin: 0;
+  font-family: var(--f-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--encre);
+  background: var(--papier);
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+.skip-link {
+  position: absolute; left: -200vw; top: 0; z-index: 100;
+  background: var(--encre); color: var(--craie);
+  padding: .75rem 1.25rem; font-weight: 600; text-decoration: none;
+}
+.skip-link:focus { left: 0; }
+
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--pad-x); }
+
+/* ---------- Typo ---------- */
+.display-xl, .display-lg {
+  font-family: var(--f-display);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  margin: 0 0 .5em;
+}
+.display-xl { font-size: clamp(2.625rem, 6.5vw, 5.25rem); }
+.display-lg { font-size: clamp(2rem, 4.5vw, 3.5rem); }
+.display-xl em, .display-lg em, .pull em {
+  font-style: italic; font-weight: 600; color: var(--orange-encre);
+}
+.band--dark .display-lg em { color: var(--orange); }
+
+.kicker {
+  font-family: var(--f-mono);
+  font-size: .8125rem; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--taupe);
+  margin: 0 0 1.75rem;
+}
+
+/* titre de rubrique, façon journal : petites capitales + filet */
+.rubrique {
+  font-family: var(--f-mono);
+  font-size: .875rem; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--craie);
+  display: flex; align-items: center; gap: 1.25rem;
+  margin: 0 0 2.75rem;
+}
+.rubrique::after { content: ""; flex: 1; height: 1px; background: var(--filet-sombre); }
+.rubrique--paper { color: var(--encre); }
+.rubrique--paper::after { background: var(--filet); }
+
+.standfirst {
+  font-size: clamp(1.125rem, 1.8vw, 1.3125rem);
+  line-height: 1.55;
+  color: var(--taupe);
+  max-width: 36rem;
+  margin: 0;
+}
+
+.pull {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 3.6vw, 3rem);
+  line-height: 1.15;
+  max-width: 46rem;
+  margin: 0 0 2.5rem;
+}
+
+.prose-cols { columns: 2 20rem; column-gap: 3.5rem; margin-bottom: 2rem; }
+.prose-cols p { margin: 0 0 1.25em; break-inside: avoid; }
+
+.section-lede { color: var(--taupe); max-width: 34rem; margin: -1.5rem 0 3rem; }
+
+/* ---------- Marque ---------- */
+.brand {
+  font-family: var(--f-body);
+  font-weight: 600; font-size: 1.375rem;
+  letter-spacing: .12em;
+  text-decoration: none; color: var(--encre);
+}
+.brand__k { color: var(--orange); }
+.brand--foot { font-size: 1.625rem; margin: 0; }
+
+/* ---------- Manchette (en-tête façon journal) ---------- */
+.masthead {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--papier);
+  border-bottom: 3px double var(--encre);
+}
+.masthead__inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+  padding-block: .875rem;
+}
+.masthead__nav { display: flex; flex-wrap: wrap; gap: .25rem 1.375rem; align-items: center; }
+.masthead__nav a {
+  font-size: .9375rem; font-weight: 500;
+  color: var(--encre); text-decoration: none;
+  padding: .25rem 0;
+  border-bottom: 2px solid transparent;
+}
+.masthead__nav a:hover { border-bottom-color: var(--orange); }
+.masthead__nav a[aria-current="page"] { border-bottom-color: var(--orange); }
+.masthead__cta {
+  background: var(--encre); color: var(--craie) !important;
+  padding: .5rem 1.05rem !important; font-weight: 600;
+  border-bottom: none !important;
+}
+.masthead__cta:hover { background: var(--orange); color: var(--encre) !important; }
+
+/* ---------- Boutons & liens ---------- */
+.btn-row { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; align-items: center; margin-top: 2.25rem; }
+.btn-row--end { justify-content: flex-start; align-content: center; }
+.btn {
+  display: inline-block;
+  font-weight: 600; font-size: 1rem;
+  text-decoration: none;
+  padding: .95rem 1.75rem;
+  border: 2px solid transparent;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.btn--solid { background: var(--encre); color: var(--papier); }
+.btn--solid:hover { background: var(--orange); color: var(--encre); }
+.btn--orange { background: var(--orange); color: var(--encre); }
+.btn--orange:hover { background: var(--craie); }
+.btn--ghost { border-color: var(--craie); color: var(--craie); }
+.btn--ghost:hover { background: var(--craie); color: var(--encre); }
+
+.link-arrow {
+  font-weight: 600; text-decoration: none;
+  color: var(--orange-encre);
+  border-bottom: 2px solid currentColor;
+  padding-bottom: .1em;
+}
+.link-arrow::after { content: " →"; }
+.link-arrow:hover { color: var(--encre); }
+
+/* ---------- Bandes ---------- */
+.band { padding-block: var(--band-y); }
+.band--paper { background: var(--papier); color: var(--encre); }
+.band--stone { background: var(--pierre); color: var(--encre); }
+.band--dark  { background: var(--encre); color: var(--craie); }
+.band--dark .kicker { color: var(--gris-chaud); }
+
+/* ---------- Héros ---------- */
+.hero { padding-block: clamp(3rem, 6vw, 5.5rem); }
+.hero__grid {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: stretch;
+}
+.hero__text { display: flex; flex-direction: column; justify-content: center; }
+.hero__media { margin: 0; }
+.hero__media img {
+  width: 100%; height: 100%;
+  min-height: 24rem;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+.hero__media figcaption, .figure-bleed figcaption {
+  font-family: var(--f-mono); font-size: .8125rem;
+  color: var(--taupe);
+  border-top: 1px solid var(--filet);
+  padding-top: .75rem; margin-top: .75rem;
+}
+
+/* ---------- Tuiles de chiffres ---------- */
+.stat-row {
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0 2.5rem;
+}
+.stat { border-left: 1px solid var(--filet-sombre); padding-left: 1.5rem; }
+.stat:first-child { border-left: none; padding-left: 0; }
+.stat__value {
+  display: block;
+  font-family: var(--f-mono); font-weight: 500;
+  font-size: clamp(2.5rem, 5vw, 4.25rem);
+  line-height: 1.1;
+  color: var(--orange);
+  font-variant-numeric: tabular-nums;
+}
+.stat__label {
+  display: block;
+  font-size: .9375rem;
+  color: var(--gris-chaud);
+  margin-top: .5rem;
+  max-width: 11rem;
+}
+
+/* ---------- Figures ---------- */
+.figure-bleed { margin: clamp(3rem, 6vw, 5rem) auto 0; }
+.figure-bleed img { width: 100%; aspect-ratio: 21 / 9; object-fit: cover; }
+
+/* ---------- Fiches installations ---------- */
+.fiches {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+.fiche {
+  background: var(--papier);
+  border: 1px solid var(--filet);
+  padding: 1.25rem 1.25rem 1.75rem;
+  display: flex; flex-direction: column; gap: .35rem;
+}
+.fiche img { aspect-ratio: 3 / 2; object-fit: cover; margin-bottom: 1rem; }
+.fiche__folio {
+  font-family: var(--f-mono); font-size: .8125rem; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--orange-encre); margin: 0;
+}
+.fiche__name {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 1.5rem; line-height: 1.15;
+  margin: .15rem 0 0;
+}
+.fiche__place { color: var(--taupe); margin: 0 0 1rem; }
+.fiche__spec { margin: 0 0 1.25rem; }
+.fiche__spec div {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;
+  padding: .45rem 0;
+  border-bottom: 1px dotted var(--filet);   /* points de conduite, façon sommaire */
+  font-size: .9375rem;
+}
+.fiche__spec dt { color: var(--taupe); }
+.fiche__spec dd {
+  margin: 0;
+  font-family: var(--f-mono); font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.fiche .link-arrow { margin-top: auto; align-self: flex-start; }
+
+/* jauge — double codage : la valeur chiffrée est déjà dans la liste */
+.meter { margin: 0 0 1.5rem; }
+.meter__track { height: 6px; background: rgba(232,114,12,.2); }
+.meter__fill { height: 100%; background: var(--orange); }
+
+/* ---------- Carte graphique (PNG matplotlib à fond CLAIR) ----------
+   Les PNG matplotlib sont générés sur fond clair : sur toute bande
+   sombre, ils vivent dans .chart-card, jamais posés à nu sur --encre. */
+.chart-card {
+  background: #FFFFFF;
+  padding: 1rem;
+  border: 1px solid var(--filet);
+}
+.chart-card img { width: 100%; }
+.chart-card__caption {
+  font-family: var(--f-mono); font-size: .8125rem;
+  color: var(--taupe); padding-top: .75rem;
+}
+
+/* ---------- CTA ---------- */
+.cta__grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+.cta__lede { color: var(--gris-chaud); max-width: 32rem; margin: 0; }
+
+/* ---------- Colophon (pied de page) ---------- */
+.colophon {
+  background: var(--papier);
+  border-top: 3px double var(--encre);
+  padding-block: clamp(3rem, 6vw, 4.5rem) 1.5rem;
+}
+.colophon__grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 2.5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--filet);
+}
+.colophon__tagline { color: var(--taupe); margin: .5rem 0 0; }
+.tagline-cap { color: var(--orange-encre); font-weight: 600; }
+.colophon address { font-style: normal; line-height: 1.7; color: var(--taupe); }
+.colophon address a { color: var(--encre); }
+.colophon__nav { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem 1.5rem; align-content: start; }
+.colophon__nav a { color: var(--taupe); text-decoration: none; }
+.colophon__nav a:hover { color: var(--orange-encre); }
+.colophon__legal {
+  font-family: var(--f-mono); font-size: .75rem;
+  color: var(--taupe); padding-top: 1.5rem;
+}
+
+/* ---------- Écrans étroits ---------- */
+@media (max-width: 60rem) {
+  .hero__grid { grid-template-columns: 1fr; }
+  .hero__media img { aspect-ratio: 3 / 2; min-height: 0; }
+  .fiches { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: 1fr 1fr; gap: 2rem 2.5rem; }
+  .stat:nth-child(odd) { border-left: none; padding-left: 0; }
+  .cta__grid { grid-template-columns: 1fr; }
+  .colophon__grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 34rem) {
+  .stat-row { grid-template-columns: 1fr; }
+  .stat { border-left: none; padding-left: 0; }
+  .masthead__nav { gap: .25rem .875rem; }
+}

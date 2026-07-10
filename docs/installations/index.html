@@ -76,15 +76,15 @@
     <h2>Vue d'ensemble annuelle</h2>
     <p class="section-intro">
       Totaux annuels par site, en MWh. Utilisez les boutons pour
-      basculer entre autoconsommation et production.
+      basculer entre injection réseau et production.
     </p>
     <div class="toggle-group" id="annual-toggle" role="group" aria-label="Type de données">
-      <button class="toggle-btn active" data-type="consommation">Autoconsommation</button>
+      <button class="toggle-btn active" data-type="consommation">Injection réseau</button>
       <button class="toggle-btn"        data-type="production">Production</button>
     </div>
     <div class="chart-wrap">
       <img src="../assets/images/annual_overview_consommation.png"
-           alt="Autoconsommation annuelle par site"
+           alt="Injection réseau annuelle par site"
            class="annual-img chart-img" data-type="consommation">
       <img src="../assets/images/annual_overview_production.png"
            alt="Production annuelle par site"
@@ -97,7 +97,7 @@
     <h2>Explorer par site</h2>
     <p class="section-intro">
       Choisissez d'abord le type de données, puis le site — seuls ceux
-      disposant de ce type de mesure sont proposés. Un site d'autoconsommation
+      disposant de ce type de mesure sont proposés. Un site d'injection réseau
       est un bâtiment raccordé au réseau ; un site de production est une
       installation photovoltaïque.
     </p>
@@ -106,7 +106,7 @@
       <div class="control-group">
         <label>Type de données</label>
         <div class="toggle-group" id="site-type-toggle" role="group" aria-label="Type de données">
-          <button class="toggle-btn active" data-type="consommation">Autoconsommation</button>
+          <button class="toggle-btn active" data-type="consommation">Injection réseau</button>
           <button class="toggle-btn"        data-type="production">Production</button>
         </div>
       </div>

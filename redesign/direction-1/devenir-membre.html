@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Devenir membre — Enerko</title>
+<meta name="description" content="Devenez sociétaire d'Enerko pour financer de futures installations photovoltaïques genevoises.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#contenu">Aller au contenu</a>
+
+<header class="site-head">
+  <a class="brand" href="index.html">
+    <img src="../assets/logos/logo-enerko-mark.png" alt="Enerko — coopérAction énergEthique" width="800" height="166">
+  </a>
+  <nav class="site-nav" aria-label="Navigation principale">
+    <a href="index.html">Accueil</a>
+    <a href="enerko.html">Enerko</a>
+    <a href="equipe.html">Équipe</a>
+    <a href="installations.html">Installations</a>
+    <a href="autoconsommer.html">Autoconsommer</a>
+    <a href="investir.html">Investir</a>
+    <a href="contact.html">Contact</a>
+    <a class="site-nav__cta" href="devenir-membre.html" aria-current="page">Devenir membre</a>
+  </nav>
+</header>
+
+<main id="contenu">
+
+  <section class="band band--dark" aria-labelledby="page-titre">
+    <div class="split-hero">
+      <div class="split-hero__content wrap">
+        <p class="kicker kicker--orange">Rejoindre la coopérative</p>
+        <h1 id="page-titre" class="display-lg">Devenir membre.</h1>
+        <p class="page-lede">Laissez-nous votre nom et votre email ci-dessous&nbsp;:
+        cela ouvrira un message pré-rempli dans votre messagerie, à nous envoyer
+        directement. Vous pouvez aussi nous écrire à
+        <a href="mailto:info@enerko.ch" style="color:var(--orange)">info@enerko.ch</a>.</p>
+
+        <form id="membership-form" class="form" novalidate>
+          <div class="form-field">
+            <label for="member-name">Nom</label>
+            <input type="text" id="member-name" name="name" autocomplete="name" required>
+          </div>
+          <div class="form-field">
+            <label for="member-email">Email</label>
+            <input type="email" id="member-email" name="email" autocomplete="email" required>
+          </div>
+          <button type="submit" class="btn btn--orange">Envoyer ma demande</button>
+        </form>
+      </div>
+
+      <!-- ============================================================
+           PHOTO SLOT (stand-in actuel : photo1_enerko.jpg) : cadrage
+           vertical, installateur sur le toit au lever du jour.
+           ============================================================ -->
+      <figure class="split-hero__media">
+        <img src="../assets/photos/photo1_enerko.jpg"
+             alt="Installateur sur un toit couvert de panneaux solaires au lever du jour, Alpes en arrière-plan">
+      </figure>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap site-foot__grid">
+    <div>
+      <a class="brand brand--foot" href="index.html">
+        <img src="../assets/logos/logo-enerko-mark.png" alt="Enerko — coopérAction énergEthique" width="800" height="166">
+      </a>
+    </div>
+    <address>
+      Enerko, société coopérative<br>
+      4, ch. des Terres-Noires<br>
+      1252 Meinier<br>
+      <a href="mailto:info@enerko.ch">info@enerko.ch</a>
+    </address>
+    <nav class="site-foot__nav" aria-label="Pied de page">
+      <a href="enerko.html">Enerko</a>
+      <a href="equipe.html">Équipe</a>
+      <a href="installations.html">Installations</a>
+      <a href="autoconsommer.html">Autoconsommer</a>
+      <a href="investir.html">Investir</a>
+      <a href="devenir-membre.html">Devenir membre</a>
+      <a href="contact.html">Contact</a>
+      <a href="liens.html">Liens</a>
+    </nav>
+  </div>
+  <div class="wrap site-foot__legal">© 2026 Enerko — société coopérative, Genève</div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var form = document.getElementById("membership-form");
+  if (!form) return;
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+
+    var name  = document.getElementById("member-name").value.trim();
+    var email = document.getElementById("member-email").value.trim();
+
+    var subject = "Demande d'adhésion — Enerko";
+    var body =
+      "Nom : " + name + "\n" +
+      "Email : " + email + "\n\n" +
+      "Je souhaite devenir membre d'Enerko.";
+
+    window.location.href =
+      "mailto:info@enerko.ch" +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(body);
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,716 @@
+/* ============================================================
+   ENERKO — Direction 1 « SIGNAL »
+   Affiche suisse / civique-industriel. Sombre dominant.
+   Système de classes réutilisable (généré par script Python).
+   Orange = #F7931E, échantillonné dans logo-enerko.png.
+   ============================================================ */
+
+/* ---------- Fontes auto-hébergées ----------
+   Bricolage Grotesque : fonts.google.com/specimen/Bricolage+Grotesque (OFL)
+   Archivo             : fonts.google.com/specimen/Archivo (OFL)
+   IBM Plex Mono       : fonts.google.com/specimen/IBM+Plex+Mono (OFL)    */
+
+@font-face { font-family: "Bricolage Grotesque"; src: url("../assets/fonts/bricolage-grotesque/bricolage-grotesque-v9-latin-500.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Bricolage Grotesque"; src: url("../assets/fonts/bricolage-grotesque/bricolage-grotesque-v9-latin-600.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Bricolage Grotesque"; src: url("../assets/fonts/bricolage-grotesque/bricolage-grotesque-v9-latin-700.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Bricolage Grotesque"; src: url("../assets/fonts/bricolage-grotesque/bricolage-grotesque-v9-latin-800.woff2") format("woff2"); font-weight: 800; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("../assets/fonts/archivo/archivo-v25-latin-regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("../assets/fonts/archivo/archivo-v25-latin-500.woff2") format("woff2");     font-weight: 500; font-display: swap; }
+@font-face { font-family: "Archivo"; src: url("../assets/fonts/archivo/archivo-v25-latin-600.woff2") format("woff2");     font-weight: 600; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("../assets/fonts/ibm-plex-mono/ibm-plex-mono-v20-latin-regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "IBM Plex Mono"; src: url("../assets/fonts/ibm-plex-mono/ibm-plex-mono-v20-latin-500.woff2") format("woff2");     font-weight: 500; font-display: swap; }
+
+/* ---------- Jetons (contrastes vérifiés WCAG AA pour leur usage) ----------
+   #F7931E sur #1E1A16 : 7.5:1  — texte et marques sur sombre : OK
+   #16130F sur #F7931E : 8.1:1  — texte sur bande orange : OK
+   #F7931E sur blanc   : 2.3:1  — JAMAIS de texte orange pur sur fond clair ;
+                                  utiliser --orange-encre (#A85B00, 5.1:1).   */
+:root {
+  /* palette */
+  --noir:        #1E1A16;  /* fond sombre principal (gris chaud presque noir) */
+  --noir-2:      #16130F;  /* nav + footer, un cran plus sombre */
+  --graphite:    #28221C;  /* surface sombre surélevée */
+  --blanc:       #FFFFFF;  /* fond clair */
+  --pierre:      #F5F2EC;  /* fond clair alternatif — rythme entre bandes claires */
+  --craie:       #F5F1EA;  /* texte sur sombre — 15.4:1 sur --noir */
+  --gris-chaud:  #BDB3A6;  /* texte secondaire sur sombre — 8.4:1 */
+  --gris-encre:  #5F574C;  /* texte secondaire sur clair — 7.1:1 */
+  --orange:      #F7931E;  /* orange Enerko (logo) : sombre + décor uniquement */
+  --orange-encre:#A85B00;  /* orange lisible pour texte/liens sur fond clair */
+  --trait-sombre: rgba(245,241,234,.18);
+  --trait-clair:  rgba(30,26,22,.14);
+
+  /* typo */
+  --f-display: "Bricolage Grotesque", "Arial Narrow", sans-serif;
+  --f-body:    "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-mono:    "IBM Plex Mono", "Consolas", monospace;
+
+  /* rythme */
+  --wrap: 76rem;
+  --pad-x: clamp(1.25rem, 4vw, 3rem);
+  --band-y: clamp(4rem, 9vw, 8rem);
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+body {
+  margin: 0;
+  font-family: var(--f-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--noir);
+  background: var(--blanc);
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+
+:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+.band--light :focus-visible, .band--orange :focus-visible { outline-color: var(--noir-2); }
+
+.skip-link {
+  position: absolute; left: -200vw; top: 0; z-index: 100;
+  background: var(--orange); color: var(--noir-2);
+  padding: .75rem 1.25rem; font-weight: 600; text-decoration: none;
+}
+.skip-link:focus { left: 0; }
+
+.wrap { max-width: var(--wrap); margin-inline: auto; padding-inline: var(--pad-x); }
+
+/* ---------- Typo ---------- */
+.display-xl, .display-lg, .display-md {
+  font-family: var(--f-display);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  margin: 0 0 .5em;
+  overflow-wrap: break-word;
+}
+.display-xl { font-size: clamp(2.125rem, 8.5vw, 6rem); }
+.display-lg { font-size: clamp(1.75rem, 5vw, 3.75rem); }
+.display-md { font-size: clamp(1.5rem, 3.2vw, 2.5rem); }
+.display-xl em, .display-lg em, .display-md em { font-style: normal; color: var(--orange); }
+.band--light .display-lg em, .band--light .display-md em { color: var(--orange-encre); }
+
+.kicker {
+  font-family: var(--f-mono);
+  font-size: .8125rem;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gris-encre);
+  margin: 0 0 1.5rem;
+}
+.kicker--light { color: var(--craie); }
+.kicker--orange { color: var(--orange); }
+/* chevron hérité du K du logo (décoratif : le texte porte le sens) */
+.kicker::before {
+  content: "";
+  display: inline-block;
+  width: .55em; height: .55em;
+  margin-right: .75em;
+  background: var(--orange);
+  clip-path: polygon(0 0, 55% 0, 100% 50%, 55% 100%, 0 100%, 45% 50%);
+}
+
+.prose p { margin: 0 0 1.25em; max-width: 38rem; }
+.prose strong { font-weight: 600; }
+
+/* ---------- Marque (fichiers logo réels) ---------- */
+.brand { display: inline-block; text-decoration: none; }
+.brand img { height: 2.25rem; width: auto; }
+.brand--foot img { height: 3.5rem; }
+
+/* ---------- En-tête ---------- */
+.site-head {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: .75rem 1rem; flex-wrap: wrap;
+  padding: .875rem var(--pad-x);
+  background: var(--noir-2);
+  border-bottom: 1px solid var(--trait-sombre);
+}
+.site-nav { display: flex; flex-wrap: wrap; gap: .25rem 1.375rem; align-items: center; }
+.site-nav a {
+  font-size: .9375rem; font-weight: 500;
+  color: var(--craie); text-decoration: none;
+  padding: .25rem 0;
+  border-bottom: 2px solid transparent;
+}
+.site-nav a:hover { border-bottom-color: var(--orange); }
+.site-nav a[aria-current="page"] { border-bottom-color: var(--orange); }
+.site-nav__cta {
+  background: var(--orange); color: var(--noir-2) !important;
+  padding: .5rem 1rem !important; font-weight: 600;
+  border-bottom: none !important;
+}
+.site-nav__cta:hover { background: var(--craie); }
+
+/* ---------- Boutons ---------- */
+.btn-row { display: flex; flex-wrap: wrap; gap: .875rem; margin-top: 2.25rem; }
+.btn {
+  display: inline-block;
+  font-family: var(--f-body); font-weight: 600; font-size: 1rem;
+  text-decoration: none;
+  padding: .95rem 1.75rem;
+  border: 2px solid transparent;
+  transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+.btn--orange { background: var(--orange); color: var(--noir-2); }
+.btn--orange:hover { background: var(--craie); }
+.btn--ghost-light { border-color: var(--craie); color: var(--craie); }
+.btn--ghost-light:hover { background: var(--craie); color: var(--noir-2); }
+.btn--dark { background: var(--noir-2); color: var(--craie); }
+.btn--dark:hover { background: var(--blanc); color: var(--noir-2); }
+.btn--ghost-dark { border-color: var(--noir-2); color: var(--noir-2); }
+.btn--ghost-dark:hover { background: var(--noir-2); color: var(--craie); }
+
+.link-arrow {
+  font-weight: 600; text-decoration: none;
+  color: var(--orange-encre);
+  border-bottom: 2px solid currentColor;
+  padding-bottom: .1em;
+}
+.link-arrow::after { content: " →"; }
+.link-arrow:hover { color: var(--noir); }
+.link-arrow--light { color: var(--orange); }
+.link-arrow--light:hover { color: var(--craie); }
+
+/* ---------- Bandes (le rythme sombre/clair de la page) ---------- */
+.band { padding-block: var(--band-y); }
+.band--dark  { background: var(--noir);  color: var(--craie); }
+.band--light { background: var(--blanc); color: var(--noir); }
+.band--stone { background: var(--pierre); color: var(--noir); }
+.band--orange { background: var(--orange); color: var(--noir-2); }
+.band--dark .kicker { color: var(--gris-chaud); }
+.band--dark .kicker--orange { color: var(--orange); }
+.band--orange .display-lg { color: var(--noir-2); }
+.band--orange__lede { max-width: 36rem; font-size: 1.125rem; margin: 0; }
+.band--tight { --band-y: clamp(3rem, 6vw, 5rem); }
+
+/* ---------- Héros ---------- */
+.hero {
+  position: relative;
+  min-height: min(92vh, 56rem);
+  display: flex; align-items: flex-end;
+  background: var(--noir-2);
+  color: var(--craie);
+}
+.hero__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.hero__scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(22,19,15,.9) 0%, rgba(22,19,15,.38) 45%, rgba(22,19,15,.15) 100%);
+}
+.hero__content { position: relative; width: 100%; padding-block: clamp(3rem, 7vw, 5.5rem); }
+.hero__lede { max-width: 34rem; font-size: 1.1875rem; margin: 1.25rem 0 0; }
+
+/* ---------- Tuiles de chiffres ---------- */
+.stat-row {
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+.stat { border-top: 3px solid var(--orange); padding-top: 1.25rem; }
+.stat__value {
+  display: block;
+  font-family: var(--f-display); font-weight: 700;
+  font-size: clamp(2.75rem, 5.5vw, 4.5rem);
+  line-height: 1;
+  color: var(--craie);
+  font-variant-numeric: tabular-nums;
+}
+.stat__unit {
+  font-family: var(--f-mono); font-weight: 500;
+  font-size: .35em; letter-spacing: .08em;
+  color: var(--orange);
+  margin-left: .35em;
+}
+.stat__label {
+  display: block;
+  font-family: var(--f-mono); font-size: .8125rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--gris-chaud);
+  margin-top: .75rem;
+}
+
+/* ---------- Grilles ---------- */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 5fr 6fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+/* principes coopératifs */
+.principes {
+  list-style: none; margin: clamp(2.5rem, 5vw, 4rem) 0 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+.principes li { border-top: 3px solid var(--orange); padding-top: 1.1rem; }
+.principes h3 {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 1.1875rem; text-transform: uppercase;
+  letter-spacing: .01em;
+  margin: 0 0 .5rem;
+}
+.principes p { margin: 0; color: var(--gris-encre); font-size: .9875rem; }
+
+.figure-bleed { margin: clamp(3rem, 6vw, 5rem) auto 0; }
+.figure-bleed img { width: 100%; aspect-ratio: 21 / 9; object-fit: cover; }
+.figure-bleed figcaption {
+  font-family: var(--f-mono); font-size: .8125rem;
+  color: var(--gris-encre);
+  padding-top: .75rem;
+  border-top: 1px solid var(--trait-clair);
+  margin-top: .75rem;
+}
+
+/* ---------- Installations ---------- */
+.install {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: center;
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+  border-top: 1px solid var(--trait-sombre);
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+.install:nth-of-type(even) .install__media { order: 2; }
+.install__media img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.install__index {
+  font-family: var(--f-mono); font-weight: 500;
+  color: var(--orange); letter-spacing: .1em;
+  margin: 0 0 .5rem;
+}
+.install__name {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: clamp(1.5rem, 2.6vw, 2.125rem);
+  text-transform: uppercase; line-height: 1.05;
+  margin: 0 0 .375rem;
+}
+.install__place { color: var(--gris-chaud); margin: 0 0 1.5rem; }
+.install__note {
+  font-family: var(--f-mono); font-size: .8125rem;
+  color: var(--gris-chaud); letter-spacing: .06em;
+  margin: 3rem 0 0;
+}
+
+.spec { display: flex; flex-wrap: wrap; gap: 1.25rem 2rem; margin: 0 0 1.5rem; }
+.spec div { min-width: 7rem; }
+.spec dt {
+  font-family: var(--f-mono); font-size: .75rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--gris-chaud);
+}
+.spec dd {
+  margin: .2rem 0 0;
+  font-family: var(--f-mono); font-weight: 500;
+  font-size: 1.125rem; font-variant-numeric: tabular-nums;
+  color: var(--craie);
+}
+.band--light .spec dt { color: var(--gris-encre); }
+.band--light .spec dd { color: var(--noir); }
+
+/* jauge d'autoconsommation — la valeur est aussi écrite en chiffres */
+.meter { max-width: 26rem; margin-bottom: 1.75rem; }
+.meter__head {
+  display: flex; justify-content: space-between;
+  font-family: var(--f-mono); font-size: .8125rem;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--gris-chaud); margin-bottom: .5rem;
+}
+.meter__value { color: var(--craie); font-weight: 500; }
+.meter__track { height: 8px; background: rgba(247,147,30,.22); }
+.meter__fill { height: 100%; background: var(--orange); }
+
+/* ---------- Données / graphiques (PNG matplotlib à fond CLAIR) ----------
+   Règle : les graphiques vivent sur une bande CLAIRE (.band--light),
+   jamais posés à nu sur une bande sombre. S'il faut absolument un
+   graphique sur du sombre, l'envelopper dans .chart-figure qui lui
+   donne une carte blanche.                                            */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+.chart-figure {
+  margin: 0;
+  background: var(--blanc);
+  border: 1px solid var(--trait-clair);
+  padding: 1rem;
+}
+.chart-figure img { width: 100%; }
+.chart-figure figcaption {
+  font-family: var(--f-mono); font-size: .8125rem;
+  color: var(--gris-encre);
+  padding-top: .85rem;
+}
+.chart-note {
+  font-family: var(--f-mono); font-size: .8125rem;
+  color: var(--gris-encre);
+  max-width: 44rem;
+  margin: 2rem 0 0;
+}
+
+/* ---------- Fiche d'installation (page détail) ---------- */
+.page-hero { padding-block: clamp(3rem, 6vw, 5rem); }
+.page-hero__back {
+  font-family: var(--f-mono); font-size: .8125rem;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--gris-chaud); text-decoration: none;
+}
+.page-hero__back:hover { color: var(--orange); }
+.page-hero .display-lg { margin-top: 1.25rem; }
+
+/* ---------- Sous-titre de page (pages secondaires, hors accueil) ---------- */
+.page-lede {
+  max-width: 42rem;
+  font-size: 1.0625rem;
+  margin: 1.5rem 0 0;
+}
+.band--dark .page-lede { color: var(--gris-chaud); }
+.band--light .page-lede { color: var(--gris-encre); }
+
+/* ---------- Sous-navigation (ancres internes) ---------- */
+.subnav {
+  display: flex; flex-wrap: wrap; gap: .5rem 1.75rem;
+  margin: 2.5rem 0 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--trait-clair);
+}
+.band--dark .subnav { border-top-color: var(--trait-sombre); }
+.subnav a {
+  font-family: var(--f-mono); font-size: .8125rem;
+  letter-spacing: .06em; text-transform: uppercase;
+  text-decoration: none; color: var(--gris-encre);
+}
+.band--dark .subnav a { color: var(--gris-chaud); }
+.subnav a:hover { color: var(--orange-encre); }
+.band--dark .subnav a:hover { color: var(--orange); }
+
+/* ---------- Grille de chiffres (page Enerko : 6 tuiles) ---------- */
+.stat-row--6 { grid-template-columns: repeat(3, 1fr); }
+.stat--light { border-top-color: var(--orange-encre); }
+.stat--light .stat__value { color: var(--noir); }
+.stat--light .stat__unit { color: var(--orange-encre); }
+.stat--light .stat__label { color: var(--gris-encre); }
+
+/* ---------- Principes (réutilisé sur enerko.html) ---------- */
+.principes--wide { grid-template-columns: repeat(2, 1fr); }
+
+/* ---------- Équipe ---------- */
+.team-grid {
+  list-style: none; margin: clamp(2rem, 4vw, 3rem) 0 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.25rem);
+}
+.team-card { border-top: 3px solid var(--orange); padding-top: 1.25rem; }
+.team-card__avatar {
+  width: 3.25rem; height: 3.25rem;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--f-display); font-weight: 700; font-size: 1.0625rem;
+  background: var(--graphite); color: var(--orange);
+  margin-bottom: 1.25rem;
+}
+.team-card__name {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 1.1875rem; text-transform: uppercase;
+  margin: 0 0 .25rem;
+}
+.team-card__role {
+  font-family: var(--f-mono); font-size: .8125rem;
+  color: var(--gris-chaud); margin: 0;
+}
+
+/* ---------- Cartes d'installation (page listing) ---------- */
+.install-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 3vw, 2rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+.install-card {
+  display: flex; flex-direction: column;
+  background: var(--blanc);
+  border: 1px solid var(--trait-clair);
+  padding: 1.5rem;
+}
+.install-card__name {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 1.25rem; text-transform: uppercase; line-height: 1.1;
+  margin: 0 0 .375rem;
+}
+.install-card__address { color: var(--gris-encre); font-size: .9375rem; margin: 0 0 1.25rem; }
+.install-card .spec { gap: 1rem 1.5rem; }
+.install-card .spec dt { color: var(--gris-encre); }
+.install-card .spec dd { color: var(--noir); }
+.install-card .meter { max-width: none; margin-top: .5rem; }
+.install-card .meter__head { color: var(--gris-encre); }
+.install-card .meter__value { color: var(--noir); }
+.install-card .link-arrow { margin-top: auto; padding-top: 1.25rem; }
+
+/* ---------- Explorateur de données (page listing installations) ---------- */
+.explorer__controls {
+  display: flex; flex-wrap: wrap; gap: 1.75rem 2.5rem;
+  align-items: end;
+  margin-bottom: 2rem;
+}
+.control-group { display: flex; flex-direction: column; gap: .5rem; }
+.control-group label {
+  font-family: var(--f-mono); font-size: .75rem;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--gris-encre);
+}
+.toggle-group { display: inline-flex; border: 1px solid var(--noir); }
+.toggle-btn {
+  font-family: var(--f-body); font-weight: 600; font-size: .875rem;
+  background: var(--blanc); color: var(--noir);
+  border: none; padding: .6rem 1.1rem;
+  cursor: pointer;
+}
+.toggle-btn + .toggle-btn { border-left: 1px solid var(--noir); }
+.toggle-btn.active { background: var(--noir); color: var(--craie); }
+.toggle-btn:hover:not(.active) { background: var(--pierre, #efe9e0); }
+
+.field-select {
+  font-family: var(--f-body); font-size: .9375rem;
+  padding: .6rem .9rem;
+  background: var(--blanc); color: var(--noir);
+  border: 1px solid var(--noir);
+  min-width: 18rem;
+}
+
+.completeness-badge {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--f-mono); font-size: .8125rem; font-weight: 500;
+  padding: .5rem .85rem;
+  border: 1px solid var(--trait-clair);
+}
+.completeness-badge::before {
+  content: ""; width: .55rem; height: .55rem; border-radius: 50%;
+  background: var(--gris-encre); flex: none;
+}
+.completeness-badge.good::before { background: #2f7d4f; }
+.completeness-badge.warn::before { background: #b4780a; }
+.completeness-badge.bad::before  { background: #b0392b; }
+.completeness-detail {
+  font-family: var(--f-mono); font-size: .8125rem;
+  color: var(--gris-encre); margin: .75rem 0 0;
+}
+
+.panel-title {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 1.0625rem; text-transform: uppercase;
+  margin: 0 0 .25rem;
+}
+.panel-desc { color: var(--gris-encre); font-size: .875rem; margin: 0 0 .75rem; }
+
+/* ---------- Schéma (page Autoconsommer) ---------- */
+.diagram-figure {
+  max-width: 44rem;
+  margin: clamp(2.5rem, 5vw, 4rem) auto 0;
+  background: var(--blanc);
+  border: 1px solid var(--trait-clair);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+.diagram-figure img { width: 100%; display: block; }
+.diagram-figure figcaption {
+  font-family: var(--f-mono); font-size: .8125rem;
+  color: var(--gris-encre); text-align: center;
+  padding-top: 1rem;
+}
+
+/* ---------- Encart chiffré (financement d'une installation) ---------- */
+.fact-callout {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: .75rem 1.5rem;
+  margin: 2rem 0;
+  padding: 1.5rem 1.75rem;
+  background: var(--pierre);
+  border-left: 3px solid var(--orange-encre);
+}
+.fact-callout__value {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 1.75rem; color: var(--noir);
+  white-space: nowrap;
+}
+.fact-callout__text { color: var(--gris-encre); max-width: 32rem; margin: 0; flex: 1 1 18rem; }
+.band--dark .fact-callout { background: var(--graphite); border-left-color: var(--orange); }
+.band--dark .fact-callout__value { color: var(--craie); }
+.band--dark .fact-callout__text { color: var(--gris-chaud); }
+
+/* ---------- Héros scindé (Contact, Devenir membre) ---------- */
+.split-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: min(78vh, 42rem);
+}
+.split-hero__content {
+  display: flex; flex-direction: column; justify-content: center;
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+}
+.split-hero__media { position: relative; min-height: 18rem; }
+.split-hero__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- Étapes (page Investir) ---------- */
+.step__head { display: flex; align-items: baseline; gap: 1.25rem; margin-bottom: 1.5rem; }
+.step__num {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 2.25rem; line-height: 1; color: var(--orange-encre);
+  flex: none;
+}
+.step__title {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: clamp(1.25rem, 2.4vw, 1.625rem);
+  text-transform: uppercase; line-height: 1.15;
+  margin: 0;
+}
+.step .prose p { max-width: 46rem; }
+
+.two-col-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  margin: 1.75rem 0;
+}
+.two-col-list h4 {
+  font-family: var(--f-mono); font-size: .8125rem;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--gris-encre); margin: 0 0 .875rem;
+}
+.two-col-list ul { margin: 0; padding-left: 1.1rem; }
+.two-col-list li { margin-bottom: .5rem; max-width: 24rem; }
+
+.plain-list { padding-left: 1.1rem; margin: 1rem 0; }
+.plain-list li { margin-bottom: .4rem; max-width: 40rem; }
+
+/* ---------- Formulaire (page Devenir membre) ---------- */
+.form {
+  max-width: 30rem;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+.form-field { display: flex; flex-direction: column; gap: .5rem; }
+.form-field label {
+  font-family: var(--f-mono); font-size: .8125rem;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--gris-encre);
+}
+.form-field input {
+  font-family: var(--f-body); font-size: 1rem;
+  padding: .85rem 1rem;
+  background: var(--blanc); color: var(--noir);
+  border: 1px solid var(--noir);
+}
+.form-field input:focus-visible { outline-offset: 2px; }
+.form .btn { align-self: flex-start; border: 2px solid var(--noir); }
+
+/* ---------- Contact ---------- */
+.contact-block { margin-top: clamp(2rem, 4vw, 3rem); display: flex; flex-wrap: wrap; gap: clamp(3rem, 6vw, 6rem); }
+.contact-block address { font-style: normal; font-size: 1.1875rem; line-height: 1.7; }
+.contact-block a { color: var(--orange); font-weight: 600; text-decoration: none; border-bottom: 2px solid currentColor; }
+
+/* ---------- Liens partenaires ---------- */
+.partner-grid {
+  list-style: none; margin: clamp(2rem, 4vw, 3rem) 0 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 3vw, 2rem);
+}
+.partner-card {
+  display: block; text-decoration: none;
+  background: var(--blanc); color: var(--noir);
+  border: 1px solid var(--trait-clair);
+  padding: 1.75rem;
+  transition: border-color .15s ease;
+}
+.partner-card:hover { border-color: var(--orange-encre); }
+.partner-card__logo {
+  height: 2.5rem; width: auto; max-width: 100%;
+  object-fit: contain; object-position: left center;
+  margin-bottom: 1.25rem;
+}
+.partner-card__name {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: 1.0625rem; text-transform: uppercase;
+  color: var(--noir);
+  margin: 0 0 .375rem;
+}
+.partner-card__desc { color: var(--gris-encre); font-size: .9375rem; margin: 0; }
+
+/* ---------- Pied de page ---------- */
+.site-foot {
+  background: var(--noir-2); color: var(--craie);
+  padding-block: clamp(3rem, 6vw, 4.5rem) 1.5rem;
+}
+.site-foot__grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 2.5rem;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid var(--trait-sombre);
+}
+.site-foot address { font-style: normal; line-height: 1.7; color: var(--gris-chaud); }
+.site-foot address a { color: var(--craie); }
+.site-foot__nav { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem 1.5rem; align-content: start; }
+.site-foot__nav a { color: var(--gris-chaud); text-decoration: none; }
+.site-foot__nav a:hover { color: var(--orange); }
+.site-foot__legal {
+  font-family: var(--f-mono); font-size: .75rem;
+  color: var(--gris-chaud); padding-top: 1.5rem;
+}
+
+/* ---------- Écrans étroits ---------- */
+@media (max-width: 56rem) {
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  .stat-row--6 { grid-template-columns: 1fr 1fr; }
+  .grid-2, .install { grid-template-columns: 1fr; }
+  .install:nth-of-type(even) .install__media { order: 0; }
+  .principes, .principes--wide { grid-template-columns: 1fr; gap: 1.5rem; }
+  .chart-grid { grid-template-columns: 1fr; }
+  .site-foot__grid { grid-template-columns: 1fr; }
+  .hero { min-height: 78vh; }
+  .figure-bleed img { aspect-ratio: 16 / 9; }
+  .team-grid { grid-template-columns: 1fr 1fr; }
+  .install-card-grid { grid-template-columns: 1fr; }
+  .two-col-list { grid-template-columns: 1fr; gap: 1.25rem; }
+  .partner-grid { grid-template-columns: 1fr 1fr; }
+  .contact-block { gap: 2.5rem; }
+  .explorer__controls { align-items: flex-start; }
+  .field-select { min-width: 0; width: 100%; }
+  .split-hero { grid-template-columns: 1fr; min-height: auto; }
+  .split-hero__media { min-height: 20rem; order: -1; }
+}
+@media (max-width: 34rem) {
+  .stat-row { grid-template-columns: 1fr; gap: 1.5rem; }
+  .stat-row--6 { grid-template-columns: 1fr; }
+  .site-nav { gap: .25rem .875rem; }
+  .site-nav a { font-size: .875rem; }
+  .brand img { height: 1.875rem; }
+  .btn { width: 100%; text-align: center; }
+  .kicker { font-size: .75rem; letter-spacing: .1em; }
+  .team-grid { grid-template-columns: 1fr; }
+  .partner-grid { grid-template-columns: 1fr; }
+  .toggle-group { width: 100%; }
+  .toggle-btn { flex: 1; }
+  .step__head { gap: .875rem; }
+  .step__num { font-size: 1.75rem; }
+  .form .btn { width: 100%; text-align: center; }
+}

@@ -37,3 +37,8 @@ desktop.ini
 # ── Fichiers temporaires ────────────────────────────────────────────────────────
 *.tmp
 *.log
+
+# ── Outils Claude Code (local uniquement, jamais sur GitHub) ────────────────────
+.claude/
+CLAUDE.md
+graphify-out/

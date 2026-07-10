@@ -37,10 +37,11 @@ SITES = {
         "color":        "#2a78d6",  # slot 1 · bleu
         "files": {
             # ⚠ Ce bâtiment a bien une installation PV (29.9 kWc, cf.
-            # INSTALLATIONS["install_soubeyran"]) mais nous ne disposons que de la
-            # part autoconsommée mesurée ici — pas d'un fichier production séparé.
-            # Ne pas interpréter cette série comme la consommation totale du
-            # bâtiment ni comme la production PV brute.
+            # INSTALLATIONS["install_soubeyran"]) mais nous ne disposons que du
+            # surplus injecté dans le réseau mesuré ici (refoulement) — pas d'un
+            # fichier production séparé. Ne pas interpréter cette série comme la
+            # consommation totale du bâtiment, l'autoconsommation, ni comme la
+            # production PV brute.
             "consommation": "904ec29e-aa65-4683-ae71-dc0576ad35fe",
             "production":   None,
         },
@@ -122,12 +123,13 @@ PV_SITE_ORDER = [sid for sid in SITE_ORDER if SITES[sid]["files"]["production"] 
 TYPES = ["consommation", "production"]
 
 # "consommation" reste la clé technique interne (fichiers, dict, cmap) — seul le
-# libellé affiché change. Renommé "Autoconsommation" à la demande de l'utilisateur :
-# un pur changement de texte (les valeurs mesurées ne changent pas), car les
-# communautés d'autoconsommateurs Enerko mesurent en priorité l'électricité
-# solaire consommée sur place plutôt que le soutirage réseau brut.
+# libellé affiché change. ⚠ Correction du 2026-07-10 (utilisateur) : l'hypothèse
+# précédente ("Autoconsommation" — l'électricité solaire consommée sur place)
+# était fausse. Cette série mesure en réalité le SURPLUS d'électricité PV
+# injecté dans le réseau (refoulement), pas la part autoconsommée. Renommée
+# en conséquence — ne pas réintroduire "Autoconsommation" pour cette clé.
 TYPE_LABELS = {
-    "consommation": "Autoconsommation",
+    "consommation": "Injection réseau",
     "production":   "Production",
 }
 
@@ -217,12 +219,12 @@ INSTALLATIONS = {
             "installateur":          "Solstis SA",
         },
         "data_note": (
-            "Les données mesurées disponibles pour ce site ne couvrent que la "
-            "part d'électricité autoconsommée relevée au compteur — nous ne "
-            "disposons pas d'un relevé séparé de la consommation totale du "
-            "bâtiment ni de la production PV brute. Le graphique ci-dessous "
-            "reflète donc uniquement cette part autoconsommée, pas l'installation "
-            "PV dans son ensemble."
+            "Les données mesurées disponibles pour ce site ne couvrent que le "
+            "surplus d'électricité PV injecté dans le réseau (refoulement) — "
+            "nous ne disposons pas d'un relevé séparé de la consommation totale "
+            "du bâtiment ni de la production PV brute. Le graphique ci-dessous "
+            "reflète donc uniquement ce surplus injecté, pas l'installation PV "
+            "dans son ensemble."
         ),
         "photos": [],
     },
