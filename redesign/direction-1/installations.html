@@ -37,12 +37,7 @@
       en autoconsommation collective à Genève. Choisissez une fiche pour le détail
       complet — description technique, financement, communauté d'autoconsommateurs
       et données mesurées.</p>
-      <nav class="subnav" aria-label="Sections de cette page">
-        <a href="#vue-ensemble">Vue d'ensemble</a>
-        <a href="#chronologie">Chronologie</a>
-        <a href="#vue-annuelle">Vue annuelle</a>
-        <a href="#explorateur">Données par site</a>
-      </nav>
+
     </div>
   </section>
 
@@ -106,34 +101,9 @@
     </div>
   </section>
 
-  <!-- ============================================================
-       PHOTO SLOT (stand-in actuel : photo2_enerko.jpg) : vue large
-       d'un des toits, pour respirer entre les fiches et les graphiques.
-       ============================================================ -->
-  <section class="band band--light" aria-label="Nos toits">
-    <figure class="figure-bleed wrap">
-      <img src="../assets/photos/photo2_enerko.jpg"
-           alt="Panneaux solaires sur un toit genevois au coucher du soleil, avec le lac Léman et le Jet d'Eau en arrière-plan"
-           width="1280" height="854" loading="lazy">
-      <figcaption>Trois toits, trois communes, une même coopérative.</figcaption>
-    </figure>
-  </section>
-
-  <!-- ============ CHRONOLOGIE — bande pierre (rythme) ============ -->
-  <section id="chronologie" class="band band--stone band--tight" aria-labelledby="chrono-titre">
-    <div class="wrap">
-      <h2 id="chrono-titre" class="display-md">Évolution des installations</h2>
-      <p class="prose" style="max-width:44rem">3 installations photovoltaïques actives,
-      de juin&nbsp;2017 à aujourd'hui. Chaque barre représente la période de mesure
-      disponible pour une installation.</p>
-      <figure class="chart-figure" style="margin-top:2rem">
-        <img src="../assets/charts/timeline.png" alt="Chronologie des installations Enerko" width="1600" height="500" loading="lazy">
-      </figure>
-    </div>
-  </section>
 
   <!-- ============ VUE ANNUELLE — bande claire ============ -->
-  <section id="vue-annuelle" class="band band--light band--tight" aria-labelledby="annuelle-titre">
+  <section id="vue-annuelle" class="band band--stone explorer" aria-labelledby="annuelle-titre">
     <div class="wrap">
       <h2 id="annuelle-titre" class="display-md">Vue d'ensemble annuelle</h2>
       <p class="prose" style="max-width:44rem">Totaux annuels par site, en MWh.
@@ -156,7 +126,7 @@
   </section>
 
   <!-- ============ EXPLORATEUR PAR SITE — bande pierre (rythme) ============ -->
-  <section id="explorateur" class="band band--stone explorer" aria-labelledby="explorateur-titre">
+  <section id="explorateur" class="band band--light band--tight" aria-labelledby="explorateur-titre">
     <div class="wrap">
       <h2 id="explorateur-titre" class="display-md">Explorer par site</h2>
       <p class="prose" style="max-width:44rem">Choisissez d'abord le type de données,

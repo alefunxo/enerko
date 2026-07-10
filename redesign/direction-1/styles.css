@@ -439,6 +439,10 @@ a { color: inherit; }
   font-family: var(--f-mono); font-size: .8125rem;
   color: var(--gris-chaud); margin: 0;
 }
+.team-card__bio {
+  font-size: .9375rem; color: var(--gris-chaud);
+  margin: .85rem 0 0; max-width: 22rem;
+}
 
 /* ---------- Cartes d'installation (page listing) ---------- */
 .install-card-grid {
@@ -613,13 +617,16 @@ a { color: inherit; }
   letter-spacing: .06em; text-transform: uppercase;
   color: var(--gris-encre);
 }
-.form-field input {
+.form-field input,
+.form-field textarea {
   font-family: var(--f-body); font-size: 1rem;
   padding: .85rem 1rem;
   background: var(--blanc); color: var(--noir);
   border: 1px solid var(--noir);
 }
-.form-field input:focus-visible { outline-offset: 2px; }
+.form-field textarea { resize: vertical; min-height: 8rem; }
+.form-field input:focus-visible,
+.form-field textarea:focus-visible { outline-offset: 2px; }
 .form .btn { align-self: flex-start; border: 2px solid var(--noir); }
 
 /* ---------- Contact ---------- */

@@ -56,6 +56,36 @@
     </div>
   </section>
 
+  <!-- ============ FORMULAIRE — bande claire ============ -->
+  <section class="band band--light" aria-labelledby="form-titre">
+    <div class="wrap">
+      <p class="kicker">Nous écrire directement</p>
+      <h2 id="form-titre" class="display-md">Un message, une question&nbsp;?</h2>
+      <p class="page-lede">Laissez-nous votre message ci-dessous&nbsp;: cela ouvrira un
+      message pré-rempli dans votre messagerie, à nous envoyer directement.</p>
+
+      <form id="contact-form" class="form" novalidate>
+        <div class="form-field">
+          <label for="contact-name">Nom complet</label>
+          <input type="text" id="contact-name" name="name" autocomplete="name" required>
+        </div>
+        <div class="form-field">
+          <label for="contact-email">Email</label>
+          <input type="email" id="contact-email" name="email" autocomplete="email" required>
+        </div>
+        <div class="form-field">
+          <label for="contact-subject">Sujet</label>
+          <input type="text" id="contact-subject" name="subject">
+        </div>
+        <div class="form-field">
+          <label for="contact-message">Message</label>
+          <textarea id="contact-message" name="message" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn--orange">Envoyer le message</button>
+      </form>
+    </div>
+  </section>
+
 </main>
 
 <footer class="site-foot">
@@ -85,5 +115,34 @@
   <div class="wrap site-foot__legal">© 2026 Enerko — société coopérative, Genève</div>
 </footer>
 
+<script>
+(function () {
+  "use strict";
+
+  var form = document.getElementById("contact-form");
+  if (!form) return;
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+
+    var name    = document.getElementById("contact-name").value.trim();
+    var email   = document.getElementById("contact-email").value.trim();
+    var subject = document.getElementById("contact-subject").value.trim();
+    var message = document.getElementById("contact-message").value.trim();
+
+    var mailSubject = subject || "Message depuis le site Enerko";
+    var body =
+      "Nom : " + name + "\n" +
+      "Email : " + email + "\n\n" +
+      message;
+
+    window.location.href =
+      "mailto:info@enerko.ch" +
+      "?subject=" + encodeURIComponent(mailSubject) +
+      "&body=" + encodeURIComponent(body);
+  });
+})();
+</script>
 </body>
 </html>
