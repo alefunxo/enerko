@@ -15,7 +15,38 @@
   </div>
 </header>
 
+<nav class="top-nav"><div class="top-nav-inner"><a href="index.html" class="active">Accueil</a><a href="installations/soubeyran-7.html">GENÈVE, Rue Soubeyran 7</a><a href="installations/meyrin-recreations-24.html">MEYRIN, Espl. des Récréations 24</a><a href="installations/plan-les-ouates-vers-8.html">PLAN-LES-OUATES, Ch. de Vers 8</a></div></nav>
+
 <main>
+
+  <!-- ── Section 0 : Installations en bref ────────────────────────────────── -->
+  <section id="sec-installations-brief">
+    <h2>Les installations en un coup d'œil</h2>
+    <p class="section-intro">
+      Surface, puissance, autoconsommation et financement de chaque installation
+      photovoltaïque Enerko. Cliquez sur une fiche pour le détail complet.
+    </p>
+    <div class="install-cards">
+      <div class="install-card">
+        <h3>GENÈVE, Rue Soubeyran 7</h3>
+        <p class="install-address">Rue Soubeyran 7, 1202 Genève, Suisse</p>
+        <ul class="brief-list"><li><span class="brief-label">Surface</span><span class="brief-value">180 m²</span></li><li><span class="brief-label">Puissance</span><span class="brief-value">29.9 kWc</span></li><li><span class="brief-label">Production électrique</span><span class="brief-value">30'000 kWh/an</span></li><li><span class="brief-label">Autoconsommation PV</span><span class="brief-value">93%</span></li><li><span class="brief-label">Autonomie PV du bâtiment</span><span class="brief-value">19%</span></li><li><span class="brief-label">Date de mise en service</span><span class="brief-value">2016</span></li><li><span class="brief-label">Coût d'installation</span><span class="brief-value">60'000 CHF</span></li><li><span class="brief-label">Rétribution unique</span><span class="brief-value">16'000 CHF</span></li><li><span class="brief-label">Installateur PV</span><span class="brief-value">Solstis SA</span></li></ul>
+        <a class="install-card-link" href="installations/soubeyran-7.html">Voir la fiche complète →</a>
+      </div>
+      <div class="install-card">
+        <h3>MEYRIN, Espl. des Récréations 24</h3>
+        <p class="install-address">Esplanade des Récréations 24, 1217 Meyrin, Suisse</p>
+        <ul class="brief-list"><li><span class="brief-label">Surface</span><span class="brief-value">740 m²</span></li><li><span class="brief-label">Puissance</span><span class="brief-value">121 kWc</span></li><li><span class="brief-label">Production électrique</span><span class="brief-value">130'000 kWh/an</span></li><li><span class="brief-label">Autoconsommation PV</span><span class="brief-value">59%</span></li><li><span class="brief-label">Autonomie PV du bâtiment</span><span class="brief-value">31%</span></li><li><span class="brief-label">Date de mise en service</span><span class="brief-value">2017</span></li><li><span class="brief-label">Coût d'installation</span><span class="brief-value">200'000 CHF</span></li><li><span class="brief-label">Rétribution unique</span><span class="brief-value">55'000 CHF</span></li><li><span class="brief-label">Installateur PV</span><span class="brief-value">Solstis SA</span></li></ul>
+        <a class="install-card-link" href="installations/meyrin-recreations-24.html">Voir la fiche complète →</a>
+      </div>
+      <div class="install-card">
+        <h3>PLAN-LES-OUATES, Ch. de Vers 8</h3>
+        <p class="install-address">Chemin de Vers 8, 1228 Plan-les-Ouates, Suisse</p>
+        <ul class="brief-list"><li><span class="brief-label">Surface</span><span class="brief-value">483 m²</span></li><li><span class="brief-label">Puissance</span><span class="brief-value">97.5 kWc</span></li><li><span class="brief-label">Production électrique</span><span class="brief-value">100'000 kWh/an</span></li><li><span class="brief-label">Autoconsommation PV</span><span class="brief-value">40%</span></li><li><span class="brief-label">Date de mise en service</span><span class="brief-value">2022</span></li><li><span class="brief-label">Coût d'installation</span><span class="brief-value">180'000 CHF</span></li><li><span class="brief-label">Rétribution unique</span><span class="brief-value">32'000 CHF</span></li><li><span class="brief-label">Installateur PV</span><span class="brief-value">Solstis SA</span></li></ul>
+        <a class="install-card-link" href="installations/plan-les-ouates-vers-8.html">Voir la fiche complète →</a>
+      </div>
+    </div>
+  </section>
 
   <!-- ── Section 1 : Chronologie ─────────────────────────────────────────── -->
   <section id="sec-timeline">
@@ -36,15 +67,15 @@
     <h2>Vue d'ensemble annuelle</h2>
     <p class="section-intro">
       Totaux annuels par site, en MWh. Utilisez les boutons pour
-      basculer entre consommation et production.
+      basculer entre autoconsommation et production.
     </p>
     <div class="toggle-group" id="annual-toggle" role="group" aria-label="Type de données">
-      <button class="toggle-btn active" data-type="consommation">Consommation</button>
+      <button class="toggle-btn active" data-type="consommation">Autoconsommation</button>
       <button class="toggle-btn"        data-type="production">Production</button>
     </div>
     <div class="chart-wrap">
       <img src="assets/images/annual_overview_consommation.png"
-           alt="Consommation annuelle par site"
+           alt="Autoconsommation annuelle par site"
            class="annual-img chart-img" data-type="consommation">
       <img src="assets/images/annual_overview_production.png"
            alt="Production annuelle par site"
@@ -57,7 +88,7 @@
     <h2>Explorer par site</h2>
     <p class="section-intro">
       Choisissez d'abord le type de données, puis le site — seuls ceux
-      disposant de ce type de mesure sont proposés. Un site de consommation
+      disposant de ce type de mesure sont proposés. Un site d'autoconsommation
       est un bâtiment raccordé au réseau ; un site de production est une
       installation photovoltaïque.
     </p>
@@ -66,7 +97,7 @@
       <div class="control-group">
         <label>Type de données</label>
         <div class="toggle-group" id="site-type-toggle" role="group" aria-label="Type de données">
-          <button class="toggle-btn active" data-type="consommation">Consommation</button>
+          <button class="toggle-btn active" data-type="consommation">Autoconsommation</button>
           <button class="toggle-btn"        data-type="production">Production</button>
         </div>
       </div>
@@ -131,7 +162,7 @@
 <footer>
   <p>Données&nbsp;: SIG (Services Industriels de Genève) &mdash;
      Enerko Coopérative Solaire &mdash;
-     Visualisation générée le 09/07/2026</p>
+     Visualisation générée le 10/07/2026</p>
 </footer>
 
 <script>

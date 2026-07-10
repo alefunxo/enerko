@@ -230,6 +230,223 @@ select:focus {
   margin-bottom: 0.75rem;
 }
 
+/* ── Barre de navigation ──────────────────────────────────────────────────── */
+.top-nav {
+  background: var(--yellow);
+}
+
+.top-nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+}
+
+.top-nav a {
+  display: inline-block;
+  padding: 0.7rem 0;
+  color: var(--navy);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-bottom: 3px solid transparent;
+}
+
+.top-nav a:hover,
+.top-nav a.active {
+  border-bottom-color: var(--navy);
+}
+
+/* ── Cartes "installations en bref" (page d'accueil) ─────────────────────── */
+.install-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+}
+
+.install-card {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 1.25rem 1.25rem 1.4rem;
+  border: 1px solid var(--border);
+}
+
+.install-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.15rem;
+}
+
+.install-card .install-address {
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.9rem;
+}
+
+.install-card .brief-list {
+  margin-bottom: 1rem;
+}
+
+.install-card-link {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--white);
+  background: var(--navy);
+  padding: 0.45rem 0.9rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.install-card-link:hover { background: var(--yellow); color: var(--navy); }
+
+/* ── Fiche installation ("en bref" + carte, détail) ───────────────────────── */
+.brief-list {
+  list-style: none;
+  font-size: 0.88rem;
+}
+
+.brief-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.brief-list li:last-child { border-bottom: none; }
+
+.brief-list dt,
+.brief-list .brief-label {
+  color: var(--muted);
+}
+
+.brief-list .brief-value {
+  font-weight: 700;
+  color: var(--navy);
+  text-align: right;
+}
+
+.install-hero {
+  margin-bottom: 1.75rem;
+}
+
+.install-hero .install-address {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-top: 0.2rem;
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--navy);
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.back-link:hover { color: var(--yellow); }
+
+.data-note {
+  background: #FCF3E3;
+  border-left: 4px solid var(--warn);
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  font-size: 0.86rem;
+  color: var(--text);
+  margin-bottom: 1.75rem;
+}
+
+.install-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .install-layout { grid-template-columns: 1fr; }
+}
+
+.install-main h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 1.4rem 0 0.5rem;
+}
+
+.install-main h3:first-child { margin-top: 0; }
+
+.install-main h4 {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 1.1rem 0 0.35rem;
+}
+
+.install-main p {
+  font-size: 0.92rem;
+  margin-bottom: 0.75rem;
+}
+
+.install-sidebar {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.install-sidebar h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.75rem;
+}
+
+.map-embed {
+  margin-top: 1.25rem;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.map-embed iframe {
+  display: block;
+  width: 100%;
+  height: 220px;
+  border: 0;
+}
+
+.measured-section {
+  margin-top: 0.5rem;
+}
+
+.measured-subtitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 1.5rem 0 0.25rem;
+}
+
+.measured-subtitle:first-child { margin-top: 0; }
+
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.photo-gallery img {
+  border-radius: 8px;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
 /* ── Pied de page ─────────────────────────────────────────────────────────── */
 footer {
   text-align: center;
