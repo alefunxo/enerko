@@ -47,17 +47,15 @@ header {
   margin: 0 auto;
 }
 
-header h1 {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--yellow);
-  letter-spacing: -0.02em;
+.brand-logo {
+  display: inline-block;
+  line-height: 0;
 }
 
-.subtitle {
-  font-size: 0.95rem;
-  opacity: 0.80;
-  margin-top: 0.35rem;
+.brand-logo img {
+  height: 60px;
+  width: auto;
+  display: block;
 }
 
 /* ── Contenu principal ────────────────────────────────────────────────────── */
@@ -235,7 +233,8 @@ select:focus {
 
 /* ── Barre de navigation ──────────────────────────────────────────────────── */
 .top-nav {
-  background: var(--yellow);
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
 }
 
 .top-nav-inner {
@@ -255,11 +254,13 @@ select:focus {
   font-size: 0.85rem;
   font-weight: 700;
   border-bottom: 3px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
 }
 
 .top-nav a:hover,
 .top-nav a.active {
-  border-bottom-color: var(--white);
+  color: var(--yellow);
+  border-bottom-color: var(--yellow);
 }
 
 /* ── Composants réutilisables : hero, boutons, stats, bandeau CTA ─────────── */
@@ -308,9 +309,14 @@ select:focus {
 .btn-primary {
   background: var(--yellow);
   color: var(--navy);
+  border: 2px solid var(--yellow);
 }
 
-.btn-primary:hover { background: var(--white); }
+.btn-primary:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--white);
+}
 
 .btn-secondary {
   background: transparent;
@@ -675,30 +681,11 @@ select:focus {
   .flow-diagram { flex-direction: column; }
 }
 
-/* Investir — sous-nav d'ancrage + sections + boîtes charges/revenus */
-.subnav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-  padding-bottom: 0.9rem;
-  margin-bottom: 1.25rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.subnav a {
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: var(--muted);
-  text-decoration: none;
-}
-
-.subnav a:hover { color: var(--yellow); }
-
+/* Investir — sections numérotées + boîtes charges/revenus */
 .investir-section {
-  padding-top: 1.5rem;
-  margin-top: 1.5rem;
-  border-top: 1px solid var(--border);
+  padding-top: 1.75rem;
+  margin-top: 1.75rem;
+  border-top: 2px solid var(--border);
 }
 
 .investir-section:first-of-type {
@@ -707,11 +694,34 @@ select:focus {
   border-top: none;
 }
 
+.investir-section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  margin-bottom: 0.9rem;
+}
+
+.investir-step {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 50%;
+  background: var(--yellow-wash);
+  border: 2px solid var(--yellow);
+  color: var(--navy);
+  font-weight: 800;
+  font-size: 0.9rem;
+  transform: translateY(2px);
+}
+
 .investir-section h3 {
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--navy);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0;
 }
 
 .investir-section p {
@@ -783,9 +793,30 @@ select:focus {
 }
 
 .lien-card {
+  display: block;
   background: var(--bg);
   border-radius: 8px;
   padding: 1.1rem 1.25rem;
+  border: 1px solid var(--border);
+  text-decoration: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.lien-card:hover {
+  border-color: var(--yellow);
+  box-shadow: var(--shadow);
+}
+
+.lien-logo {
+  height: 40px;
+  width: auto;
+  max-width: calc(100% - 1.5rem);
+  object-fit: contain;
+  object-position: center;
+  margin-bottom: 0.9rem;
+  background: var(--white);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
   border: 1px solid var(--border);
 }
 
@@ -816,7 +847,7 @@ footer a:hover { color: var(--yellow); }
 
 /* ── Responsive global ────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
-  header h1    { font-size: 1.5rem; }
+  .brand-logo img { height: 44px; }
   section      { padding: 1.25rem 1rem; }
   main         { padding: 1rem 0.75rem 2rem; }
   .toggle-btn  { padding: 0.35rem 0.75rem; font-size: 0.82rem; }

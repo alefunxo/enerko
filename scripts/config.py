@@ -553,27 +553,38 @@ CONTACT = {
     "email": "info@enerko.ch",
 }
 
-# Pas d'URL externe : non fournie/confirmée par l'utilisateur, on n'en devine pas.
+# Logos partenaires : fichiers attendus sous docs/assets/images/partners/<logo>.
+# Fournis par l'utilisateur le 2026-07-10 — à déposer sur disque avant rebuild.
 LIENS = [
     {
         "name": "Equilibre",
         "desc": "Coopérative d'habitation partenaire de plusieurs installations Enerko.",
+        "url": "https://www.cooperative-equilibre.ch/",
+        "logo": "partners/equilibre.png",
     },
     {
         "name": "Swissgrid",
         "desc": "Gestionnaire du réseau de transport d'électricité suisse.",
+        "url": "https://www.swissgrid.ch/fr/home.html",
+        "logo": "partners/swissgrid.png",
     },
     {
         "name": "SIG",
         "desc": "Services Industriels de Genève — distributeur d'électricité local.",
+        "url": "https://ww2.sig-ge.ch/",
+        "logo": "partners/sig.jpg",
     },
     {
         "name": "Swissolar",
         "desc": "Association professionnelle suisse de l'énergie solaire.",
+        "url": "https://www.swissolar.ch/fr",
+        "logo": "partners/swissolar.jpg",
     },
     {
         "name": "VESE",
         "desc": "Association des producteurs d'énergie indépendants.",
+        "url": "https://www.vese.ch/fr/",
+        "logo": "partners/vese.png",
     },
 ]
 

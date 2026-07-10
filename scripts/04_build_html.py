@@ -85,6 +85,20 @@ def _fmt_kwc(v) -> str:
 # pages institutionnelles (Enerko?, Autoconsommer, Investir, Devenir membre,
 # Contact, Liens). Les fiches individuelles ne sont plus listées directement
 # dans la nav (ça ferait 3+ entrées de plus) — on y accède depuis "Installations".
+def _header_html(depth: int) -> str:
+    """Logo Enerko — le fichier image porte déjà le nom + la signature
+    'coopérAction énergEthique', donc pas de texte de sous-titre séparé
+    (évite de dupliquer ce que le logo affiche déjà)."""
+    prefix = "../" if depth else ""
+    return f"""<header>
+  <div class="header-inner">
+    <a href="{prefix}index.html" class="brand-logo">
+      <img src="{prefix}assets/images/logo-enerko.png" alt="Enerko — coopérAction énergEthique">
+    </a>
+  </div>
+</header>"""
+
+
 def _nav_links(depth: int):
     prefix = "../" if depth else ""
     return [
@@ -531,12 +545,7 @@ def build_index_html() -> str:
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <h1>Enerko</h1>
-    <p class="subtitle">Coopérative Solaire — Courbes de charge des installations photovoltaïques</p>
-  </div>
-</header>
+{_header_html(0)}
 
 {_nav_html("accueil", 0)}
 
@@ -589,12 +598,7 @@ def build_installation_html(iid: str, completeness: dict, today: str) -> str:
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <h1>Enerko</h1>
-    <p class="subtitle">Coopérative Solaire — Courbes de charge des installations photovoltaïques</p>
-  </div>
-</header>
+{_header_html(depth)}
 
 {_nav_html("installations", depth)}
 
@@ -695,12 +699,7 @@ def _page_shell(
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <h1>Enerko</h1>
-    <p class="subtitle">Coopérative Solaire — Courbes de charge des installations photovoltaïques</p>
-  </div>
-</header>
+{_header_html(depth)}
 
 {_nav_html(active, depth)}
 
@@ -814,15 +813,7 @@ def build_autoconsommer_html(today: str) -> str:
     return _page_shell("Autoconsommer", "autoconsommer", depth, body, today)
 
 
-def _investir_subnav_html() -> str:
-    items = "".join(
-        f'<a href="#{s["anchor"]}">{s["nav_label"].upper()}</a>'
-        for s in INVESTIR["sections"]
-    )
-    return f'<nav class="subnav" aria-label="Sections Investir">{items}</nav>'
-
-
-def _investir_section_html(s: dict) -> str:
+def _investir_section_html(s: dict, idx: int) -> str:
     paragraphs = "".join(f"<p>{p}</p>" for p in s.get("paragraphs", []))
     charges_revenus = ""
     if "charges" in s:
@@ -848,7 +839,10 @@ def _investir_section_html(s: dict) -> str:
 
     return f"""
     <div id="{s["anchor"]}" class="investir-section">
-      <h3>{s["title"]}</h3>
+      <div class="investir-section-head">
+        <span class="investir-step" aria-label="Étape {idx} : {s["nav_label"]}">{idx}</span>
+        <h3>{s["title"]}</h3>
+      </div>
       {paragraphs}
       {charges_revenus}
       {closing}
@@ -859,12 +853,13 @@ def _investir_section_html(s: dict) -> str:
 
 def build_investir_html(today: str) -> str:
     depth = 0
-    sections_html = "".join(_investir_section_html(s) for s in INVESTIR["sections"])
+    sections_html = "".join(
+        _investir_section_html(s, idx) for idx, s in enumerate(INVESTIR["sections"], start=1)
+    )
     body = f"""
   <section id="sec-investir">
     <h2>Investir</h2>
     <p class="section-intro">{INVESTIR["summary"]}</p>
-    {_investir_subnav_html()}
     {sections_html}
   </section>"""
     return _page_shell("Investir", "investir", depth, body, today)
@@ -899,10 +894,11 @@ def build_liens_html(today: str) -> str:
     depth = 0
     cards = "".join(
         f"""
-      <div class="lien-card">
+      <a class="lien-card" href="{l["url"]}" target="_blank" rel="noopener">
+        <img class="lien-logo" src="assets/images/{l["logo"]}" alt="{l["name"]}">
         <h3>{l["name"]}</h3>
         <p>{l["desc"]}</p>
-      </div>""" for l in LIENS
+      </a>""" for l in LIENS
     )
     body = f"""
   <section id="sec-liens">
