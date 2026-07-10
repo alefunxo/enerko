@@ -189,13 +189,17 @@ def _data_note_html(note) -> str:
 
 
 def _stat_tiles_html() -> str:
-    """Chiffres d'impact agrégés à partir des fiches INSTALLATIONS (brief) —
-    aucune donnée nouvelle, simple somme des chiffres déjà publiés par fiche."""
+    """Chiffres d'impact — la plupart agrégés à partir des fiches INSTALLATIONS
+    (brief), simple somme des chiffres déjà publiés par fiche. Le nombre de
+    membres n'est pas connu : affiché "X" en attendant le vrai chiffre plutôt
+    que de l'omettre ou de l'inventer — remplacer dans la liste `tiles`
+    ci-dessous une fois disponible."""
     total_kwc = sum(INSTALLATIONS[iid]["brief"]["puissance_kwc"] for iid in INSTALLATION_ORDER)
     total_m2  = sum(INSTALLATIONS[iid]["brief"]["surface_m2"] for iid in INSTALLATION_ORDER)
     total_kwh = sum(INSTALLATIONS[iid]["brief"]["production_kwh_an"] for iid in INSTALLATION_ORDER)
     total_chf = sum(INSTALLATIONS[iid]["brief"]["cout_chf"] for iid in INSTALLATION_ORDER)
     tiles = [
+        ("X",                                         "Membres de la coopérative"),
         (str(len(INSTALLATION_ORDER)),               "Installations photovoltaïques"),
         (f"{_fmt_kwc(total_kwc)} kWc",                "Puissance installée totale"),
         (f"{_fmt_thousands(total_m2)} m²",            "Surface de toiture équipée"),
@@ -268,6 +272,18 @@ def _completeness_badge_html(comp) -> str:
     else:
         detail = "Aucun trou significatif détecté."
     return f'{badge}<p class="completeness-detail completeness-standalone">{detail}</p>'
+
+
+def _building_measured_html(building: dict, depth: int, completeness: dict) -> str:
+    site_ids = building["site_ids"]
+    types_present = [t for t in TYPES if site_ids.get(t) is not None]
+    blocks = "".join(
+        _measured_type_block_html(site_ids[t], t, depth, completeness)
+        for t in types_present
+    )
+    if building.get("label"):
+        return f'<h3 class="measured-building-title">{building["label"]}</h3>{blocks}'
+    return blocks
 
 
 def _measured_type_block_html(site_id: str, type_key: str, depth: int, completeness: dict) -> str:
@@ -590,10 +606,8 @@ def build_installation_html(iid: str, completeness: dict, today: str) -> str:
     inst  = INSTALLATIONS[iid]
     depth = 1
 
-    types_present = [t for t in TYPES if inst["site_ids"].get(t) is not None]
     measured_blocks = "".join(
-        _measured_type_block_html(inst["site_ids"][t], t, depth, completeness)
-        for t in types_present
+        _building_measured_html(b, depth, completeness) for b in inst["buildings"]
     )
 
     sections = inst["sections"]
@@ -738,6 +752,12 @@ def build_installations_index_html(today: str) -> str:
       détail complet — description technique, financement, communauté
       d'autoconsommateurs et données mesurées.
     </p>
+    <nav class="subnav" aria-label="Sections de cette page">
+      <a href="#sec-installations">Vue d'ensemble</a>
+      <a href="#sec-timeline">Chronologie</a>
+      <a href="#sec-annual">Vue annuelle</a>
+      <a href="#sec-sites">Données par site</a>
+    </nav>
     <div class="install-cards">{_install_cards_html(depth)}
     </div>
   </section>

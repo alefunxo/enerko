@@ -134,13 +134,19 @@ TYPE_LABELS = {
 # ── Fiches installations ────────────────────────────────────────────────────────
 # Contenu éditorial (texte Enerko) pour les pages détaillées "une installation,
 # une page". Trois installations documentées pour l'instant — les sites sans
-# fiche ici (site_c, site_e) restent accessibles via l'explorateur de la page
+# fiche ici (site_e) restent accessibles via l'explorateur de la page
 # d'accueil mais n'ont pas de page dédiée.
 #
-# 'site_ids'   : {"consommation": site_id|None, "production": site_id|None} —
-#                quels SITES fournissent les graphiques mesurés de cette fiche.
+# 'buildings'  : liste de {"label": str|None, "site_ids": {"consommation": site_id|None,
+#                "production": site_id|None}} — une fiche peut regrouper plusieurs
+#                bâtiments mesurés séparément (ex. Meyrin 24 + 26, deux compteurs
+#                distincts). 'label' affiche un sous-titre "Bâtiment X" avant ses
+#                graphiques ; laisser None quand la fiche ne couvre qu'un seul
+#                bâtiment (pas de sous-titre superflu dans ce cas).
 # 'brief'      : chiffres de la fiche "en bref" (valeurs éditoriales Enerko,
 #                indépendantes des séries mesurées — ne pas les recalculer).
+#                Pour Meyrin, ces chiffres couvrent l'ensemble de
+#                l'installation (les deux points de comptage) — cf. data_note.
 # 'photos'     : liste de noms de fichiers dans docs/assets/images/ (vide pour
 #                l'instant ; ajouter les fichiers puis lister leur nom ici).
 # 'data_note'  : avertissement affiché en tête de fiche si les données mesurées
@@ -151,7 +157,9 @@ INSTALLATIONS = {
         "name":    "GENÈVE, Rue Soubeyran 7",
         "slug":    "soubeyran-7",
         "address": "Rue Soubeyran 7, 1202 Genève, Suisse",
-        "site_ids": {"consommation": "site_a", "production": None},
+        "buildings": [
+            {"label": None, "site_ids": {"consommation": "site_a", "production": None}},
+        ],
         "description": (
             "La coopérative Enerko a financé l'installation photovoltaïque sur la "
             "toiture du bâtiment des coopératives Equilibre et Luciole, à la rue "
@@ -219,10 +227,13 @@ INSTALLATIONS = {
         "photos": [],
     },
     "install_meyrin_recreations_24": {
-        "name":    "MEYRIN, Espl. des Récréations 24",
+        "name":    "MEYRIN, Espl. des Récréations 24 et 26",
         "slug":    "meyrin-recreations-24",
-        "address": "Esplanade des Récréations 24, 1217 Meyrin, Suisse",
-        "site_ids": {"consommation": "site_b", "production": "site_d"},
+        "address": "Esplanade des Récréations 24 et 26, 1217 Meyrin, Suisse",
+        "buildings": [
+            {"label": "Bâtiment 24", "site_ids": {"consommation": "site_b", "production": "site_d"}},
+            {"label": "Bâtiment 26", "site_ids": {"consommation": "site_c", "production": "site_c"}},
+        ],
         "description": (
             "La coopérative Enerko a financé les installations photovoltaïques "
             "sur les toitures des trois bâtiments de la coopérative équilibre, à "
@@ -265,10 +276,12 @@ INSTALLATIONS = {
                 "regroupement permet ainsi d'autoconsommer plus de la moitié de "
                 "la production PV. L'électricité PV couvre environ un tiers de "
                 "la consommation électrique totale des bâtiments.",
-                "Les trois bâtiments sont raccordés au même compteur SIG : sur "
-                "le plan des données mesurées ci-dessous, ils apparaissent donc "
-                "comme un seul point d'autoconsommation et un seul point de "
-                "production, et non comme trois installations distinctes.",
+                "Enerko identifie trois bâtiments sur ce site (promenade de "
+                "l'Aubier 19-20-21), mais SIG les relève via deux points de "
+                "comptage distincts, rattachés aux adresses Esplanade des "
+                "Récréations 24 et 26. Les données mesurées ci-dessous sont "
+                "donc présentées par bâtiment (24 puis 26), et non par les "
+                "trois bâtiments identifiés par Enerko.",
             ],
         },
         "brief": {
@@ -282,14 +295,24 @@ INSTALLATIONS = {
             "retribution_chf":       55000,
             "installateur":          "Solstis SA",
         },
-        "data_note": None,
+        "data_note": (
+            "Enerko identifie trois bâtiments sur ce site (promenade de "
+            "l'Aubier 19-20-21), au sein d'une même communauté "
+            "d'autoconsommateurs, mais SIG les relève via deux points de "
+            "comptage distincts : Esplanade des Récréations 24 et 26. Les "
+            "chiffres de la fiche technique ci-contre portent sur "
+            "l'ensemble de l'installation. Les graphiques ci-dessous "
+            "présentent les deux points de comptage séparément."
+        ),
         "photos": [],
     },
     "install_plan_les_ouates_vers_8": {
         "name":    "PLAN-LES-OUATES, Ch. de Vers 8",
         "slug":    "plan-les-ouates-vers-8",
         "address": "Chemin de Vers 8, 1228 Plan-les-Ouates, Suisse",
-        "site_ids": {"consommation": "site_g", "production": "site_f"},
+        "buildings": [
+            {"label": None, "site_ids": {"consommation": "site_g", "production": "site_f"}},
+        ],
         "description": (
             "La coopérative Enerko a financé l'installation photovoltaïque sur "
             "la toiture du bâtiment de la commune de Plan-les-Ouates, au chemin "

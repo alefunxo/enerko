@@ -12,9 +12,13 @@
   --border:  #DEE2E6;
   --shadow:  0 2px 12px rgba(0, 0, 0, 0.07);
   --radius:  10px;
-  /* Palette de statut fixe (jamais réutilisée pour une série de données) */
-  --good:    #0CA30C;
-  --warn:    #C97A05;
+  /* Palette de statut fixe (jamais réutilisée pour une série de données).
+     --good et --warn assombris vs. l'original : le texte blanc du badge
+     n'atteignait pas 4.5:1 (WCAG AA) sur les deux ; --warn également
+     éloigné en teinte de --yellow pour ne pas se confondre avec l'accent
+     de marque. */
+  --good:    #1F7A1F;
+  --warn:    #8A6D00;
   --bad:     #D03B3B;
 }
 
@@ -89,6 +93,29 @@ h2 {
   margin-bottom: 1.25rem;
   max-width: 80ch;
 }
+
+/* Sous-nav d'ancrage — pour sauter directement à une section plus bas sur
+   la même page (ex. Nadia qui revient consulter "Données par site" sans
+   rescroller devant les cartes d'aperçu à chaque visite). */
+.subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  padding-bottom: 0.9rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.subnav a {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.subnav a:hover { color: var(--navy); }
 
 /* ── Boutons toggle ───────────────────────────────────────────────────────── */
 .toggle-group {
@@ -272,7 +299,6 @@ select:focus {
 
 .top-nav a:hover,
 .top-nav a.active {
-  color: var(--yellow);
   border-bottom-color: var(--yellow);
 }
 
@@ -284,13 +310,13 @@ select:focus {
   align-self: stretch;
   align-items: center;
   cursor: pointer;
-  padding: 0 0 0 0.1rem;
+  padding: 0.4rem 0 0.4rem 0.1rem;
   color: var(--navy);
 }
 
 .nav-toggle-label::before {
   content: "☰  Menu";
-  font-size: 0.95rem;
+  font-size: 1.15rem;
   font-weight: 700;
 }
 
@@ -429,10 +455,12 @@ select:focus {
 }
 
 .install-card {
-  background: var(--bg);
+  background: var(--white);
   border-radius: 8px;
-  padding: 1.25rem 1.25rem 1.4rem;
+  padding: 1.4rem 1.25rem 1.4rem;
   border: 1px solid var(--border);
+  border-top: 4px solid var(--yellow);
+  box-shadow: var(--shadow);
 }
 
 .install-card h3 {
@@ -595,6 +623,22 @@ select:focus {
 
 .measured-subtitle:first-child { margin-top: 0; }
 
+/* Sous-titre "Bâtiment X" — quand une fiche regroupe plusieurs bâtiments
+   mesurés séparément (ex. Meyrin 24 + 26), pour bien les distinguer des
+   sous-titres "Autoconsommation"/"Production" qui suivent. */
+.measured-building-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--navy);
+  background: var(--yellow-wash);
+  border-left: 4px solid var(--yellow);
+  border-radius: 6px;
+  padding: 0.65rem 1rem;
+  margin: 2.25rem 0 1.25rem;
+}
+
+.measured-building-title:first-child { margin-top: 0; }
+
 .photo-gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -639,13 +683,13 @@ select:focus {
   padding: 1.5rem;
   background: var(--bg);
   border-radius: 8px;
-  text-align: center;
 }
 
 .diagram-img {
   max-width: 640px;
   width: 100%;
   height: auto;
+  margin: 0 auto;
 }
 
 /* Investir — sections numérotées + boîtes charges/revenus */
@@ -878,7 +922,8 @@ footer a:hover { color: var(--yellow); }
   .nav-toggle-checkbox:checked ~ .top-nav-links { display: flex; }
 
   .top-nav-links a {
-    padding: 0.75rem 0;
+    padding: 0.9rem 0;
+    font-size: 1.05rem;
     border-bottom: none;
     border-top: 1px solid var(--border);
   }
