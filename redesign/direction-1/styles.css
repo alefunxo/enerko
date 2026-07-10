@@ -124,6 +124,7 @@ a { color: inherit; }
 
 .prose p { margin: 0 0 1.25em; max-width: 38rem; }
 .prose strong { font-weight: 600; }
+.prose--justify p { text-align: justify; text-justify: inter-word; hyphens: auto; }
 
 /* ---------- Marque (fichiers logo réels) ---------- */
 .brand { display: inline-block; text-decoration: none; }
@@ -559,6 +560,18 @@ a { color: inherit; }
 .band--dark .fact-callout { background: var(--graphite); border-left-color: var(--orange); }
 .band--dark .fact-callout__value { color: var(--craie); }
 .band--dark .fact-callout__text { color: var(--gris-chaud); }
+
+/* ---------- Fiche technique (détail d'installation) ---------- */
+.tech-panel {
+  max-width: 48rem;
+  margin: 0 0 2rem;
+  padding: 1.75rem 2rem;
+  background: var(--blanc);
+  border: 1px solid var(--trait-clair);
+  border-top: 3px solid var(--orange-encre);
+}
+.tech-panel .spec { margin-bottom: 1.25rem; }
+.tech-panel .prose p:last-child { margin-bottom: 0; }
 
 /* ---------- Héros scindé (Contact, Devenir membre) ---------- */
 .split-hero {
