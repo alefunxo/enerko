@@ -16,7 +16,7 @@
   </div>
 </header>
 
-<nav class="top-nav"><div class="top-nav-inner"><a href="index.html">Accueil</a><a href="enerko.html">Enerko ?</a><a href="installations/index.html">Installations</a><a href="autoconsommer.html" class="active">Autoconsommer</a><a href="investir.html">Investir</a><a href="devenir-membre.html">Devenir membre</a><a href="contact.html">Contact</a><a href="liens.html">Liens</a></div></nav>
+<nav class="top-nav"><div class="top-nav-inner"><input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox"><label for="nav-toggle" class="nav-toggle-label" aria-label="Ouvrir le menu"></label><div class="top-nav-links"><a href="index.html">Accueil</a><a href="enerko.html">Enerko</a><a href="equipe.html">Équipe</a><a href="installations/index.html">Installations</a><a href="autoconsommer.html" class="active">Autoconsommer</a><a href="investir.html">Investir</a><a href="devenir-membre.html">Devenir membre</a><a href="contact.html">Contact</a><a href="liens.html">Liens</a></div></div></nav>
 
 <main>
 
@@ -25,24 +25,10 @@
     <p class="section-intro">L'autoconsommation collective est le fait de se regrouper au sein d'un bâtiment pour autoconsommer un maximum d'électricité photovoltaïque.</p>
     <p>Dans un contexte actuel où l'électricité photovoltaïque est rachetée à bas prix par les gestionnaires de réseaux électriques suisses, il est cohérent d'essayer d'en autoconsommer instantanément un maximum. Pour ce faire, une communauté d'autoconsommateurs ou un regroupement pour consommation propre est mis en œuvre.</p><p>La coopérative Enerko vend aux membres des communautés/regroupements d'autoconsommation d'une part l'énergie photovoltaïque instantanément consommée, mais également l'électricité soutirée du réseau électrique de SIG, au prix de la gamme vitale bleu heures pleines/creuses.</p><p>L'autoconsommateur consomme ainsi un mix électrique comportant un quart d'électricité solaire et trois quarts d'électricité hydraulique suisse. Il s'agit d'une électricité de meilleure qualité que la gamme vitale vert de SIG, ceci au prix du vitale bleu.</p><p>L'électricité photovoltaïque non autoconsommée instantanément est refoulée sur le réseau électrique et achetée par SIG à un tarif révisé chaque année.</p>
     
-    <div class="flow-diagram">
-      <div class="flow-node flow-node-grid">Réseau SIG</div>
-      <div class="flow-arrows">
-        <div class="flow-arrow flow-arrow-buy">
-          <span class="flow-arrow-icon">→</span>
-          <span class="flow-arrow-text">électricité achetée à SIG <strong>24 cts/kWh</strong></span>
-        </div>
-        <div class="flow-arrow flow-arrow-sell">
-          <span class="flow-arrow-icon">←</span>
-          <span class="flow-arrow-text">vendue à SIG <strong>12 cts/kWh</strong></span>
-        </div>
-      </div>
-      <div class="flow-node flow-node-building">
-        <span class="flow-node-roof">Installation photovoltaïque</span>
-        <span class="flow-node-self">☀ électricité solaire autoconsommée</span>
-      </div>
+    <div class="diagram-wrap">
+      <img class="diagram-img" src="assets/images/autoconsommation_collective.png"
+           alt="Schéma de l'autoconsommation collective : l'électricité solaire produite en toiture est autoconsommée par le bâtiment, le surplus est vendu à SIG (12 cts/kWh) et le manque est acheté à SIG (24 cts/kWh).">
     </div>
-    <p class="flow-caption">Autoconsommation collective</p>
     
     <div class="cta-band">
       <h3>Déjà locataire d'un bâtiment équipé ?</h3>

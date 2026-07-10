@@ -411,14 +411,6 @@ AUTOCONSOMMER = {
             "tarif révisé chaque année."
         ),
     ],
-    "diagram": {
-        "caption": "Autoconsommation collective",
-        "buy_label": "électricité achetée à SIG",
-        "buy_price": "24 cts/kWh",
-        "sell_label": "vendue à SIG",
-        "sell_price": "12 cts/kWh",
-        "self_label": "électricité solaire autoconsommée",
-    },
     "cta_text": (
         "Vous habitez ou gérez déjà un bâtiment équipé par Enerko et "
         "souhaitez rejoindre une communauté d'autoconsommateurs, ou vous "
@@ -552,6 +544,16 @@ CONTACT = {
     "address_lines": ["4, ch. des Terres-Noires", "1252 Meinier", "Suisse"],
     "email": "info@enerko.ch",
 }
+
+# Placeholders — noms confirmés par l'utilisateur le 2026-07-10, fonctions
+# réelles à préciser (remplacer "Fonction à préciser" une fois connues).
+EQUIPE = [
+    {"name": "Arthur Rinaldi",       "role": "Fonction à préciser"},
+    {"name": "Christophe Brunet",    "role": "Fonction à préciser"},
+    {"name": "Antoine Delay",        "role": "Fonction à préciser"},
+    {"name": "Elvis Redza",          "role": "Fonction à préciser"},
+    {"name": "Alejandro Pena-Bello", "role": "Fonction à préciser"},
+]
 
 # Logos partenaires : fichiers attendus sous docs/assets/images/partners/<logo>.
 # Fournis par l'utilisateur le 2026-07-10 — à déposer sur disque avant rebuild.

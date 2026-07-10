@@ -130,6 +130,7 @@ h2 {
 
 .chart-img {
   width: 100%;
+  min-width: 480px;
   height: auto;
   border-radius: 4px;
 }
@@ -197,6 +198,13 @@ select:focus {
   margin-bottom: 1.25rem;
 }
 
+/* Sur la fiche d'installation, le badge est seul (pas dans la ligne .controls
+   qui lui donne normalement de la hauteur libre) — la marge négative ci-dessus
+   ferait alors chevaucher le texte sur le badge. */
+.completeness-detail.completeness-standalone {
+  margin-top: 0.4rem;
+}
+
 /* ── Grille deux colonnes ─────────────────────────────────────────────────── */
 .charts-row.two-col {
   display: grid;
@@ -242,6 +250,11 @@ select:focus {
   margin: 0 auto;
   padding: 0 1.5rem;
   display: flex;
+  align-items: center;
+}
+
+.top-nav-links {
+  display: flex;
   flex-wrap: wrap;
   gap: 0.25rem 1.5rem;
 }
@@ -261,6 +274,28 @@ select:focus {
 .top-nav a.active {
   color: var(--yellow);
   border-bottom-color: var(--yellow);
+}
+
+/* Menu hamburger (mobile uniquement) — case à cocher cachée, pas de JS */
+.nav-toggle-checkbox { display: none; }
+
+.nav-toggle-label {
+  display: none;
+  align-self: stretch;
+  align-items: center;
+  cursor: pointer;
+  padding: 0 0 0 0.1rem;
+  color: var(--navy);
+}
+
+.nav-toggle-label::before {
+  content: "☰  Menu";
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.nav-toggle-checkbox:checked ~ .nav-toggle-label::before {
+  content: "✕  Fermer";
 }
 
 /* ── Composants réutilisables : hero, boutons, stats, bandeau CTA ─────────── */
@@ -576,7 +611,7 @@ select:focus {
 
 /* ── Pages institutionnelles ──────────────────────────────────────────────── */
 
-/* Enerko ? — tagline + texte deux colonnes */
+/* Enerko — logo + texte deux colonnes */
 .about-layout {
   display: grid;
   grid-template-columns: 1fr 1.4fr;
@@ -588,97 +623,29 @@ select:focus {
   .about-layout { grid-template-columns: 1fr; }
 }
 
-.brand-tagline {
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--navy);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
+.about-logo {
+  max-width: 320px;
+  width: 100%;
+  height: auto;
 }
-
-.brand-tagline .accent { color: var(--yellow); }
 
 .about-text p {
   font-size: 0.95rem;
 }
 
-/* Autoconsommer — diagramme de flux */
-.flow-diagram {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+/* Autoconsommer — diagramme (image) */
+.diagram-wrap {
   margin: 1.5rem 0 0.5rem;
   padding: 1.5rem;
   background: var(--bg);
   border-radius: 8px;
-}
-
-.flow-node {
-  border-radius: 8px;
-  padding: 1rem 1.25rem;
-  font-weight: 700;
-  font-size: 0.9rem;
   text-align: center;
-  flex: 0 0 auto;
 }
 
-.flow-node-grid {
-  background: var(--bg);
-  color: var(--navy);
-  border: 2px solid var(--navy);
-  min-width: 130px;
-}
-
-.flow-node-building {
-  background: var(--white);
-  border: 2px solid var(--yellow);
-  min-width: 220px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-}
-
-.flow-node-roof { color: var(--navy); }
-
-.flow-node-self {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--yellow);
-}
-
-.flow-arrows {
-  flex: 1 1 220px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-}
-
-.flow-arrow {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  font-size: 0.82rem;
-  color: var(--text);
-}
-
-.flow-arrow-icon { font-size: 1.1rem; font-weight: 700; }
-.flow-arrow-buy .flow-arrow-icon  { color: #2A78D6; }
-.flow-arrow-sell .flow-arrow-icon { color: var(--yellow); }
-.flow-arrow strong { color: var(--navy); }
-
-.flow-caption {
-  text-align: center;
-  font-size: 0.78rem;
-  font-weight: 700;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-top: 0.9rem;
-}
-
-@media (max-width: 700px) {
-  .flow-diagram { flex-direction: column; }
+.diagram-img {
+  max-width: 640px;
+  width: 100%;
+  height: auto;
 }
 
 /* Investir — sections numérotées + boîtes charges/revenus */
@@ -832,6 +799,48 @@ select:focus {
   color: var(--muted);
 }
 
+/* Équipe */
+.equipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.25rem;
+}
+
+.equipe-card {
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 1.5rem 1.25rem;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.equipe-avatar {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 0.9rem;
+  border-radius: 50%;
+  background: var(--yellow-wash);
+  border: 2px solid var(--yellow);
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+.equipe-card h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.25rem;
+}
+
+.equipe-role {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
 /* ── Pied de page ─────────────────────────────────────────────────────────── */
 footer {
   text-align: center;
@@ -846,7 +855,42 @@ footer a { color: var(--navy); font-weight: 600; text-decoration: none; }
 footer a:hover { color: var(--yellow); }
 
 /* ── Responsive global ────────────────────────────────────────────────────── */
+/* En dessous de 700px, 9 entrées de nav ne tiennent plus sur une ligne —
+   on les replie derrière le bouton hamburger plutôt que de laisser un mur
+   de liens sur 3-4 lignes au-dessus du contenu. */
+@media (max-width: 700px) {
+  .top-nav-inner {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 1.25rem;
+  }
+
+  .nav-toggle-label { display: flex; }
+
+  .top-nav-links {
+    display: none;
+    flex-direction: column;
+    gap: 0;
+    width: 100%;
+    padding-bottom: 0.5rem;
+  }
+
+  .nav-toggle-checkbox:checked ~ .top-nav-links { display: flex; }
+
+  .top-nav-links a {
+    padding: 0.75rem 0;
+    border-bottom: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .top-nav-links a:hover,
+  .top-nav-links a.active {
+    background: var(--yellow-wash);
+  }
+}
+
 @media (max-width: 600px) {
+  header       { padding: 1.1rem 1.25rem; }
   .brand-logo img { height: 44px; }
   section      { padding: 1.25rem 1rem; }
   main         { padding: 1rem 0.75rem 2rem; }

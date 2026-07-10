@@ -21,7 +21,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from config import (
     SITES, SITE_ORDER, PV_SITE_ORDER, TYPES, TYPE_LABELS,
     INSTALLATIONS, INSTALLATION_ORDER, DOCS_DIR,
-    ABOUT, AUTOCONSOMMER, INVESTIR, DEVENIR_MEMBRE, CONTACT, LIENS,
+    ABOUT, AUTOCONSOMMER, INVESTIR, DEVENIR_MEMBRE, CONTACT, LIENS, EQUIPE,
 )
 
 COMPLETENESS_PATH = DOCS_DIR / "assets" / "data" / "completeness.json"
@@ -103,7 +103,8 @@ def _nav_links(depth: int):
     prefix = "../" if depth else ""
     return [
         ("accueil", "Accueil", f"{prefix}index.html"),
-        ("enerko", "Enerko ?", f"{prefix}enerko.html"),
+        ("enerko", "Enerko", f"{prefix}enerko.html"),
+        ("equipe", "Équipe", f"{prefix}equipe.html"),
         ("installations", "Installations", f"{prefix}installations/index.html"),
         ("autoconsommer", "Autoconsommer", f"{prefix}autoconsommer.html"),
         ("investir", "Investir", f"{prefix}investir.html"),
@@ -114,11 +115,21 @@ def _nav_links(depth: int):
 
 
 def _nav_html(active: str, depth: int) -> str:
+    """Sur mobile, 9 entrées ne tiennent pas sur une ligne — repliées derrière
+    un bouton hamburger en CSS pur (case à cocher cachée + sélecteur ~), pour
+    que ça marche sur toutes les pages sans dépendre du <script> du dashboard
+    (qui n'est présent que sur installations/index.html)."""
     items = []
     for slug, label, href in _nav_links(depth):
         cls = ' class="active"' if slug == active else ""
         items.append(f'<a href="{href}"{cls}>{label}</a>')
-    return f'<nav class="top-nav"><div class="top-nav-inner">{"".join(items)}</div></nav>'
+    return (
+        '<nav class="top-nav"><div class="top-nav-inner">'
+        '<input type="checkbox" id="nav-toggle" class="nav-toggle-checkbox">'
+        '<label for="nav-toggle" class="nav-toggle-label" aria-label="Ouvrir le menu"></label>'
+        f'<div class="top-nav-links">{"".join(items)}</div>'
+        '</div></nav>'
+    )
 
 
 def _brief_list_html(brief: dict) -> str:
@@ -256,7 +267,7 @@ def _completeness_badge_html(comp) -> str:
         )
     else:
         detail = "Aucun trou significatif détecté."
-    return f'{badge}<p class="completeness-detail">{detail}</p>'
+    return f'{badge}<p class="completeness-detail completeness-standalone">{detail}</p>'
 
 
 def _measured_type_block_html(site_id: str, type_key: str, depth: int, completeness: dict) -> str:
@@ -741,13 +752,10 @@ def build_enerko_html(today: str) -> str:
     depth = 0
     body = f"""
   <section id="sec-about">
-    <h2>Enerko ?</h2>
+    <h2>Enerko</h2>
     <div class="about-layout">
       <div class="about-tagline">
-        <p class="brand-tagline">
-          {ABOUT["tagline_prefix"]}<span class="accent">{ABOUT["tagline_accent1"]}</span
-          >{ABOUT["tagline_mid"]}<span class="accent">{ABOUT["tagline_accent2"]}</span>
-        </p>
+        <img class="about-logo" src="assets/images/logo-enerko.png" alt="Enerko — coopérAction énergEthique">
       </div>
       <div class="about-text">
         <p>{ABOUT["text"]}</p>
@@ -765,30 +773,15 @@ def build_enerko_html(today: str) -> str:
         depth,
     )}
   </section>"""
-    return _page_shell("Enerko ?", "enerko", depth, body, today)
+    return _page_shell("Enerko", "enerko", depth, body, today)
 
 
 def _autoconsommer_diagram_html() -> str:
-    d = AUTOCONSOMMER["diagram"]
-    return f"""
-    <div class="flow-diagram">
-      <div class="flow-node flow-node-grid">Réseau SIG</div>
-      <div class="flow-arrows">
-        <div class="flow-arrow flow-arrow-buy">
-          <span class="flow-arrow-icon">→</span>
-          <span class="flow-arrow-text">{d["buy_label"]} <strong>{d["buy_price"]}</strong></span>
-        </div>
-        <div class="flow-arrow flow-arrow-sell">
-          <span class="flow-arrow-icon">←</span>
-          <span class="flow-arrow-text">{d["sell_label"]} <strong>{d["sell_price"]}</strong></span>
-        </div>
-      </div>
-      <div class="flow-node flow-node-building">
-        <span class="flow-node-roof">Installation photovoltaïque</span>
-        <span class="flow-node-self">☀ {d["self_label"]}</span>
-      </div>
-    </div>
-    <p class="flow-caption">{d["caption"]}</p>"""
+    return """
+    <div class="diagram-wrap">
+      <img class="diagram-img" src="assets/images/autoconsommation_collective.png"
+           alt="Schéma de l'autoconsommation collective : l'électricité solaire produite en toiture est autoconsommée par le bâtiment, le surplus est vendu à SIG (12 cts/kWh) et le manque est acheté à SIG (24 cts/kWh).">
+    </div>"""
 
 
 def build_autoconsommer_html(today: str) -> str:
@@ -909,6 +902,30 @@ def build_liens_html(today: str) -> str:
     return _page_shell("Liens utiles", "liens", depth, body, today)
 
 
+def _initials(name: str) -> str:
+    return "".join(p[0] for p in name.split()[:2]).upper()
+
+
+def build_equipe_html(today: str) -> str:
+    depth = 0
+    cards = "".join(
+        f"""
+      <div class="equipe-card">
+        <div class="equipe-avatar">{_initials(m["name"])}</div>
+        <h3>{m["name"]}</h3>
+        <p class="equipe-role">{m["role"]}</p>
+      </div>""" for m in EQUIPE
+    )
+    body = f"""
+  <section id="sec-equipe">
+    <h2>L'équipe</h2>
+    <p class="section-intro">Les membres du comité et de l'équipe opérationnelle d'Enerko.</p>
+    <div class="equipe-grid">{cards}
+    </div>
+  </section>"""
+    return _page_shell("Équipe", "equipe", depth, body, today)
+
+
 def main() -> None:
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
     INSTALL_DIR.mkdir(parents=True, exist_ok=True)
@@ -930,6 +947,7 @@ def main() -> None:
     pages = [
         (build_installations_index_html(today), INSTALL_DIR / "index.html"),
         (build_enerko_html(today),               DOCS_DIR / "enerko.html"),
+        (build_equipe_html(today),                DOCS_DIR / "equipe.html"),
         (build_autoconsommer_html(today),         DOCS_DIR / "autoconsommer.html"),
         (build_investir_html(today),              DOCS_DIR / "investir.html"),
         (build_devenir_membre_html(today),        DOCS_DIR / "devenir-membre.html"),
