@@ -1,4 +1,4 @@
-# Enerko — Courbes de charge
+# Enerko 
 
 Site statique GitHub Pages de la coopérative solaire Enerko : présentation de la coopérative
 et visualisation des courbes de charge (injection réseau et production) de ses installations
