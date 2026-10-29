@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Meyrin, Espl. des Récréations 24 &amp; 26 — Enerko</title>
-<meta name="description" content="Installations photovoltaïques Enerko de l'Esplanade des Récréations à Meyrin : 121 kWc, 130 000 kWh/an, 59% d'autoconsommation.">
+<meta name="description" content="Installations photovoltaïques Enerko de l'Esplanade des Récréations à Meyrin : 121 kWc, 130 000 kWh/an, 60% d'autoconsommation.">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -38,13 +38,13 @@
       <dl class="spec">
         <div><dt>Puissance</dt><dd>121&nbsp;kWc</dd></div>
         <div><dt>Surface</dt><dd>740&nbsp;m²</dd></div>
-        <div><dt>Production</dt><dd>130&nbsp;000&nbsp;kWh/an</dd></div>
+        <div><dt>Production</dt><dd><!--stat:meyrin.production_kwh-->130&nbsp;000<!--/stat-->&nbsp;kWh/an</dd></div>
         <div><dt>Coût</dt><dd>200&nbsp;000&nbsp;CHF</dd></div>
         <div><dt>Rétribution unique</dt><dd>55&nbsp;000&nbsp;CHF</dd></div>
       </dl>
-      <div class="meter" role="img" aria-label="Autoconsommation : 59 pour cent">
-        <div class="meter__head"><span>Autoconsommation</span><span class="meter__value">59&nbsp;%</span></div>
-        <div class="meter__track"><div class="meter__fill" style="width:59%"></div></div>
+      <div class="meter" data-meter="meyrin.autoconso_pct" role="img" aria-label="Autoconsommation : 60 pour cent">
+        <div class="meter__head"><span>Autoconsommation</span><span class="meter__value">60&nbsp;%</span></div>
+        <div class="meter__track"><div class="meter__fill" style="width:60%"></div></div>
       </div>
       <div class="meter" role="img" aria-label="Autonomie PV du bâtiment : 31 pour cent">
         <div class="meter__head"><span>Autonomie PV du bâtiment</span><span class="meter__value">31&nbsp;%</span></div>
@@ -89,7 +89,7 @@
             <div><dt>Modules</dt><dd>447 × Canadian Solar 270&nbsp;Wc (polycristallin)</dd></div>
             <div><dt>Puissance totale</dt><dd>121&nbsp;kWc</dd></div>
             <div><dt>Onduleurs</dt><dd>6 × SMA Sunny Tripower</dd></div>
-            <div><dt>Production annuelle</dt><dd>140'000&nbsp;kWh (≈&nbsp;50 logements genevois)</dd></div>
+            <div><dt>Production annuelle</dt><dd>≈&nbsp;<!--stat:meyrin.production_kwh-->130&nbsp;000<!--/stat-->&nbsp;kWh (estimée, ≈&nbsp;<!--stat:meyrin.logements-->45<!--/stat--> logements genevois)</dd></div>
           </dl>
           <div class="prose">
             <p>Les modules sont posés sur les toitures plates, en dômes Est-Ouest ou

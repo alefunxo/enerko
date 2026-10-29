@@ -46,6 +46,7 @@ def run_full() -> None:
         ("01 — Lecture des CSV",           "01_parse",      "process_all"),
         ("02 — Calcul des agrégats",       "02_aggregate",  "process_all"),
         ("03 — Génération des graphiques", "03_charts",     "main"),
+        ("04 — Chiffres-clés des pages",   "04_stats",      "main"),
     ]
 
     success = 0
@@ -68,7 +69,8 @@ def run_full() -> None:
 
 def run_charts_only() -> None:
     import importlib
-    for name, fn_name in [("02_aggregate", "process_all"), ("03_charts", "main")]:
+    for name, fn_name in [("02_aggregate", "process_all"), ("03_charts", "main"),
+                         ("04_stats", "main")]:
         mod = importlib.import_module(name)
         _run(name, getattr(mod, fn_name))
 

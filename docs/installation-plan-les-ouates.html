@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Plan-les-Ouates, Ch. de Vers 8 — Enerko</title>
-<meta name="description" content="Installation photovoltaïque Enerko du chemin de Vers 8 à Plan-les-Ouates : 97,5 kWc, 100 000 kWh/an, 40% d'autoconsommation.">
+<meta name="description" content="Installation photovoltaïque Enerko du chemin de Vers 8 à Plan-les-Ouates : 97,5 kWc, 101 000 kWh/an, 55% d'autoconsommation.">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -38,13 +38,13 @@
       <dl class="spec">
         <div><dt>Puissance</dt><dd>97,5&nbsp;kWc</dd></div>
         <div><dt>Surface</dt><dd>483&nbsp;m²</dd></div>
-        <div><dt>Production</dt><dd>100&nbsp;000&nbsp;kWh/an</dd></div>
+        <div><dt>Production</dt><dd><!--stat:plo.production_kwh-->101&nbsp;000<!--/stat-->&nbsp;kWh/an</dd></div>
         <div><dt>Coût</dt><dd>180&nbsp;000&nbsp;CHF</dd></div>
         <div><dt>Rétribution unique</dt><dd>32&nbsp;000&nbsp;CHF</dd></div>
       </dl>
-      <div class="meter" role="img" aria-label="Autoconsommation : 40 pour cent">
-        <div class="meter__head"><span>Autoconsommation</span><span class="meter__value">40&nbsp;%</span></div>
-        <div class="meter__track"><div class="meter__fill" style="width:40%"></div></div>
+      <div class="meter" data-meter="plo.autoconso_pct" role="img" aria-label="Autoconsommation : 55 pour cent">
+        <div class="meter__head"><span>Autoconsommation</span><span class="meter__value">55&nbsp;%</span></div>
+        <div class="meter__track"><div class="meter__fill" style="width:55%"></div></div>
       </div>
     </div>
   </section>
@@ -84,7 +84,7 @@
             <div><dt>Modules</dt><dd>260 × Bisol 375&nbsp;Wc (monocristallin)</dd></div>
             <div><dt>Puissance totale</dt><dd>97,5&nbsp;kWc</dd></div>
             <div><dt>Onduleur</dt><dd>1 × Solarmax 110&nbsp;SXT</dd></div>
-            <div><dt>Production annuelle</dt><dd>≈&nbsp;100'000&nbsp;kWh (estimée)</dd></div>
+            <div><dt>Production annuelle</dt><dd>≈&nbsp;<!--stat:plo.production_kwh-->101&nbsp;000<!--/stat-->&nbsp;kWh (moyenne mesurée 2023–2025)</dd></div>
           </dl>
           <div class="prose">
             <p>Les modules sont posés sur la toiture plate, en shed à 10°
@@ -106,8 +106,8 @@
             tarif SIG Vitale Bleu.</p>
             <p>Du fait de la configuration des installations électriques, la
             consommation instantanée d'électricité PV est priorisée par rapport à
-            l'électricité provenant du réseau électrique. Ce regroupement permet ainsi,
-            selon les premières estimations, d'autoconsommer 40% de la production PV.</p>
+            l'électricité provenant du réseau électrique. Ce regroupement permet ainsi
+            d'autoconsommer environ <!--stat:plo.autoconso_pct-->55<!--/stat-->% de la production PV (moyenne mesurée sur 2023–2025).</p>
           </div>
         </div>
       </div>
