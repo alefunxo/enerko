@@ -138,7 +138,7 @@ totaux de l'accueil affichent tous les mêmes valeurs, calculées une seule fois
 | Installation | Production | Autoconsommation | Remarque |
 |---|---|---|---|
 | Plan-les-Ouates | mesurée (≈ 101 000 kWh/an) | mesurée (≈ 55 %) | séries complètes |
-| Meyrin | nominale (130 000 kWh/an) | mesurée (≈ 60 %) | 3 toitures, mais seulement 2 compteurs de production (Récréations 24 et 26) : la production mesurée (≈ 77 MWh/an) ne couvre pas tout |
+| Meyrin | mesurée (≈ 78 000 kWh/an) | mesurée (≈ 60 %) | SIG relève les 3 bâtiments via 2 points de comptage (Récréations 24 et 26) : les deux séries couvrent toute l'installation. Nettement sous les 130 000 kWh/an nominaux (≈ 640 kWh/kWc contre ≈ 1 030 à Plan-les-Ouates) |
 | Soubeyran | nominale (30 000 kWh/an) | nominale (93 %) | pas de fichier de production, seulement l'injection réseau : non calculable |
 
 Les valeurs nominales viennent des dicts `brief` de `config.py`. `stats.json` contient en plus

@@ -19,7 +19,14 @@
     <a href="index.html" aria-current="page">Accueil</a>
     <a href="enerko.html">Enerko</a>
     <a href="equipe.html">Équipe</a>
-    <a href="installations.html">Installations</a>
+    <div class="nav-dropdown">
+      <a href="installations.html" aria-haspopup="true">Installations</a>
+      <ul class="nav-dropdown__menu" aria-label="Installations">
+        <li><a href="installation-soubeyran.html">Genève, Rue Soubeyran 7</a></li>
+        <li><a href="installation-meyrin.html">Meyrin, Aubier 19-20-21</a></li>
+        <li><a href="installation-plan-les-ouates.html">Plan-les-Ouates, Ch. de Vers 8</a></li>
+      </ul>
+    </div>
     <a href="autoconsommer.html">Autoconsommer</a>
     <a href="investir.html">Investir</a>
     <a href="contact.html">Contact</a>
@@ -66,7 +73,7 @@
           <span class="stat__label">puissance installée</span>
         </li>
         <li class="stat">
-          <span class="stat__value"><!--stat:total.production_mwh-->261<!--/stat--><span class="stat__unit">MWh</span></span>
+          <span class="stat__value"><!--stat:total.production_mwh-->209<!--/stat--><span class="stat__unit">MWh</span></span>
           <span class="stat__label">production annuelle</span>
         </li>
         <li class="stat">
@@ -169,7 +176,7 @@
 
       <!-- ============================================================
            PHOTO SLOT nº4 (stand-in actuel : photo2_enerko.jpg) :
-           photo du toit des Récréations 24–26 à Meyrin — c'est votre
+           photo du toit de l'Aubier 19-20-21 à Meyrin — c'est votre
            plus grande centrale, montrez l'étendue : vue drone ou depuis
            un toit voisin. À défaut : « aerial solar rooftop apartment
            building » (Pexels), cadrage 4:3.
@@ -177,17 +184,17 @@
       <article class="install">
         <div class="install__media">
           <img src="assets/photos/photo2_enerko.jpg"
-               alt="Toiture photovoltaïque de l'Esplanade des Récréations à Meyrin"
+               alt="Toiture photovoltaïque de la promenade de l'Aubier à Meyrin"
                width="1280" height="854" loading="lazy">
         </div>
         <div class="install__body">
           <p class="install__index">02</p>
-          <h3 class="install__name">Espl. des Récréations 24&nbsp;&amp;&nbsp;26</h3>
+          <h3 class="install__name">Prom. de l'Aubier 19-20-21</h3>
           <p class="install__place">1217 Meyrin — en service depuis 2017</p>
           <dl class="spec">
             <div><dt>Puissance</dt><dd>121&nbsp;kWc</dd></div>
             <div><dt>Surface</dt><dd>740&nbsp;m²</dd></div>
-            <div><dt>Production</dt><dd><!--stat:meyrin.production_kwh-->130&nbsp;000<!--/stat-->&nbsp;kWh/an</dd></div>
+            <div><dt>Production</dt><dd><!--stat:meyrin.production_kwh-->78&nbsp;000<!--/stat-->&nbsp;kWh/an</dd></div>
           </dl>
           <div class="meter" data-meter="meyrin.autoconso_pct" role="img" aria-label="Autoconsommation : 60 pour cent">
             <div class="meter__head"><span>Autoconsommation</span><span class="meter__value">60&nbsp;%</span></div>

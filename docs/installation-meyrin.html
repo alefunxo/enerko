@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Meyrin, Espl. des Récréations 24 &amp; 26 — Enerko</title>
-<meta name="description" content="Installations photovoltaïques Enerko de l'Esplanade des Récréations à Meyrin : 121 kWc, 130 000 kWh/an, 60% d'autoconsommation.">
+<title>Meyrin, Prom. de l'Aubier 19-20-21 — Enerko</title>
+<meta name="description" content="Installations photovoltaïques Enerko de la promenade de l'Aubier à Meyrin : 121 kWc, 78 000 kWh/an, 60% d'autoconsommation.">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -19,7 +19,14 @@
     <a href="index.html">Accueil</a>
     <a href="enerko.html">Enerko</a>
     <a href="equipe.html">Équipe</a>
-    <a href="installations.html" aria-current="page">Installations</a>
+    <div class="nav-dropdown">
+      <a href="installations.html" aria-current="page" aria-haspopup="true">Installations</a>
+      <ul class="nav-dropdown__menu" aria-label="Installations">
+        <li><a href="installation-soubeyran.html">Genève, Rue Soubeyran 7</a></li>
+        <li><a href="installation-meyrin.html" aria-current="page">Meyrin, Aubier 19-20-21</a></li>
+        <li><a href="installation-plan-les-ouates.html">Plan-les-Ouates, Ch. de Vers 8</a></li>
+      </ul>
+    </div>
     <a href="autoconsommer.html">Autoconsommer</a>
     <a href="investir.html">Investir</a>
     <a href="contact.html">Contact</a>
@@ -33,12 +40,12 @@
     <div class="wrap">
       <a class="page-hero__back" href="installations.html">← Toutes les installations</a>
       <p class="kicker kicker--orange" style="margin-top:1.5rem">Installation 02 — Meyrin</p>
-      <h1 id="fiche-titre" class="display-lg">Espl. des Récréations<br>24&nbsp;&amp;&nbsp;26</h1>
+      <h1 id="fiche-titre" class="display-lg">Prom. de l'Aubier<br>19-20-21</h1>
       <p class="install__place">1217 Meyrin — en service depuis 2017 — réalisée par Solstis&nbsp;SA</p>
       <dl class="spec">
         <div><dt>Puissance</dt><dd>121&nbsp;kWc</dd></div>
         <div><dt>Surface</dt><dd>740&nbsp;m²</dd></div>
-        <div><dt>Production</dt><dd><!--stat:meyrin.production_kwh-->130&nbsp;000<!--/stat-->&nbsp;kWh/an</dd></div>
+        <div><dt>Production</dt><dd><!--stat:meyrin.production_kwh-->78&nbsp;000<!--/stat-->&nbsp;kWh/an</dd></div>
         <div><dt>Coût</dt><dd>200&nbsp;000&nbsp;CHF</dd></div>
         <div><dt>Rétribution unique</dt><dd>55&nbsp;000&nbsp;CHF</dd></div>
       </dl>
@@ -55,12 +62,12 @@
 
   <!-- ============================================================
        PHOTO SLOT (stand-in actuel : photo2_enerko.jpg) : le toit des
-       Récréations 24–26 vu de haut — vue drone montrant les deux
+       Aubier 19-20-21 vu de haut — vue drone montrant les deux
        bâtiments et l'étendue des panneaux.
        ============================================================ -->
   <figure class="hero hero--install" aria-label="Photo de l'installation">
     <img class="hero__img" src="assets/photos/photo2_enerko.jpg"
-         alt="Toiture photovoltaïque de l'Esplanade des Récréations à Meyrin au coucher du soleil"
+         alt="Toiture photovoltaïque de la promenade de l'Aubier à Meyrin au coucher du soleil"
          width="1280" height="854">
   </figure>
 
@@ -75,9 +82,10 @@
         <p>La coopérative Enerko a financé les installations photovoltaïques sur les
         toitures des trois bâtiments de la coopérative équilibre, à la promenade de
         l'Aubier 19-20-21. La coopérative Enerko a également monté et gère
-        l'exploitation des trois communautés d'autoconsommateurs au sein des
+        l'exploitation des trois communautés d'autoconsommateurs au sein des trois
         bâtiments, ceci afin de maximiser l'autoconsommation de l'électricité solaire
-        produite en toiture.</p>
+        produite en toiture. Les données sont mésurés au moyen de deux compteurs
+        d'énergie qui couvrent l'ensemble de la production électrique des bâtiments.</p>
       </div>
     </div>
 
@@ -89,7 +97,7 @@
             <div><dt>Modules</dt><dd>447 × Canadian Solar 270&nbsp;Wc (polycristallin)</dd></div>
             <div><dt>Puissance totale</dt><dd>121&nbsp;kWc</dd></div>
             <div><dt>Onduleurs</dt><dd>6 × SMA Sunny Tripower</dd></div>
-            <div><dt>Production annuelle</dt><dd>≈&nbsp;<!--stat:meyrin.production_kwh-->130&nbsp;000<!--/stat-->&nbsp;kWh (estimée, ≈&nbsp;<!--stat:meyrin.logements-->45<!--/stat--> logements genevois)</dd></div>
+            <div><dt>Production annuelle</dt><dd>≈&nbsp;<!--stat:meyrin.production_kwh-->78&nbsp;000<!--/stat-->&nbsp;kWh (moyenne mesurée 2023–2025, ≈&nbsp;<!--stat:meyrin.logements-->27<!--/stat--> logements genevois)</dd></div>
           </dl>
           <div class="prose">
             <p>Les modules sont posés sur les toitures plates, en dômes Est-Ouest ou

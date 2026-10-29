@@ -156,6 +156,27 @@ a { color: inherit; }
 }
 .site-nav__cta:hover { background: var(--craie); }
 
+/* Menu déroulant « Installations » : s'ouvre au survol ou au focus clavier ;
+   le lien parent reste cliquable (page d'ensemble), utile au tactile. */
+.nav-dropdown { position: relative; }
+.nav-dropdown > a::after {
+  content: ""; display: inline-block; margin-left: .4rem; vertical-align: .15em;
+  border: .3rem solid transparent; border-top-color: currentColor; border-bottom-width: 0;
+}
+.nav-dropdown__menu {
+  display: none; position: absolute; top: 100%; left: -.75rem; z-index: 60;
+  min-width: 15rem; margin: 0; padding: .5rem 0 .25rem; list-style: none;
+  background: var(--noir-2); border: 1px solid var(--trait-sombre);
+}
+.nav-dropdown:hover .nav-dropdown__menu,
+.nav-dropdown:focus-within .nav-dropdown__menu { display: block; }
+.nav-dropdown__menu a {
+  display: block; padding: .5rem .75rem; white-space: nowrap;
+  border-bottom: none;
+}
+.nav-dropdown__menu a:hover,
+.nav-dropdown__menu a[aria-current="page"] { color: var(--orange); }
+
 /* ---------- Boutons ---------- */
 .btn-row { display: flex; flex-wrap: wrap; gap: .875rem; margin-top: 2.25rem; }
 .btn {

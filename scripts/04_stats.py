@@ -42,10 +42,11 @@ MIN_REF_YEARS = 2
 # textes d'origine : 35 000 kWh ≈ 12 logements, 140 000 kWh ≈ 50 logements).
 KWH_PAR_LOGEMENT = 2900
 
-# Installation → config.INSTALLATIONS, séries de production (toutes les toitures
-# mesurées) et séries d'injection réseau ("consommation") du même périmètre.
-# production_complete=False : les séries de production ne couvrent pas tous les
-# toits (Meyrin : 3 toitures, 2 compteurs de production) → production nominale.
+# Installation → config.INSTALLATIONS, séries de production et séries d'injection
+# réseau ("consommation") du même périmètre. Meyrin : SIG relève les 3 bâtiments
+# via 2 points de comptage (Récréations 24 et 26), donc ces 2 séries couvrent
+# toute l'installation (cf. config.INSTALLATIONS[...]["data_note"]).
+# production_complete=False : pas de série de production → valeur nominale du brief.
 INSTALLS = {
     "soubeyran": {
         "config": "install_soubeyran",
@@ -59,7 +60,7 @@ INSTALLS = {
         "page": "installation-meyrin.html",
         "production": ["site_c_production", "site_d_production"],
         "injection": ["site_b_consommation", "site_c_consommation"],
-        "production_complete": False,
+        "production_complete": True,
     },
     "plo": {
         "config": "install_plan_les_ouates_vers_8",

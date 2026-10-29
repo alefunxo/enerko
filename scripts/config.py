@@ -51,7 +51,7 @@ SITES = {
         },
     },
     "site_b": {
-        "name":         "MEYRIN, Espl. des Récréations 24",
+        "name":         "MEYRIN, Aubier 19-20-21 (SIG Récréations 24)",
         "online_since": "2017-11",
         "color":        "#1baf7a",  # slot 2 · aqua
         "files": {
@@ -60,7 +60,7 @@ SITES = {
         },
     },
     "site_c": {
-        "name":         "MEYRIN, Espl. des Récréations 26",
+        "name":         "MEYRIN, Aubier 19-20-21 (SIG Récréations 26)",
         "online_since": "2018-01",
         "color":        "#eda100",  # slot 3 · jaune
         "files": {
@@ -70,12 +70,12 @@ SITES = {
         },
     },
     "site_d": {
-        # Installation PV de "MEYRIN, Espl. des Récréations 24" (même adresse que site_b)
+        # Installation PV de "MEYRIN, Aubier 19-20-21 (SIG Récréations 24)" (même adresse que site_b)
         # Nom volontairement sans suffixe "Photovoltaïque" : le type (Consommation/
         # Production) est déjà indiqué dans le titre de chaque graphique et dans la
         # légende des vues par type — dupliquer ici créait des libellés incohérents
         # entre sites (ex. site_c) et redondants (04_build_html.py, 03_charts.py).
-        "name":         "MEYRIN, Espl. des Récréations 24",
+        "name":         "MEYRIN, Aubier 19-20-21 (SIG Récréations 24)",
         "online_since": "2018-01",
         "color":        "#008300",  # slot 4 · vert
         "files": {
@@ -233,9 +233,9 @@ INSTALLATIONS = {
         "photos": [],
     },
     "install_meyrin_recreations_24": {
-        "name":    "MEYRIN, Espl. des Récréations 24 et 26",
+        "name":    "MEYRIN, Prom. de l'Aubier 19-20-21",
         "slug":    "meyrin-recreations-24",
-        "address": "Esplanade des Récréations 24 et 26, 1217 Meyrin, Suisse",
+        "address": "Promenade de l'Aubier 19-20-21, 1217 Meyrin, Suisse",
         "buildings": [
             {"label": "Bâtiment 24", "site_ids": {"consommation": "site_b", "production": "site_d"}},
             {"label": "Bâtiment 26", "site_ids": {"consommation": "site_c", "production": "site_c"}},
