@@ -54,6 +54,7 @@ INSTALLS = {
         "production": [],
         "injection": ["site_a_consommation"],
         "production_complete": False,
+        "toitures": 1,
     },
     "meyrin": {
         "config": "install_meyrin_recreations_24",
@@ -61,6 +62,7 @@ INSTALLS = {
         "production": ["site_c_production", "site_d_production"],
         "injection": ["site_b_consommation", "site_c_consommation"],
         "production_complete": True,
+        "toitures": 3,
     },
     "plo": {
         "config": "install_plan_les_ouates_vers_8",
@@ -68,6 +70,7 @@ INSTALLS = {
         "production": ["site_f_production"],
         "injection": ["site_g_consommation"],
         "production_complete": True,
+        "toitures": 1,
     },
 }
 
@@ -114,6 +117,9 @@ def compute() -> dict:
 
         entry = {
             "puissance_kwc": brief["puissance_kwc"],
+            "surface_m2": brief["surface_m2"],
+            "toitures": spec["toitures"],
+            "cout_chf": brief["cout_chf"],
             "reference_years": ref if have_prod and have_ref else [],
         }
 
@@ -138,9 +144,17 @@ def compute() -> dict:
         entry["logements"] = _round_int(entry["production_kwh"] / KWH_PAR_LOGEMENT)
         stats[name] = entry
 
+    sites = list(stats.values())
+    prod_kwh = sum(s["production_kwh"] for s in sites)
+    autoconso = sum(s["production_kwh"] * s["autoconso_pct"] for s in sites) / prod_kwh
     stats["total"] = {
-        "kwc": _round_int(sum(s["puissance_kwc"] for s in stats.values())),
-        "production_mwh": _round_int(sum(s["production_kwh"] for s in stats.values()) / 1000),
+        "kwc": round(sum(s["puissance_kwc"] for s in sites), 1),
+        "surface_m2": sum(s["surface_m2"] for s in sites),
+        "toitures": sum(s["toitures"] for s in sites),
+        "production_mwh": _round_int(prod_kwh / 1000),
+        "cout_kchf": _round_int(sum(s["cout_chf"] for s in sites) / 1000),
+        # moyenne pondérée par la production, arrondie à 5 % (texte courant)
+        "autoconso_pct": 5 * _round_int(autoconso / 5),
     }
     return stats
 
@@ -153,8 +167,10 @@ def _nbsp_thousands(n: int) -> str:
 
 def _fmt(key: str, value) -> str:
     leaf = key.split(".")[-1]
-    if leaf == "production_kwh":
+    if leaf in ("production_kwh", "surface_m2"):
         return _nbsp_thousands(value)
+    if leaf in ("puissance_kwc", "kwc"):  # virgule décimale, sans « ,0 »
+        return f"{value:g}".replace(".", ",")
     return str(value)
 
 
@@ -172,7 +188,7 @@ METER = re.compile(
     r'<span class="meter__value">)[^<]*'
     r'(</span></div>\s*<div class="meter__track"><div class="meter__fill" style="width:)[\d.]+(%)'
 )
-META_DESC = re.compile(r",\s*[\d ]+ kWh/an, \d+% d'autoconsommation")
+META_DESC = re.compile(r"[\d,]+ kWc,\s*[\d ]+ kWh/an, \d+% d'autoconsommation")
 
 
 def patch_html(path: Path, stats: dict, install: str = None) -> bool:
@@ -194,7 +210,9 @@ def patch_html(path: Path, stats: dict, install: str = None) -> bool:
     if install:
         s = stats[install]
         prod = f"{s['production_kwh']:,}".replace(",", " ")
-        out = META_DESC.sub(f", {prod} kWh/an, {s['autoconso_pct']}% d'autoconsommation", out)
+        kwc = _fmt("puissance_kwc", s["puissance_kwc"])
+        out = META_DESC.sub(
+            f"{kwc} kWc, {prod} kWh/an, {s['autoconso_pct']}% d'autoconsommation", out)
 
     if out != src:
         with open(path, "w", encoding="utf-8", newline="") as f:
@@ -212,7 +230,8 @@ def main() -> None:
     print("✓  stats.json")
     for name, s in stats.items():
         if name == "total":
-            print(f"   total : {s['kwc']} kWc, {s['production_mwh']} MWh/an")
+            print(f"   total : {s['kwc']} kWc, {s['surface_m2']} m², {s['production_mwh']} MWh/an, "
+                  f"{s['cout_kchf']} k CHF, autoconsommation moyenne ≈ {s['autoconso_pct']} %")
         else:
             print(f"   {name:10s} production {s['production_kwh']:>7,} kWh/an ({s['production_source']}), "
                   f"autoconsommation {s['autoconso_pct']} % ({s['autoconso_source']}"

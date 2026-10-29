@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Enerko — Coopérative solaire genevoise</title>
 <meta name="description" content="Enerko, société coopérative fondée en 2016 à Genève, finance des installations photovoltaïques en autoconsommation collective.">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=20261029">
 </head>
 <body>
 
@@ -65,11 +65,11 @@
     <div class="wrap">
       <ul class="stat-row">
         <li class="stat">
-          <span class="stat__value">5</span>
-          <span class="stat__label">installations en service</span>
+          <span class="stat__value"><!--stat:total.toitures-->5<!--/stat--></span>
+          <span class="stat__label">toitures équipées</span>
         </li>
         <li class="stat">
-          <span class="stat__value"><!--stat:total.kwc-->248<!--/stat--><span class="stat__unit">kWc</span></span>
+          <span class="stat__value"><!--stat:total.kwc-->248,4<!--/stat--><span class="stat__unit">kWc</span></span>
           <span class="stat__label">puissance installée</span>
         </li>
         <li class="stat">
@@ -162,8 +162,8 @@
           <h3 class="install__name">Rue Soubeyran 7</h3>
           <p class="install__place">1202 Genève — en service depuis 2016</p>
           <dl class="spec">
-            <div><dt>Puissance</dt><dd>29,9&nbsp;kWc</dd></div>
-            <div><dt>Surface</dt><dd>180&nbsp;m²</dd></div>
+            <div><dt>Puissance</dt><dd><!--stat:soubeyran.puissance_kwc-->29,9<!--/stat-->&nbsp;kWc</dd></div>
+            <div><dt>Surface</dt><dd><!--stat:soubeyran.surface_m2-->180<!--/stat-->&nbsp;m²</dd></div>
             <div><dt>Production</dt><dd><!--stat:soubeyran.production_kwh-->30&nbsp;000<!--/stat-->&nbsp;kWh/an</dd></div>
           </dl>
           <div class="meter" data-meter="soubeyran.autoconso_pct" role="img" aria-label="Autoconsommation : 93 pour cent">
@@ -192,8 +192,8 @@
           <h3 class="install__name">Prom. de l'Aubier 19-20-21</h3>
           <p class="install__place">1217 Meyrin — en service depuis 2017</p>
           <dl class="spec">
-            <div><dt>Puissance</dt><dd>121&nbsp;kWc</dd></div>
-            <div><dt>Surface</dt><dd>740&nbsp;m²</dd></div>
+            <div><dt>Puissance</dt><dd><!--stat:meyrin.puissance_kwc-->121<!--/stat-->&nbsp;kWc</dd></div>
+            <div><dt>Surface</dt><dd><!--stat:meyrin.surface_m2-->740<!--/stat-->&nbsp;m²</dd></div>
             <div><dt>Production</dt><dd><!--stat:meyrin.production_kwh-->78&nbsp;000<!--/stat-->&nbsp;kWh/an</dd></div>
           </dl>
           <div class="meter" data-meter="meyrin.autoconso_pct" role="img" aria-label="Autoconsommation : 60 pour cent">
@@ -221,8 +221,8 @@
           <h3 class="install__name">Ch. de Vers 8</h3>
           <p class="install__place">1228 Plan-les-Ouates — en service depuis 2022</p>
           <dl class="spec">
-            <div><dt>Puissance</dt><dd>97,5&nbsp;kWc</dd></div>
-            <div><dt>Surface</dt><dd>483&nbsp;m²</dd></div>
+            <div><dt>Puissance</dt><dd><!--stat:plo.puissance_kwc-->97,5<!--/stat-->&nbsp;kWc</dd></div>
+            <div><dt>Surface</dt><dd><!--stat:plo.surface_m2-->483<!--/stat-->&nbsp;m²</dd></div>
             <div><dt>Production</dt><dd><!--stat:plo.production_kwh-->101&nbsp;000<!--/stat-->&nbsp;kWh/an</dd></div>
           </dl>
           <div class="meter" data-meter="plo.autoconso_pct" role="img" aria-label="Autoconsommation : 55 pour cent">
