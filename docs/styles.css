@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    ENERKO — Direction 1 « SIGNAL »
    Affiche suisse / civique-industriel. Sombre dominant.
    Système de classes réutilisable (généré par script Python).
@@ -557,14 +557,14 @@ a { color: inherit; }
 
 /* ---------- Schéma (page Autoconsommer) ---------- */
 .diagram-figure {
-  max-width: 44rem;
+  max-width: 56rem;
   margin: clamp(2.5rem, 5vw, 4rem) auto 0;
   background: var(--blanc);
   border: 1px solid var(--trait-clair);
   padding: clamp(1.5rem, 4vw, 2.5rem);
 }
-.diagram-figure img { width: 100%; display: block; }
-.diagram-figure figcaption {
+.diagram-figure img,\n.diagram-figure svg { width: 100%; height: auto; display: block; }
+.flow-scroll { overflow-x: auto; }\n.flow-diagram { min-width: 42rem; }\n.flow-diagram text { font-family: var(--f-body); }\n.flow-diagram .num { font-family: var(--f-display); }\n.diagram-figure figcaption {
   font-family: var(--f-mono); font-size: .8125rem;
   color: var(--gris-encre); text-align: center;
   padding-top: 1rem;
@@ -810,3 +810,7 @@ a { color: inherit; }
   .step__num { font-size: 1.75rem; }
   .form .btn { width: 100%; text-align: center; }
 }
+
+.flow-dots { animation: flow-move 1.4s linear infinite; }
+@keyframes flow-move { to { stroke-dashoffset: -22; } }
+@media (prefers-reduced-motion: reduce) { .flow-dots { animation: none; } }
